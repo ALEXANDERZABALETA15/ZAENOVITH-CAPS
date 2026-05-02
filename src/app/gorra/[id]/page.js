@@ -58,7 +58,7 @@ export default async function GorraDetalle({ params }) {
     'Telefono: \n\n' +
     'Quedo atento a tu confirmacion!'
 
-  const whatsappURL = 'https://wa.me/573000000000?text=' + encodeURIComponent(mensaje)
+  const whatsappURL = 'https://wa.me/573133635338?text=' + encodeURIComponent(mensaje)
 
   return (
     <main style={{

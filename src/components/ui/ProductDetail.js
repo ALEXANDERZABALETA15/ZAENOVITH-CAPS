@@ -20,7 +20,7 @@ Color: ${gorra.color}
 Precio: ${formatPrecio(gorra.precio)}
 `
 
-    const url = `https://wa.me/573001112233?text=${encodeURIComponent(mensaje)}`
+    const url = `https://wa.me/573133635338?text=${encodeURIComponent(mensaje)}`
 
     window.open(url, '_blank')
   }
