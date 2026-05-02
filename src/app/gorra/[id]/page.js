@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { gorras } from '@/lib/gorras'
+import GaleriaDetalle from '@/components/ui/GaleriaDetalle'
 
 export async function generateMetadata({ params }) {
   const { id } = await params
@@ -28,12 +28,12 @@ export default async function GorraDetalle({ params }) {
           <h1 style={{
             color: '#C9A84C',
             fontSize: '48px',
-            fontFamily: 'serif',
+            fontFamily: 'var(--font-playfair)',
             marginBottom: '16px',
           }}>
             404
           </h1>
-          <p style={{ color: '#888', fontSize: '16px' }}>
+          <p style={{ color: '#888', fontSize: '16px', fontFamily: 'var(--font-inter)' }}>
             Producto no encontrado
           </p>
         </div>
@@ -45,21 +45,20 @@ export default async function GorraDetalle({ params }) {
   const proximo = gorra.estado === 'proximo'
 
   const mensaje =
-    `Hola, quiero realizar un pedido 🧢\n\n` +
-    `📋 Detalle del producto:\n` +
-    `• Gorra: ${gorra.nombre}\n` +
-    `• Color: ${gorra.color}\n` +
-    `• Precio: $${gorra.precio.toLocaleString('es-CO')}\n` +
-    `• Cantidad: 1\n\n` +
-    `📦 Datos de envio:\n` +
-    `• Nombre completo: \n` +
-    `• Ciudad: \n` +
-    `• Direccion: \n` +
-    `• Barrio: \n` +
-    `• Telefono: \n\n` +
-    `Quedo atento a tu confirmacion!`
+    'Hola, quiero realizar un pedido!\n\n' +
+    'Gorra: ' + gorra.nombre + '\n' +
+    'Color: ' + gorra.color + '\n' +
+    'Precio: $' + gorra.precio.toLocaleString('es-CO') + '\n' +
+    'Cantidad: 1\n\n' +
+    'Datos de envio:\n' +
+    'Nombre completo: \n' +
+    'Ciudad: \n' +
+    'Direccion: \n' +
+    'Barrio: \n' +
+    'Telefono: \n\n' +
+    'Quedo atento a tu confirmacion!'
 
-  const whatsappURL = `https://wa.me/573000000000?text=${encodeURIComponent(mensaje)}`
+  const whatsappURL = 'https://wa.me/573000000000?text=' + encodeURIComponent(mensaje)
 
   return (
     <main style={{
@@ -78,76 +77,10 @@ export default async function GorraDetalle({ params }) {
         alignItems: 'start',
       }}>
 
-        {/* GALERÍA DE IMÁGENES */}
-        <div>
-          {/* Imagen principal */}
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            aspectRatio: '1/1',
-            overflow: 'hidden',
-            marginBottom: '12px',
-            borderRadius: '2px',
-          }}>
-            <Image
-              src={gorra.fotos[0]}
-              alt={gorra.nombre}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              style={{ objectFit: 'cover' }}
-              priority
-            />
+        {/* GALERÍA INTERACTIVA */}
+        <GaleriaDetalle fotos={gorra.fotos} nombre={gorra.nombre} />
 
-            {/* Badge */}
-            <div style={{
-              position: 'absolute',
-              top: '16px',
-              left: '16px',
-              backgroundColor: '#3a2a0a',
-              color: '#C9A84C',
-              fontSize: '11px',
-              fontWeight: '700',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              padding: '6px 14px',
-              borderRadius: '2px',
-            }}>
-              {gorra.badge}
-            </div>
-          </div>
-
-          {/* Miniaturas */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${gorra.fotos.length}, 1fr)`,
-            gap: '8px',
-          }}>
-            {gorra.fotos.map((foto, index) => (
-              <div
-                key={index}
-                style={{
-                  position: 'relative',
-                  aspectRatio: '1/1',
-                  overflow: 'hidden',
-                  borderRadius: '2px',
-                  border: index === 0
-                    ? '1px solid rgba(201,168,76,0.6)'
-                    : '1px solid rgba(255,255,255,0.06)',
-                }}
-              >
-                <Image
-                  src={foto}
-                  alt={`${gorra.nombre} vista ${index + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 33vw, 15vw"
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* INFORMACIÓN DEL PRODUCTO */}
+        {/* INFORMACIÓN */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -229,7 +162,7 @@ export default async function GorraDetalle({ params }) {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '10px',
+            gap: '12px',
             padding: 'clamp(16px, 3vw, 24px)',
             backgroundColor: '#111111',
             borderRadius: '2px',
@@ -240,11 +173,14 @@ export default async function GorraDetalle({ params }) {
               { label: 'Coleccion', value: gorra.coleccion },
               { label: 'Estado', value: gorra.badge },
             ].map((detalle) => (
-              <div key={detalle.label} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+              <div
+                key={detalle.label}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
                 <span style={{
                   color: '#888',
                   fontSize: '12px',
@@ -296,16 +232,16 @@ export default async function GorraDetalle({ params }) {
             {agotado ? 'Sin Stock' : proximo ? 'Proximamente' : 'Comprar por WhatsApp'}
           </a>
 
-          {/* Nota de envío */}
+          {/* Nota envío */}
           {!agotado && !proximo && (
             <p style={{
-              color: '#888',
+              color: '#555',
               fontSize: '12px',
               textAlign: 'center',
               fontFamily: 'var(--font-inter)',
               letterSpacing: '0.05em',
             }}>
-              Envios a todo Colombia
+              Envios a todo Colombia 🇨🇴
             </p>
           )}
 
