@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 const navLinks = ['Coleccion', 'Novedades', 'Ofertas', 'Contacto']
 
@@ -55,32 +56,36 @@ export default function Header() {
         }}
       >
 
-        {/* Logo */}
-        <div>
-          <h1
-            style={{
-              fontSize: 'clamp(18px, 4vw, 26px)',
-              fontWeight: '800',
-              color: 'var(--color-gold)',
-              letterSpacing: '0.15em',
-              fontFamily: 'var(--font-playfair)',
-            }}
-          >
-            ZAENOVITH
-          </h1>
-
-          <p
-            style={{
-              fontSize: 'clamp(7px, 1.5vw, 9px)',
-              color: 'var(--color-gray)',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              marginTop: '-2px',
-            }}
-          >
-            Premium Caps
-          </p>
-        </div>
+       {/* Logo — clic vuelve al inicio */}
+<Link href="/" style={{ textDecoration: 'none' }}>
+  <div>
+    <h1
+      style={{
+        fontSize: 'clamp(18px, 4vw, 26px)',
+        fontWeight: '800',
+        color: 'var(--color-gold)',
+        letterSpacing: '0.15em',
+        fontFamily: 'var(--font-playfair)',
+        transition: 'opacity 0.3s ease',
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+      onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+    >
+      ZAHENOVITH
+    </h1>
+    <p
+      style={{
+        fontSize: 'clamp(7px, 1.5vw, 9px)',
+        color: 'var(--color-gray)',
+        letterSpacing: '0.3em',
+        textTransform: 'uppercase',
+        marginTop: '-2px',
+      }}
+    >
+      Premium Caps
+    </p>
+  </div>
+</Link>
 
         {/* Links desktop */}
         <div
