@@ -5,13 +5,13 @@ export const gorras = [
     precio: 65000,
     coleccion: 'Clasicos',
     color: 'Azul Navy',
-    descripcion: 'Gorra curva con bordado premium. Diseño exclusivo con logo dorado.',
+    descripcion: 'Gorra curva con bordado premium. Diseno exclusivo con logo dorado.',
     estado: 'activo',
     badge: 'Nuevo',
     fotos: [
       'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80',
-      'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=600&q=80',
-      'https://images.unsplash.com/photo-1575428652377-a2d80e2277ec?w=600&q=80',
+      'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80',
+      'https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=600&q=80',
     ],
   },
   {
@@ -25,8 +25,8 @@ export const gorras = [
     badge: 'Destacado',
     fotos: [
       'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80',
+      'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80',
       'https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=600&q=80',
-      'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=600&q=80',
     ],
   },
   {
@@ -55,9 +55,9 @@ export const gorras = [
     estado: 'agotado',
     badge: 'Agotado',
     fotos: [
-      'https://images.unsplash.com/photo-1575428652377-a2d80e2277ec?w=600&q=80',
+      'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80',
+      'https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=600&q=80',
       'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80',
-      'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=600&q=80',
     ],
   },
   {
@@ -70,7 +70,7 @@ export const gorras = [
     estado: 'activo',
     badge: 'Exclusivo',
     fotos: [
-      'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=600&q=80',
+      'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80',
       'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80',
       'https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=600&q=80',
     ],
@@ -85,8 +85,8 @@ export const gorras = [
     estado: 'proximo',
     badge: 'Proximamente',
     fotos: [
+      'https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=600&q=80',
       'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80',
-      'https://images.unsplash.com/photo-1575428652377-a2d80e2277ec?w=600&q=80',
       'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80',
     ],
   },

@@ -66,6 +66,15 @@ img {
   }
 }
 
+.btn-volver {
+  color: #888888;
+  transition: color 0.3s ease;
+}
+
+.btn-volver:hover {
+  color: #C9A84C !important;
+}
+
 @media (min-width: 769px) {
   .mobile-menu-btn {
     display: none !important;

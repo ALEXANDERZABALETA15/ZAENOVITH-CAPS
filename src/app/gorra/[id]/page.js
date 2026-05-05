@@ -1,5 +1,6 @@
 import { gorras } from '@/lib/gorras'
 import GaleriaDetalle from '@/components/ui/GaleriaDetalle'
+import Link from 'next/link'
 
 export async function generateMetadata({ params }) {
   const { id } = await params
@@ -67,6 +68,31 @@ export default async function GorraDetalle({ params }) {
       paddingTop: 'clamp(100px, 12vw, 140px)',
       paddingBottom: 'clamp(60px, 8vw, 100px)',
     }}>
+      {/* Botón volver */}
+<div style={{
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 clamp(16px, 5vw, 40px)',
+  marginBottom: 'clamp(24px, 4vw, 40px)',
+}}>
+  <Link
+    href="/"
+    className="btn-volver"
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      color: '#888',
+      textDecoration: 'none',
+      fontSize: '13px',
+      fontFamily: 'var(--font-inter)',
+      letterSpacing: '0.05em',
+    }}
+  >
+    <span style={{ fontSize: '16px' }}>←</span>
+    Volver al catalogo
+  </Link>
+</div>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
