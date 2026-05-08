@@ -1,15 +1,15 @@
 'use client'
-
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { gorras } from '@/lib/gorras'
 import GorraCard from '@/components/ui/GorraCard'
+import { useColeccion } from '@/lib/ColeccionContext'
 
 const colecciones = ['Todas', 'Clasicos', 'Urbano', 'Vintage', 'Premium']
 const GORRAS_POR_PAGINA = 4
 
 export default function GorrasGrid() {
-  const [coleccionActiva, setColeccionActiva] = useState('Todas')
+  const { coleccionActiva, setColeccionActiva } = useColeccion()
   const [cantidad, setCantidad] = useState(GORRAS_POR_PAGINA)
 
   const gorrasFiltradas = coleccionActiva === 'Todas'
