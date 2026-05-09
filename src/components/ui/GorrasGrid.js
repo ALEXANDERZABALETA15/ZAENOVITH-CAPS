@@ -1,8 +1,9 @@
 'use client'
-import { useState } from 'react'
+
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { gorras } from '@/lib/gorras'
 import GorraCard from '@/components/ui/GorraCard'
+import { getGorras } from '@/lib/getGorras'
 import { useColeccion } from '@/lib/ColeccionContext'
 
 const colecciones = ['Todas', 'Clasicos', 'Urbano', 'Vintage', 'Premium']
@@ -11,6 +12,18 @@ const GORRAS_POR_PAGINA = 4
 export default function GorrasGrid() {
   const { coleccionActiva, setColeccionActiva } = useColeccion()
   const [cantidad, setCantidad] = useState(GORRAS_POR_PAGINA)
+  const [gorras, setGorras] = useState([])
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    async function cargarGorras() {
+      setCargando(true)
+      const data = await getGorras()
+      setGorras(data)
+      setCargando(false)
+    }
+    cargarGorras()
+  }, [])
 
   const gorrasFiltradas = coleccionActiva === 'Todas'
     ? gorras
@@ -144,20 +157,45 @@ export default function GorrasGrid() {
           ))}
         </motion.div>
 
+        {/* Cargando */}
+        {cargando && (
+          <div style={{ textAlign: 'center', padding: '60px 0' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              border: '2px solid rgba(201,168,76,0.2)',
+              borderTop: '2px solid #C9A84C',
+              borderRadius: '50%',
+              margin: '0 auto 16px',
+              animation: 'spin 1s linear infinite',
+            }} />
+            <p style={{
+              color: 'var(--color-gray)',
+              fontSize: '13px',
+              fontFamily: 'var(--font-inter)',
+              letterSpacing: '0.1em',
+            }}>
+              Cargando coleccion...
+            </p>
+          </div>
+        )}
+
         {/* Grid de tarjetas */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(240px, 30vw, 300px), 1fr))',
-          gap: 'clamp(16px, 3vw, 28px)',
-          marginBottom: 'clamp(32px, 6vw, 56px)',
-        }}>
-          {gorrasVisibles.map((gorra) => (
-            <GorraCard key={gorra.id} gorra={gorra} />
-          ))}
-        </div>
+        {!cargando && (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(240px, 30vw, 300px), 1fr))',
+            gap: 'clamp(16px, 3vw, 28px)',
+            marginBottom: 'clamp(32px, 6vw, 56px)',
+          }}>
+            {gorrasVisibles.map((gorra) => (
+              <GorraCard key={gorra.id} gorra={gorra} />
+            ))}
+          </div>
+        )}
 
         {/* Sin resultados */}
-        {gorrasFiltradas.length === 0 && (
+        {!cargando && gorrasFiltradas.length === 0 && (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
             <p style={{
               fontSize: '14px',
@@ -171,7 +209,7 @@ export default function GorrasGrid() {
         )}
 
         {/* Botón Ver más */}
-        {hayMas && (
+        {!cargando && hayMas && (
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

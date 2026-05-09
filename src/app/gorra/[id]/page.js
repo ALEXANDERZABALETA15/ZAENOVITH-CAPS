@@ -1,10 +1,10 @@
-import { gorras } from '@/lib/gorras'
+import { getGorraById } from '@/lib/getGorras'
 import GaleriaDetalle from '@/components/ui/GaleriaDetalle'
 import Link from 'next/link'
 
 export async function generateMetadata({ params }) {
   const { id } = await params
-  const gorra = gorras.find((item) => item.id === Number(id))
+  const gorra = await getGorraById(Number(id))
   if (!gorra) return { title: 'Producto no encontrado' }
   return {
     title: `${gorra.nombre} — ZAHENOVITH`,
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
 
 export default async function GorraDetalle({ params }) {
   const { id } = await params
-  const gorra = gorras.find((item) => item.id === Number(id))
+  const gorra = await getGorraById(Number(id))
 
   if (!gorra) {
     return (
