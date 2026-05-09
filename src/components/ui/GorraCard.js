@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import Image from 'next/image'
+
 
 const badgeColors = {
   Nuevo:        { bg: '#1a472a', color: '#4ade80' },
@@ -69,7 +69,7 @@ export default function GorraCard({ gorra }) {
     aspectRatio: '1/1',
   }}
 >
-  <Image
+  <img
     src={gorra.fotos[fotoActual]}
     alt={gorra.nombre}
     fill

@@ -24,7 +24,7 @@ export default function GaleriaDetalle({ fotos, nombre }) {
           border: '1px solid rgba(201,168,76,0.15)',
         }}
       >
-        <Image
+        <img
           src={fotos[fotoActual]}
           alt={nombre}
           fill
@@ -73,7 +73,7 @@ export default function GaleriaDetalle({ fotos, nombre }) {
               }
             }}
           >
-            <Image
+            <img
               src={foto}
               alt={`${nombre} vista ${index + 1}`}
               fill
