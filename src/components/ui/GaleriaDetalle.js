@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 
 export default function GaleriaDetalle({ fotos, nombre }) {
   const [fotoActual, setFotoActual] = useState(0)
@@ -15,7 +14,6 @@ export default function GaleriaDetalle({ fotos, nombre }) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-          position: 'relative',
           width: '100%',
           aspectRatio: '1/1',
           overflow: 'hidden',
@@ -27,14 +25,15 @@ export default function GaleriaDetalle({ fotos, nombre }) {
         <img
           src={fotos[fotoActual]}
           alt={nombre}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
           style={{
+            width: '100%',
+            height: '100%',
             objectFit: 'cover',
+            objectPosition: 'center',
             transition: 'transform 0.6s ease',
             transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+            display: 'block',
           }}
-          priority
         />
       </div>
 
@@ -49,7 +48,6 @@ export default function GaleriaDetalle({ fotos, nombre }) {
             key={index}
             onClick={() => setFotoActual(index)}
             style={{
-              position: 'relative',
               aspectRatio: '1/1',
               overflow: 'hidden',
               borderRadius: '2px',
@@ -76,9 +74,13 @@ export default function GaleriaDetalle({ fotos, nombre }) {
             <img
               src={foto}
               alt={`${nombre} vista ${index + 1}`}
-              fill
-              sizes="(max-width: 768px) 33vw, 15vw"
-              style={{ objectFit: 'cover' }}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                display: 'block',
+              }}
             />
           </div>
         ))}

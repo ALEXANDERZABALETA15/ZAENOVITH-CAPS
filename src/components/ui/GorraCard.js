@@ -70,17 +70,21 @@ export default function GorraCard({ gorra }) {
   }}
 >
   <img
-    src={gorra.fotos[fotoActual]}
-    alt={gorra.nombre}
-    fill
-    sizes="(max-width: 768px) 100vw, 33vw"
-    style={{
-      objectFit: 'cover',
-      transition: 'transform 0.6s ease',
-      transform: isHovered ? 'scale(1.08)' : 'scale(1)',
-      filter: agotado ? 'grayscale(60%)' : 'none',
-    }}
-  />
+  src={gorra.fotos[fotoActual]}
+  alt={gorra.nombre}
+  style={{
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    transition: 'transform 0.6s ease',
+    transform: isHovered ? 'scale(1.08)' : 'scale(1)',
+    filter: agotado ? 'grayscale(60%)' : 'none',
+    display: 'block',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  }}
+/>
 
   {/* Overlay oscuro en hover */}
   <div
