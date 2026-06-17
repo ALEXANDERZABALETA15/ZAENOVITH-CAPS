@@ -18,7 +18,7 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: 'ZAHENOVITH — Gorras Exclusivas',
+  title: 'CROWNLUX - PREMIUM CAPS',
   description: 'Descubre la coleccion mas exclusiva de gorras. Disenos unicos con calidad premium.',
 }
 

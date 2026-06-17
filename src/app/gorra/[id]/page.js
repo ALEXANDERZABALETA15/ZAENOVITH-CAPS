@@ -7,7 +7,7 @@ export async function generateMetadata({ params }) {
   const gorra = await getGorraById(Number(id))
   if (!gorra) return { title: 'Producto no encontrado' }
   return {
-    title: `${gorra.nombre} — ZAHENOVITH`,
+    title: `${gorra.nombre} — CROWNLUX`,
     description: gorra.descripcion,
   }
 }

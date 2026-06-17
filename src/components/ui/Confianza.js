@@ -70,7 +70,7 @@ export default function Confianza() {
             fontFamily: 'var(--font-playfair)',
             letterSpacing: '0.03em',
           }}>
-            La Experiencia ZAHENOVITH
+            La experiencia CROWNLUX
           </h2>
         </motion.div>
 

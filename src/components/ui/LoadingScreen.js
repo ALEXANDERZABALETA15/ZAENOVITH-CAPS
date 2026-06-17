@@ -43,7 +43,7 @@ export default function LoadingScreen() {
               letterSpacing: '0.15em',
             }}
           >
-            ZAHENOVITH
+            CROWNLUX
           </motion.h1>
 
           {/* Subtítulo */}

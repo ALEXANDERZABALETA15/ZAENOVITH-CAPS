@@ -35,7 +35,7 @@ export default function Footer() {
               fontFamily: 'var(--font-playfair)',
               marginBottom: '6px',
             }}>
-              ZAHENOVITH
+              CROWNLUX
             </h2>
             <p style={{
               fontSize: '9px',
@@ -130,7 +130,7 @@ export default function Footer() {
             fontFamily: 'var(--font-inter)',
             letterSpacing: '0.05em',
           }}>
-            © {year} ZAHENOVITH. Todos los derechos reservados.
+            © {year} CROWNLUX. Todos los derechos reservados.
           </p>
 
           <p style={{

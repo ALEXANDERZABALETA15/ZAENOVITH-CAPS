@@ -104,7 +104,7 @@ export default function Hero() {
             fontFamily: 'var(--font-playfair)',
           }}
         >
-          ZAENOVITH
+          CROWNLUX
         </h1>
 
         {/* Subtítulo dorado */}
