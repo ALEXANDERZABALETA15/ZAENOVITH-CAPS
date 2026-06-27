@@ -54,8 +54,8 @@ const resenas = [
     nombre: 'Isabella C.',
     ciudad: 'Pereira',
     estrellas: 5,
-    comentario: 'La gorra Gold Edition es una obra de arte. Vale cada peso. Envio rapido y seguro.',
-    gorra: 'Gold Edition',
+    comentario: 'La gorra Chrome Hearts es una obra de arte. Vale cada peso. Envio rapido y seguro.',
+    gorra: 'Chrome Hearts',
     fecha: 'Hace 1 mes',
   },
 ]
@@ -64,7 +64,7 @@ function Estrellas({ cantidad }) {
   return (
     <div style={{ display: 'flex', gap: '3px' }}>
       {Array.from({ length: cantidad }).map((_, i) => (
-        <span key={i} style={{ color: '#C9A84C', fontSize: '14px' }}>★</span>
+        <span key={i} style={{ color: 'var(--color-green)', fontSize: '14px' }}>★</span>
       ))}
     </div>
   )
@@ -85,7 +85,7 @@ export default function Resenas() {
 
   return (
     <section style={{
-      backgroundColor: '#0a0a0a',
+      backgroundColor: 'var(--color-black)',
       padding: 'clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px)',
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -104,10 +104,10 @@ export default function Resenas() {
             gap: '12px',
             marginBottom: '16px',
           }}>
-            <div style={{ width: '40px', height: '1px', backgroundColor: '#C9A84C' }} />
+            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: '#C9A84C',
+              color: 'var(--color-green)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
@@ -115,15 +115,16 @@ export default function Resenas() {
             }}>
               Lo Que Dicen Nuestros Clientes
             </p>
-            <div style={{ width: '40px', height: '1px', backgroundColor: '#C9A84C' }} />
+            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>
 
           <h2 style={{
             fontSize: 'clamp(24px, 4vw, 40px)',
             fontWeight: '800',
-            color: '#ffffff',
-            fontFamily: 'var(--font-playfair)',
-            letterSpacing: '0.03em',
+            color: 'var(--color-white)',
+            fontFamily: 'var(--font-cinzel)',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
             marginBottom: '16px',
           }}>
             Clientes Satisfechos
@@ -140,25 +141,26 @@ export default function Resenas() {
             {[
               { numero: '500+', label: 'Clientes felices' },
               { numero: '5.0', label: 'Calificacion promedio' },
-              { numero: '100%', label: 'Recomendacion' },
+              { numero: '100%', label: 'Recomendarian' },
             ].map((stat) => (
               <div key={stat.label} style={{ textAlign: 'center' }}>
                 <p style={{
                   fontSize: 'clamp(24px, 4vw, 36px)',
                   fontWeight: '800',
-                  color: '#C9A84C',
-                  fontFamily: 'var(--font-playfair)',
+                  color: 'var(--color-green)',
+                  fontFamily: 'var(--font-cinzel)',
                   lineHeight: '1',
                   marginBottom: '6px',
                 }}>
                   {stat.numero}
                 </p>
                 <p style={{
-                  fontSize: '12px',
-                  color: '#888',
+                  fontSize: '11px',
+                  color: 'var(--color-gray)',
                   fontFamily: 'var(--font-inter)',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
+                  fontWeight: '300',
                 }}>
                   {stat.label}
                 </p>
@@ -167,80 +169,75 @@ export default function Resenas() {
           </div>
         </motion.div>
 
-        {/* Carrusel de reseñas */}
+        {/* Carrusel */}
         <div style={{ position: 'relative', maxWidth: '700px', margin: '0 auto' }}>
 
-          {/* Reseña activa */}
           <motion.div
             key={activa}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             style={{
-              backgroundColor: '#111111',
-              border: '1px solid rgba(201,168,76,0.15)',
+              backgroundColor: 'var(--color-black-card)',
+              border: '1px solid rgba(199,199,199,0.08)',
               borderRadius: '2px',
               padding: 'clamp(24px, 4vw, 48px)',
               textAlign: 'center',
               marginBottom: '24px',
             }}
           >
-            {/* Comillas decorativas */}
             <p style={{
               fontSize: '48px',
-              color: '#C9A84C',
+              color: 'var(--color-green)',
               lineHeight: '1',
               marginBottom: '16px',
               opacity: 0.4,
               fontFamily: 'serif',
             }}>
+              
             </p>
 
-            {/* Estrellas */}
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
               <Estrellas cantidad={resena.estrellas} />
             </div>
 
-            {/* Comentario */}
             <p style={{
-              fontSize: 'clamp(14px, 2vw, 17px)',
-              color: '#cccccc',
+              fontSize: 'clamp(14px, 2vw, 16px)',
+              color: 'var(--color-silver)',
               lineHeight: '1.8',
               fontFamily: 'var(--font-inter)',
               fontStyle: 'italic',
+              fontWeight: '300',
               marginBottom: '24px',
             }}>
               {resena.comentario}
             </p>
 
-            {/* Separador */}
             <div style={{
               width: '40px',
               height: '1px',
-              backgroundColor: '#C9A84C',
+              backgroundColor: 'var(--color-green)',
               margin: '0 auto 20px',
             }} />
 
-            {/* Info cliente */}
-            <div>
-              <p style={{
-                fontSize: '14px',
-                fontWeight: '700',
-                color: '#ffffff',
-                fontFamily: 'var(--font-inter)',
-                marginBottom: '4px',
-              }}>
-                {resena.nombre}
-              </p>
-              <p style={{
-                fontSize: '12px',
-                color: '#888',
-                fontFamily: 'var(--font-inter)',
-                letterSpacing: '0.1em',
-              }}>
-                {resena.ciudad} · {resena.gorra} · {resena.fecha}
-              </p>
-            </div>
+            <p style={{
+              fontSize: '13px',
+              fontWeight: '600',
+              color: 'var(--color-white)',
+              fontFamily: 'var(--font-inter)',
+              marginBottom: '4px',
+            }}>
+              {resena.nombre}
+            </p>
+            <p style={{
+              fontSize: '11px',
+              color: 'var(--color-gray)',
+              fontFamily: 'var(--font-inter)',
+              letterSpacing: '0.1em',
+              fontWeight: '300',
+            }}>
+              {resena.ciudad} · {resena.gorra} · {resena.fecha}
+            </p>
           </motion.div>
 
           {/* Controles */}
@@ -250,8 +247,6 @@ export default function Resenas() {
             alignItems: 'center',
             gap: '20px',
           }}>
-
-            {/* Botón anterior */}
             <button
               onClick={anterior}
               style={{
@@ -259,8 +254,8 @@ export default function Resenas() {
                 height: '40px',
                 borderRadius: '50%',
                 backgroundColor: 'transparent',
-                border: '1px solid rgba(201,168,76,0.3)',
-                color: '#C9A84C',
+                border: '1px solid rgba(199,199,199,0.2)',
+                color: 'var(--color-silver)',
                 fontSize: '16px',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
@@ -269,18 +264,19 @@ export default function Resenas() {
                 justifyContent: 'center',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#C9A84C'
-                e.currentTarget.style.color = '#000'
+                e.currentTarget.style.backgroundColor = 'var(--color-green)'
+                e.currentTarget.style.borderColor = 'var(--color-green)'
+                e.currentTarget.style.color = 'var(--color-white)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.color = '#C9A84C'
+                e.currentTarget.style.borderColor = 'rgba(199,199,199,0.2)'
+                e.currentTarget.style.color = 'var(--color-silver)'
               }}
             >
               ←
             </button>
 
-            {/* Puntos indicadores */}
             <div style={{ display: 'flex', gap: '8px' }}>
               {resenas.map((_, index) => (
                 <button
@@ -291,8 +287,8 @@ export default function Resenas() {
                     height: '6px',
                     borderRadius: '3px',
                     backgroundColor: activa === index
-                      ? '#C9A84C'
-                      : 'rgba(255,255,255,0.2)',
+                      ? 'var(--color-green)'
+                      : 'rgba(199,199,199,0.2)',
                     border: 'none',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -302,7 +298,6 @@ export default function Resenas() {
               ))}
             </div>
 
-            {/* Botón siguiente */}
             <button
               onClick={siguiente}
               style={{
@@ -310,8 +305,8 @@ export default function Resenas() {
                 height: '40px',
                 borderRadius: '50%',
                 backgroundColor: 'transparent',
-                border: '1px solid rgba(201,168,76,0.3)',
-                color: '#C9A84C',
+                border: '1px solid rgba(199,199,199,0.2)',
+                color: 'var(--color-silver)',
                 fontSize: '16px',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
@@ -320,17 +315,18 @@ export default function Resenas() {
                 justifyContent: 'center',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#C9A84C'
-                e.currentTarget.style.color = '#000'
+                e.currentTarget.style.backgroundColor = 'var(--color-green)'
+                e.currentTarget.style.borderColor = 'var(--color-green)'
+                e.currentTarget.style.color = 'var(--color-white)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.color = '#C9A84C'
+                e.currentTarget.style.borderColor = 'rgba(199,199,199,0.2)'
+                e.currentTarget.style.color = 'var(--color-silver)'
               }}
             >
               →
             </button>
-
           </div>
         </div>
       </div>

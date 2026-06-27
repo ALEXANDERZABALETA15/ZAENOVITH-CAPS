@@ -16,17 +16,16 @@ export default function Header() {
         left: 0,
         right: 0,
         zIndex: 1000,
-        backgroundColor: 'rgba(10,10,10,0.95)',
+        backgroundColor: 'rgba(10,10,10,0.97)',
         backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(201,168,76,0.2)',
+        borderBottom: '1px solid rgba(199,199,199,0.15)',
         width: '100%',
       }}
     >
-
       {/* Barra superior */}
       <div
         style={{
-          backgroundColor: 'var(--color-gold)',
+          backgroundColor: 'var(--color-green)',
           textAlign: 'center',
           padding: '6px 16px',
         }}
@@ -34,12 +33,14 @@ export default function Header() {
         <p
           style={{
             fontSize: 'clamp(10px, 2vw, 12px)',
-            color: 'var(--color-black)',
+            color: 'var(--color-white)',
             fontWeight: '600',
-            letterSpacing: '0.1em',
+            letterSpacing: '0.15em',
+            fontFamily: 'var(--font-inter)',
+            textTransform: 'uppercase',
           }}
         >
-          ENVIOS A TODO COLOMBIA — CALIDAD PREMIUM
+          Envios a Todo Colombia — Calidad Premium
         </p>
       </div>
 
@@ -55,37 +56,43 @@ export default function Header() {
           justifyContent: 'space-between',
         }}
       >
+        {/* Logo */}
+        <Link href="/" style={{ textDecoration: 'none' }}>
+          <div>
+            <h1
+              style={{
+                fontSize: 'clamp(16px, 3.5vw, 24px)',
+                fontWeight: '800',
+                color: 'var(--color-white)',
+                letterSpacing: '0.2em',
+                fontFamily: 'var(--font-cinzel)',
+                textTransform: 'uppercase',
+                transition: 'color 0.3s ease',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.color = 'var(--color-green)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = 'var(--color-white)')
+              }
+            >
+              CROWNLUX
+            </h1>
 
-       {/* Logo — clic vuelve al inicio */}
-<Link href="/" style={{ textDecoration: 'none' }}>
-  <div>
-    <h1
-      style={{
-        fontSize: 'clamp(18px, 4vw, 26px)',
-        fontWeight: '800',
-        color: 'var(--color-gold)',
-        letterSpacing: '0.15em',
-        fontFamily: 'var(--font-playfair)',
-        transition: 'opacity 0.3s ease',
-      }}
-      onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
-      onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-    >
-      CROWNLUX
-    </h1>
-    <p
-      style={{
-        fontSize: 'clamp(7px, 1.5vw, 9px)',
-        color: 'var(--color-gray)',
-        letterSpacing: '0.3em',
-        textTransform: 'uppercase',
-        marginTop: '-2px',
-      }}
-    >
-      Premium Caps
-    </p>
-  </div>
-</Link>
+            <p
+              style={{
+                fontSize: 'clamp(7px, 1.5vw, 9px)',
+                color: 'var(--color-silver)',
+                letterSpacing: '0.3em',
+                textTransform: 'uppercase',
+                marginTop: '-2px',
+                fontFamily: 'var(--font-inter)',
+              }}
+            >
+              Premium Caps
+            </p>
+          </div>
+        </Link>
 
         {/* Links desktop */}
         <div
@@ -97,28 +104,28 @@ export default function Header() {
           }}
         >
           {navLinks.map((item) => (
-            <a
+            <Link
               key={item}
               href="#"
               style={{
-                fontSize: 'clamp(11px, 1.5vw, 13px)',
-                color: 'var(--color-white-soft)',
+                fontSize: 'clamp(10px, 1.5vw, 12px)',
+                color: 'var(--color-silver)',
                 fontWeight: '500',
-                letterSpacing: '0.08em',
+                letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 transition: 'color 0.3s ease',
                 whiteSpace: 'nowrap',
-                textDecoration: 'none',
+                fontFamily: 'var(--font-inter)',
               }}
               onMouseEnter={(e) =>
-                (e.target.style.color = 'var(--color-gold)')
+                (e.currentTarget.style.color = 'var(--color-green)')
               }
               onMouseLeave={(e) =>
-                (e.target.style.color = 'var(--color-white-soft)')
+                (e.currentTarget.style.color = 'var(--color-silver)')
               }
             >
               {item}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -142,31 +149,29 @@ export default function Header() {
               display: 'block',
               width: '24px',
               height: '2px',
-              backgroundColor: 'var(--color-gold)',
+              backgroundColor: 'var(--color-white)',
               transition: 'all 0.3s ease',
               transform: menuOpen
                 ? 'rotate(45deg) translateY(7px)'
                 : 'none',
             }}
           />
-
           <span
             style={{
               display: 'block',
               width: '24px',
               height: '2px',
-              backgroundColor: 'var(--color-gold)',
+              backgroundColor: 'var(--color-white)',
               transition: 'all 0.3s ease',
               opacity: menuOpen ? 0 : 1,
             }}
           />
-
           <span
             style={{
               display: 'block',
               width: '24px',
               height: '2px',
-              backgroundColor: 'var(--color-gold)',
+              backgroundColor: 'var(--color-white)',
               transition: 'all 0.3s ease',
               transform: menuOpen
                 ? 'rotate(-45deg) translateY(-7px)'
@@ -180,7 +185,7 @@ export default function Header() {
       <div
         style={{
           backgroundColor: 'var(--color-black-soft)',
-          borderTop: '1px solid rgba(201,168,76,0.2)',
+          borderTop: '1px solid rgba(199,199,199,0.1)',
           padding: menuOpen
             ? '24px clamp(16px, 4vw, 24px)'
             : '0 clamp(16px, 4vw, 24px)',
@@ -193,23 +198,23 @@ export default function Header() {
         }}
       >
         {navLinks.map((item) => (
-          <a
+          <Link
             key={item}
             href="#"
             onClick={() => setMenuOpen(false)}
             style={{
-              fontSize: '14px',
-              color: 'var(--color-white-soft)',
+              fontSize: '13px',
+              color: 'var(--color-silver)',
               fontWeight: '500',
-              letterSpacing: '0.08em',
+              letterSpacing: '0.15em',
               textTransform: 'uppercase',
               padding: '8px 0',
-              borderBottom: '1px solid rgba(201,168,76,0.1)',
-              textDecoration: 'none',
+              borderBottom: '1px solid rgba(199,199,199,0.08)',
+              fontFamily: 'var(--font-inter)',
             }}
           >
             {item}
-          </a>
+          </Link>
         ))}
       </div>
     </header>

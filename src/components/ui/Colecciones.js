@@ -43,7 +43,7 @@ export default function Colecciones() {
 
   return (
     <section style={{
-      backgroundColor: '#111111',
+      backgroundColor: 'var(--color-black-soft)',
       padding: 'clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px)',
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -65,10 +65,10 @@ export default function Colecciones() {
             gap: '12px',
             marginBottom: '16px',
           }}>
-            <div style={{ width: '40px', height: '1px', backgroundColor: '#C9A84C' }} />
+            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: '#C9A84C',
+              color: 'var(--color-green)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
@@ -76,15 +76,16 @@ export default function Colecciones() {
             }}>
               Nuestras Colecciones
             </p>
-            <div style={{ width: '40px', height: '1px', backgroundColor: '#C9A84C' }} />
+            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>
 
           <h2 style={{
             fontSize: 'clamp(24px, 4vw, 40px)',
             fontWeight: '800',
-            color: '#ffffff',
-            fontFamily: 'var(--font-playfair)',
-            letterSpacing: '0.03em',
+            color: 'var(--color-white)',
+            fontFamily: 'var(--font-cinzel)',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
           }}>
             Encuentra Tu Estilo
           </h2>
@@ -135,6 +136,7 @@ function ColeccionCard({ col, index, onClick }) {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
+          display: 'block',
           transition: 'transform 0.6s ease',
         }}
       />
@@ -142,7 +144,7 @@ function ColeccionCard({ col, index, onClick }) {
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%)',
+        background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%)',
       }} />
 
       <div style={{
@@ -153,10 +155,10 @@ function ColeccionCard({ col, index, onClick }) {
         padding: 'clamp(16px, 3vw, 24px)',
       }}>
         <p style={{
-          fontSize: '10px',
-          color: '#C9A84C',
+          fontSize: '9px',
+          color: 'var(--color-green)',
           fontWeight: '600',
-          letterSpacing: '0.2em',
+          letterSpacing: '0.25em',
           textTransform: 'uppercase',
           fontFamily: 'var(--font-inter)',
           marginBottom: '6px',
@@ -165,11 +167,12 @@ function ColeccionCard({ col, index, onClick }) {
         </p>
 
         <h3 style={{
-          fontSize: 'clamp(18px, 2.5vw, 24px)',
-          fontWeight: '800',
-          color: '#ffffff',
-          fontFamily: 'var(--font-playfair)',
+          fontSize: 'clamp(16px, 2.5vw, 22px)',
+          fontWeight: '700',
+          color: 'var(--color-white)',
+          fontFamily: 'var(--font-cinzel)',
           letterSpacing: '0.05em',
+          textTransform: 'uppercase',
           marginBottom: '4px',
         }}>
           {col.nombre}
@@ -177,9 +180,10 @@ function ColeccionCard({ col, index, onClick }) {
 
         <p style={{
           fontSize: '12px',
-          color: 'rgba(255,255,255,0.7)',
+          color: 'var(--color-silver)',
           fontFamily: 'var(--font-inter)',
           letterSpacing: '0.05em',
+          fontWeight: '300',
         }}>
           {col.descripcion}
         </p>
@@ -187,7 +191,7 @@ function ColeccionCard({ col, index, onClick }) {
         <div style={{
           width: '24px',
           height: '1px',
-          backgroundColor: '#C9A84C',
+          backgroundColor: 'var(--color-green)',
           marginTop: '12px',
         }} />
       </div>

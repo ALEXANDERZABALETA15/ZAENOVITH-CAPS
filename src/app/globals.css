@@ -1,17 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --color-black:      #0a0a0a;
-  --color-black-soft: #111111;
-  --color-black-card: #1a1a1a;
-  --color-gold:       #C9A84C;
-  --color-gold-light: #E2C97E;
-  --color-gold-dark:  #A07830;
-  --color-white:      #ffffff;
-  --color-white-soft: #f5f5f5;
-  --color-gray:       #888888;
-  --color-gray-soft:  #2a2a2a;
+  /* Paleta principal */
+  --color-black:        #0a0a0a;
+  --color-black-soft:   #111111;
+  --color-black-card:   #1c1c1c;
+  --color-white:        #f5f3ec;
+  --color-white-pure:   #ffffff;
+  --color-green:        #1e6b52;
+  --color-green-light:  #2a8f6f;
+  --color-green-dark:   #164d3b;
+
+  /* Paleta secundaria */
+  --color-silver:       #c7c7c7;
+  --color-silver-dark:  #8a8a8a;
+  --color-gray:         #7a7a7a;
+  --color-gray-soft:    #2a2a2a;
+
+  /* Tipografia */
+  --font-cinzel:        var(--font-cinzel);
+  --font-inter:         var(--font-inter);
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -30,9 +40,10 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-cinzel), serif;
   color: var(--color-white);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 p, span, a, button {
@@ -66,20 +77,23 @@ img {
   }
 }
 
-.btn-volver {
-  color: #888888;
-  transition: color 0.3s ease;
-}
-
-.btn-volver:hover {
-  color: #C9A84C !important;
-}
-
 @media (min-width: 769px) {
   .mobile-menu-btn {
     display: none !important;
   }
 }
+
+/* Hover links */
+.btn-volver {
+  color: var(--color-gray);
+  transition: color 0.3s ease;
+}
+
+.btn-volver:hover {
+  color: var(--color-green) !important;
+}
+
+/* Spinner */
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

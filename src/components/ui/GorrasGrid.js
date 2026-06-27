@@ -65,10 +65,10 @@ export default function GorrasGrid() {
             gap: '12px',
             marginBottom: '16px',
           }}>
-            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-gold)' }} />
+            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: 'var(--color-gold)',
+              color: 'var(--color-green)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
@@ -76,15 +76,17 @@ export default function GorrasGrid() {
             }}>
               Coleccion Exclusiva
             </p>
-            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-gold)' }} />
+            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>
 
           <h2 style={{
             fontSize: 'clamp(28px, 5vw, 56px)',
             fontWeight: '800',
             color: 'var(--color-white)',
-            fontFamily: 'var(--font-playfair)',
+            fontFamily: 'var(--font-cinzel)',
             marginBottom: '16px',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
           }}>
             Catalogo Premium
           </h2>
@@ -96,6 +98,7 @@ export default function GorrasGrid() {
             margin: '0 auto',
             lineHeight: '1.8',
             fontFamily: 'var(--font-inter)',
+            fontWeight: '300',
           }}>
             Cada diseno es unico. Cada gorra cuenta una historia.
           </p>
@@ -122,14 +125,14 @@ export default function GorrasGrid() {
               style={{
                 padding: 'clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px)',
                 backgroundColor: coleccionActiva === col
-                  ? 'var(--color-gold)'
+                  ? 'var(--color-green)'
                   : 'transparent',
                 color: coleccionActiva === col
-                  ? 'var(--color-black)'
+                  ? 'var(--color-white)'
                   : 'var(--color-gray)',
                 border: coleccionActiva === col
-                  ? '1px solid var(--color-gold)'
-                  : '1px solid rgba(255,255,255,0.1)',
+                  ? '1px solid var(--color-green)'
+                  : '1px solid rgba(199,199,199,0.1)',
                 fontSize: 'clamp(10px, 1.5vw, 12px)',
                 fontWeight: '600',
                 letterSpacing: '0.15em',
@@ -137,17 +140,17 @@ export default function GorrasGrid() {
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 fontFamily: 'var(--font-inter)',
-                borderRadius: '2px',
+                borderRadius: '1px',
               }}
               onMouseEnter={(e) => {
                 if (coleccionActiva !== col) {
-                  e.currentTarget.style.borderColor = 'var(--color-gold)'
-                  e.currentTarget.style.color = 'var(--color-gold)'
+                  e.currentTarget.style.borderColor = 'var(--color-green)'
+                  e.currentTarget.style.color = 'var(--color-green)'
                 }
               }}
               onMouseLeave={(e) => {
                 if (coleccionActiva !== col) {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+                  e.currentTarget.style.borderColor = 'rgba(199,199,199,0.1)'
                   e.currentTarget.style.color = 'var(--color-gray)'
                 }
               }}
@@ -163,8 +166,8 @@ export default function GorrasGrid() {
             <div style={{
               width: '40px',
               height: '40px',
-              border: '2px solid rgba(201,168,76,0.2)',
-              borderTop: '2px solid #C9A84C',
+              border: '2px solid rgba(30,107,82,0.2)',
+              borderTop: '2px solid var(--color-green)',
               borderRadius: '50%',
               margin: '0 auto 16px',
               animation: 'spin 1s linear infinite',
@@ -180,7 +183,7 @@ export default function GorrasGrid() {
           </div>
         )}
 
-        {/* Grid de tarjetas */}
+        {/* Grid */}
         {!cargando && (
           <div style={{
             display: 'grid',
@@ -221,24 +224,24 @@ export default function GorrasGrid() {
               style={{
                 padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 56px)',
                 backgroundColor: 'transparent',
-                color: 'var(--color-gold)',
-                border: '1px solid var(--color-gold)',
+                color: 'var(--color-green)',
+                border: '1px solid var(--color-green)',
                 fontSize: 'clamp(11px, 1.5vw, 13px)',
-                fontWeight: '700',
+                fontWeight: '600',
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 fontFamily: 'var(--font-inter)',
-                borderRadius: '2px',
+                borderRadius: '1px',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--color-gold)'
-                e.currentTarget.style.color = 'var(--color-black)'
+                e.currentTarget.style.backgroundColor = 'var(--color-green)'
+                e.currentTarget.style.color = 'var(--color-white)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.color = 'var(--color-gold)'
+                e.currentTarget.style.color = 'var(--color-green)'
               }}
             >
               Ver Mas Gorras

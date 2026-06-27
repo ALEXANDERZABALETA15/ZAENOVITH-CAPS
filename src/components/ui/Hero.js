@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+
 export default function Hero() {
   return (
     <section
@@ -15,8 +17,7 @@ export default function Hero() {
         paddingTop: 'clamp(100px, 15vw, 130px)',
       }}
     >
-
-      {/* Fondo decorativo dorado */}
+      {/* Fondo decorativo verde */}
       <div
         style={{
           position: 'absolute',
@@ -26,7 +27,8 @@ export default function Hero() {
           width: 'clamp(300px, 60vw, 700px)',
           height: 'clamp(300px, 60vw, 700px)',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201,168,76,0.07) 0%, rgba(10,10,10,0) 70%)',
+          background:
+            'radial-gradient(circle, rgba(30,107,82,0.08) 0%, rgba(10,10,10,0) 70%)',
           pointerEvents: 'none',
         }}
       />
@@ -40,7 +42,8 @@ export default function Hero() {
           transform: 'translateY(-50%)',
           width: '1px',
           height: 'clamp(80px, 15vw, 150px)',
-          background: 'linear-gradient(to bottom, transparent, var(--color-gold), transparent)',
+          background:
+            'linear-gradient(to bottom, transparent, var(--color-silver), transparent)',
         }}
       />
 
@@ -53,7 +56,8 @@ export default function Hero() {
           transform: 'translateY(-50%)',
           width: '1px',
           height: 'clamp(80px, 15vw, 150px)',
-          background: 'linear-gradient(to bottom, transparent, var(--color-gold), transparent)',
+          background:
+            'linear-gradient(to bottom, transparent, var(--color-silver), transparent)',
         }}
       />
 
@@ -67,7 +71,6 @@ export default function Hero() {
           width: '100%',
         }}
       >
-
         {/* Etiqueta superior */}
         <div
           style={{
@@ -77,19 +80,34 @@ export default function Hero() {
             marginBottom: 'clamp(16px, 3vw, 24px)',
           }}
         >
-          <div style={{ width: 'clamp(30px, 5vw, 50px)', height: '1px', backgroundColor: 'var(--color-gold)' }} />
+          <div
+            style={{
+              width: 'clamp(30px, 5vw, 50px)',
+              height: '1px',
+              backgroundColor: 'var(--color-green)',
+            }}
+          />
+
           <p
             style={{
-              fontSize: 'clamp(10px, 1.5vw, 12px)',
-              color: 'var(--color-gold)',
+              fontSize: 'clamp(9px, 1.5vw, 11px)',
+              color: 'var(--color-green)',
               fontWeight: '600',
-              letterSpacing: '0.3em',
+              letterSpacing: '0.4em',
               textTransform: 'uppercase',
+              fontFamily: 'var(--font-inter)',
             }}
           >
             Coleccion Exclusiva
           </p>
-          <div style={{ width: 'clamp(30px, 5vw, 50px)', height: '1px', backgroundColor: 'var(--color-gold)' }} />
+
+          <div
+            style={{
+              width: 'clamp(30px, 5vw, 50px)',
+              height: '1px',
+              backgroundColor: 'var(--color-green)',
+            }}
+          />
         </div>
 
         {/* Título principal */}
@@ -98,22 +116,23 @@ export default function Hero() {
             fontSize: 'clamp(36px, 8vw, 96px)',
             fontWeight: '900',
             color: 'var(--color-white)',
-            letterSpacing: '0.05em',
+            letterSpacing: '0.1em',
             lineHeight: '1',
             marginBottom: 'clamp(8px, 2vw, 16px)',
-            fontFamily: 'var(--font-playfair)',
+            fontFamily: 'var(--font-cinzel)',
+            textTransform: 'uppercase',
           }}
         >
           CROWNLUX
         </h1>
 
-        {/* Subtítulo dorado */}
+        {/* Subtítulo */}
         <h2
           style={{
-            fontSize: 'clamp(12px, 2.5vw, 20px)',
-            fontWeight: '300',
-            color: 'var(--color-gold)',
-            letterSpacing: '0.4em',
+            fontSize: 'clamp(10px, 2vw, 14px)',
+            fontWeight: '400',
+            color: 'var(--color-silver)',
+            letterSpacing: '0.5em',
             textTransform: 'uppercase',
             marginBottom: 'clamp(16px, 4vw, 32px)',
             fontFamily: 'var(--font-inter)',
@@ -125,17 +144,18 @@ export default function Hero() {
         {/* Descripción */}
         <p
           style={{
-            fontSize: 'clamp(13px, 2vw, 16px)',
+            fontSize: 'clamp(13px, 2vw, 15px)',
             color: 'var(--color-gray)',
             lineHeight: '1.8',
-            maxWidth: '500px',
+            maxWidth: '480px',
             margin: '0 auto',
             marginBottom: 'clamp(32px, 6vw, 56px)',
             fontFamily: 'var(--font-inter)',
+            fontWeight: '300',
           }}
         >
-          Gorras de edicion limitada con disenos exclusivos.
-          Cada pieza cuenta una historia unica.
+          Gorras de edicion limitada con disenos exclusivos. Cada pieza cuenta
+          una historia unica.
         </p>
 
         {/* Botones */}
@@ -148,66 +168,69 @@ export default function Hero() {
           }}
         >
           {/* Botón principal */}
-          <a
+          <Link
             href="#coleccion"
             style={{
               display: 'inline-block',
               padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 40px)',
-              backgroundColor: 'var(--color-gold)',
-              color: 'var(--color-black)',
-              fontSize: 'clamp(11px, 1.5vw, 13px)',
-              fontWeight: '700',
-              letterSpacing: '0.15em',
+              backgroundColor: 'var(--color-green)',
+              color: 'var(--color-white)',
+              fontSize: 'clamp(10px, 1.5vw, 12px)',
+              fontWeight: '600',
+              letterSpacing: '0.2em',
               textTransform: 'uppercase',
               textDecoration: 'none',
               transition: 'all 0.3s ease',
               fontFamily: 'var(--font-inter)',
+              borderRadius: '1px',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-gold-light)'
+              e.currentTarget.style.backgroundColor =
+                'var(--color-green-light)'
               e.currentTarget.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-gold)'
+              e.currentTarget.style.backgroundColor = 'var(--color-green)'
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
             Ver Coleccion
-          </a>
+          </Link>
 
           {/* Botón secundario */}
-          <a
+          <Link
             href="#contacto"
             style={{
               display: 'inline-block',
               padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 40px)',
               backgroundColor: 'transparent',
               color: 'var(--color-white)',
-              fontSize: 'clamp(11px, 1.5vw, 13px)',
-              fontWeight: '700',
-              letterSpacing: '0.15em',
+              fontSize: 'clamp(10px, 1.5vw, 12px)',
+              fontWeight: '600',
+              letterSpacing: '0.2em',
               textTransform: 'uppercase',
               textDecoration: 'none',
-              border: '1px solid rgba(255,255,255,0.3)',
+              border: '1px solid var(--color-silver)',
               transition: 'all 0.3s ease',
               fontFamily: 'var(--font-inter)',
+              borderRadius: '1px',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-gold)'
-              e.currentTarget.style.color = 'var(--color-gold)'
+              e.currentTarget.style.borderColor = 'var(--color-green)'
+              e.currentTarget.style.color = 'var(--color-green)'
               e.currentTarget.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'
+              e.currentTarget.style.borderColor = 'var(--color-silver)'
               e.currentTarget.style.color = 'var(--color-white)'
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
             Contactanos
-          </a>
+          </Link>
         </div>
 
-        {/* Indicador scroll */}
+        {/* Scroll indicator */}
         <div
           style={{
             marginTop: 'clamp(40px, 8vw, 80px)',
@@ -217,24 +240,27 @@ export default function Hero() {
             gap: '8px',
           }}
         >
-          <p style={{
-            fontSize: '10px',
-            color: 'var(--color-gray)',
-            letterSpacing: '0.3em',
-            textTransform: 'uppercase',
-            fontFamily: 'var(--font-inter)',
-          }}>
+          <p
+            style={{
+              fontSize: '9px',
+              color: 'var(--color-gray)',
+              letterSpacing: '0.4em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-inter)',
+            }}
+          >
             Scroll
           </p>
+
           <div
             style={{
               width: '1px',
               height: 'clamp(30px, 5vw, 50px)',
-              background: 'linear-gradient(to bottom, var(--color-gold), transparent)',
+              background:
+                'linear-gradient(to bottom, var(--color-green), transparent)',
             }}
           />
         </div>
-
       </div>
     </section>
   )

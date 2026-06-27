@@ -32,15 +32,16 @@ export default function LoadingScreen() {
         >
           {/* Logo animado */}
           <motion.h1
-            initial={{ opacity: 0, letterSpacing: '0.5em' }}
-            animate={{ opacity: 1, letterSpacing: '0.15em' }}
-            transition={{ duration: 1, ease: 'easeOut' }}
+            initial={{ opacity: 0, letterSpacing: '0.8em' }}
+            animate={{ opacity: 1, letterSpacing: '0.2em' }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
             style={{
-              fontSize: 'clamp(28px, 6vw, 56px)',
+              fontSize: 'clamp(24px, 5vw, 48px)',
               fontWeight: '900',
-              color: '#C9A84C',
-              fontFamily: 'var(--font-playfair)',
-              letterSpacing: '0.15em',
+              color: '#f5f3ec',
+              fontFamily: 'var(--font-cinzel)',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
             }}
           >
             CROWNLUX
@@ -50,11 +51,11 @@ export default function LoadingScreen() {
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
             style={{
-              fontSize: '11px',
-              color: '#888',
-              letterSpacing: '0.4em',
+              fontSize: '10px',
+              color: '#c7c7c7',
+              letterSpacing: '0.5em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-inter)',
             }}
@@ -67,7 +68,7 @@ export default function LoadingScreen() {
             style={{
               width: 'clamp(120px, 20vw, 200px)',
               height: '1px',
-              backgroundColor: 'rgba(201,168,76,0.2)',
+              backgroundColor: 'rgba(199,199,199,0.15)',
               marginTop: '16px',
               position: 'relative',
               overflow: 'hidden',
@@ -82,7 +83,7 @@ export default function LoadingScreen() {
                 top: 0,
                 left: 0,
                 height: '100%',
-                backgroundColor: '#C9A84C',
+                background: 'linear-gradient(to right, #1e6b52, #c7c7c7)',
               }}
             />
           </motion.div>
