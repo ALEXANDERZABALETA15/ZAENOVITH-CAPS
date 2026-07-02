@@ -19,7 +19,7 @@ export default async function GorraDetalle({ params }) {
   if (!gorra) {
     return (
       <main style={{
-        backgroundColor: '#0a0a0a',
+        backgroundColor: 'var(--color-black)',
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
@@ -27,14 +27,18 @@ export default async function GorraDetalle({ params }) {
       }}>
         <div style={{ textAlign: 'center' }}>
           <h1 style={{
-            color: '#C9A84C',
+            color: 'var(--color-green)',
             fontSize: '48px',
-            fontFamily: 'var(--font-playfair)',
+            fontFamily: 'var(--font-cinzel)',
             marginBottom: '16px',
           }}>
             404
           </h1>
-          <p style={{ color: '#888', fontSize: '16px', fontFamily: 'var(--font-inter)' }}>
+          <p style={{
+            color: 'var(--color-gray)',
+            fontSize: '16px',
+            fontFamily: 'var(--font-inter)',
+          }}>
             Producto no encontrado
           </p>
         </div>
@@ -63,36 +67,38 @@ export default async function GorraDetalle({ params }) {
 
   return (
     <main style={{
-      backgroundColor: '#0a0a0a',
+      backgroundColor: 'var(--color-black)',
       minHeight: '100vh',
       paddingTop: 'clamp(100px, 12vw, 140px)',
       paddingBottom: 'clamp(60px, 8vw, 100px)',
     }}>
+
       {/* Botón volver */}
-<div style={{
-  maxWidth: '1200px',
-  margin: '0 auto',
-  padding: '0 clamp(16px, 5vw, 40px)',
-  marginBottom: 'clamp(24px, 4vw, 40px)',
-}}>
-  <Link
-    href="/"
-    className="btn-volver"
-    style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '8px',
-      color: '#888',
-      textDecoration: 'none',
-      fontSize: '13px',
-      fontFamily: 'var(--font-inter)',
-      letterSpacing: '0.05em',
-    }}
-  >
-    <span style={{ fontSize: '16px' }}>←</span>
-    Volver al catalogo
-  </Link>
-</div>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 clamp(16px, 5vw, 40px)',
+        marginBottom: 'clamp(24px, 4vw, 40px)',
+      }}>
+        <Link
+          href="/"
+          className="btn-volver"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: 'var(--color-gray)',
+            textDecoration: 'none',
+            fontSize: '13px',
+            fontFamily: 'var(--font-inter)',
+            letterSpacing: '0.05em',
+          }}
+        >
+          <span style={{ fontSize: '16px' }}>←</span>
+          Volver al catalogo
+        </Link>
+      </div>
+
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
@@ -103,7 +109,7 @@ export default async function GorraDetalle({ params }) {
         alignItems: 'start',
       }}>
 
-        {/* GALERÍA INTERACTIVA */}
+        {/* GALERÍA */}
         <GaleriaDetalle fotos={gorra.fotos} nombre={gorra.nombre} />
 
         {/* INFORMACIÓN */}
@@ -120,9 +126,9 @@ export default async function GorraDetalle({ params }) {
             alignItems: 'center',
             gap: '10px',
           }}>
-            <div style={{ width: '24px', height: '1px', backgroundColor: '#C9A84C' }} />
+            <div style={{ width: '24px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
-              color: '#C9A84C',
+              color: 'var(--color-green)',
               fontSize: '11px',
               fontWeight: '600',
               letterSpacing: '0.3em',
@@ -135,12 +141,13 @@ export default async function GorraDetalle({ params }) {
 
           {/* Nombre */}
           <h1 style={{
-            color: '#ffffff',
-            fontSize: 'clamp(32px, 5vw, 56px)',
+            color: 'var(--color-white)',
+            fontSize: 'clamp(28px, 5vw, 52px)',
             fontWeight: '800',
             lineHeight: '1.1',
-            fontFamily: 'var(--font-playfair)',
-            letterSpacing: '0.03em',
+            fontFamily: 'var(--font-cinzel)',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
           }}>
             {gorra.nombre}
           </h1>
@@ -151,11 +158,11 @@ export default async function GorraDetalle({ params }) {
             alignItems: 'center',
             gap: '16px',
             paddingBottom: 'clamp(16px, 3vw, 24px)',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            borderBottom: '1px solid rgba(199,199,199,0.08)',
           }}>
             <span style={{
-              color: agotado ? '#888' : '#C9A84C',
-              fontSize: 'clamp(28px, 4vw, 40px)',
+              color: agotado ? 'var(--color-gray)' : 'var(--color-green)',
+              fontSize: 'clamp(24px, 4vw, 36px)',
               fontWeight: '700',
               fontFamily: 'var(--font-inter)',
             }}>
@@ -164,10 +171,11 @@ export default async function GorraDetalle({ params }) {
 
             {gorra.precioAnterior && (
               <span style={{
-                color: '#888',
+                color: 'var(--color-gray)',
                 fontSize: 'clamp(16px, 2vw, 20px)',
                 textDecoration: 'line-through',
                 fontFamily: 'var(--font-inter)',
+                fontWeight: '300',
               }}>
                 ${gorra.precioAnterior.toLocaleString('es-CO')}
               </span>
@@ -176,10 +184,11 @@ export default async function GorraDetalle({ params }) {
 
           {/* Descripción */}
           <p style={{
-            color: '#888888',
-            fontSize: 'clamp(14px, 2vw, 16px)',
+            color: 'var(--color-gray)',
+            fontSize: 'clamp(13px, 2vw, 15px)',
             lineHeight: '1.8',
             fontFamily: 'var(--font-inter)',
+            fontWeight: '300',
           }}>
             {gorra.descripcion}
           </p>
@@ -190,9 +199,9 @@ export default async function GorraDetalle({ params }) {
             flexDirection: 'column',
             gap: '12px',
             padding: 'clamp(16px, 3vw, 24px)',
-            backgroundColor: '#111111',
+            backgroundColor: 'var(--color-black-card)',
             borderRadius: '2px',
-            border: '1px solid rgba(255,255,255,0.06)',
+            border: '1px solid rgba(199,199,199,0.06)',
           }}>
             {[
               { label: 'Color', value: gorra.color },
@@ -208,16 +217,17 @@ export default async function GorraDetalle({ params }) {
                 }}
               >
                 <span style={{
-                  color: '#888',
-                  fontSize: '12px',
-                  letterSpacing: '0.1em',
+                  color: 'var(--color-gray)',
+                  fontSize: '11px',
+                  letterSpacing: '0.15em',
                   textTransform: 'uppercase',
                   fontFamily: 'var(--font-inter)',
+                  fontWeight: '300',
                 }}>
                   {detalle.label}
                 </span>
                 <span style={{
-                  color: '#ffffff',
+                  color: 'var(--color-white)',
                   fontSize: '13px',
                   fontWeight: '500',
                   fontFamily: 'var(--font-inter)',
@@ -233,23 +243,24 @@ export default async function GorraDetalle({ params }) {
             href={agotado || proximo ? undefined : whatsappURL}
             target="_blank"
             rel="noopener noreferrer"
+            className="btn-whatsapp"
             style={{
               display: 'block',
               width: '100%',
               padding: 'clamp(14px, 2vw, 18px)',
-              backgroundColor: agotado || proximo ? 'transparent' : '#C9A84C',
-              color: agotado || proximo ? '#888' : '#000000',
+              backgroundColor: agotado || proximo ? 'transparent' : 'var(--color-green)',
+              color: agotado || proximo ? 'var(--color-gray)' : 'var(--color-white)',
               border: agotado || proximo
-                ? '1px solid rgba(255,255,255,0.1)'
+                ? '1px solid rgba(199,199,199,0.1)'
                 : 'none',
-              fontSize: 'clamp(11px, 1.5vw, 13px)',
-              fontWeight: '700',
+              fontSize: '12px',
+              fontWeight: '600',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               textAlign: 'center',
               textDecoration: 'none',
               cursor: agotado || proximo ? 'not-allowed' : 'pointer',
-              borderRadius: '2px',
+              borderRadius: '1px',
               pointerEvents: agotado || proximo ? 'none' : 'auto',
               transition: 'all 0.3s ease',
               fontFamily: 'var(--font-inter)',
@@ -261,11 +272,12 @@ export default async function GorraDetalle({ params }) {
           {/* Nota envío */}
           {!agotado && !proximo && (
             <p style={{
-              color: '#555',
+              color: 'var(--color-gray)',
               fontSize: '12px',
               textAlign: 'center',
               fontFamily: 'var(--font-inter)',
               letterSpacing: '0.05em',
+              fontWeight: '300',
             }}>
               Envios a todo Colombia 🇨🇴
             </p>

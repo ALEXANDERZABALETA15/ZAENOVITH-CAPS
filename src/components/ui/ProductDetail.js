@@ -186,7 +186,7 @@ Precio: ${formatPrecio(gorra.precio)}
               maxWidth: '400px',
               padding: '18px',
               backgroundColor: 'var(--color-gold)',
-              color: 'var(--color-black)',
+              color: 'var(--color-green)',
               fontWeight: '700',
               fontSize: '13px',
               letterSpacing: '0.15em',

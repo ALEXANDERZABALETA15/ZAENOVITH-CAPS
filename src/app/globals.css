@@ -98,3 +98,7 @@ img {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.btn-whatsapp:hover {
+  background-color: var(--color-green-light) !important;
+}
