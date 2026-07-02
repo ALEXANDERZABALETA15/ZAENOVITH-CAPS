@@ -19,7 +19,7 @@ export default function GaleriaDetalle({ fotos, nombre }) {
           overflow: 'hidden',
           marginBottom: '12px',
           borderRadius: '2px',
-          border: '1px solid rgba(201,168,76,0.15)',
+          border: '1px solid rgba(199,199,199,0.08)',
         }}
       >
         <img
@@ -52,8 +52,8 @@ export default function GaleriaDetalle({ fotos, nombre }) {
               overflow: 'hidden',
               borderRadius: '2px',
               border: fotoActual === index
-                ? '1px solid rgba(201,168,76,0.8)'
-                : '1px solid rgba(255,255,255,0.06)',
+                ? '1px solid var(--color-green)'
+                : '1px solid rgba(199,199,199,0.06)',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
               opacity: fotoActual === index ? 1 : 0.6,
@@ -61,13 +61,13 @@ export default function GaleriaDetalle({ fotos, nombre }) {
             onMouseEnter={(e) => {
               if (fotoActual !== index) {
                 e.currentTarget.style.opacity = '1'
-                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
+                e.currentTarget.style.borderColor = 'rgba(30,107,82,0.5)'
               }
             }}
             onMouseLeave={(e) => {
               if (fotoActual !== index) {
                 e.currentTarget.style.opacity = '0.6'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                e.currentTarget.style.borderColor = 'rgba(199,199,199,0.06)'
               }
             }}
           >
