@@ -7,25 +7,19 @@ const colecciones = [
   {
     nombre: 'Clasicos',
     descripcion: 'Estilos atemporales',
-    imagen: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80',
+    imagen: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1783091995/fila-1-columna-1_1_lberf5.png',
     cantidad: '2 estilos',
   },
   {
     nombre: 'Urbano',
     descripcion: 'Streetwear premium',
-    imagen: 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80',
+    imagen: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1783091995/fila-1-columna-2_o1ldv4.png',
     cantidad: '2 estilos',
-  },
-  {
-    nombre: 'Vintage',
-    descripcion: 'Edicion retro exclusiva',
-    imagen: 'https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=600&q=80',
-    cantidad: '1 estilo',
   },
   {
     nombre: 'Premium',
     descripcion: 'Lo mas exclusivo',
-    imagen: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80',
+    imagen: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1783091995/fila-1-columna-3_wnwu3e.png',
     cantidad: '1 estilo',
   },
 ]
