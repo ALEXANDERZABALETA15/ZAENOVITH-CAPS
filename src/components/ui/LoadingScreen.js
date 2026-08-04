@@ -126,7 +126,7 @@ export default function LoadingScreen() {
               }}
             >
               <source
-                src="https://res.cloudinary.com/dg4kazsno/video/upload/v1785613906/RPReplay_Final1785609236_202608011416_au8ow6.mp4"
+                src="https://res.cloudinary.com/dg4kazsno/video/upload/v1785816704/Luxury_brand_intro_video_generation_202608032309_fnomgn.mp4"
                 type="video/mp4"
               />
             </video>

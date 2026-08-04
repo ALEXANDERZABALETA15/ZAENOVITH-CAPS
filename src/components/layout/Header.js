@@ -3,7 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const navLinks = ['Coleccion', 'Novedades', 'Ofertas', 'Contacto']
+const navLinks = [
+  { nombre: 'Coleccion', href: '#coleccion' },
+  { nombre: 'Novedades', href: '#novedades' },
+  { nombre: 'Ofertas', href: '#ofertas' },
+  { nombre: 'Contacto', href: '#contacto' },
+]
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -104,9 +109,9 @@ export default function Header() {
           }}
         >
           {navLinks.map((item) => (
-            <Link
-              key={item}
-              href="#"
+            <a
+              key={item.nombre}
+              href={item.href}
               style={{
                 fontSize: 'clamp(10px, 1.5vw, 12px)',
                 color: 'var(--color-silver)',
@@ -117,15 +122,11 @@ export default function Header() {
                 whiteSpace: 'nowrap',
                 fontFamily: 'var(--font-inter)',
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.color = 'var(--color-green)')
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = 'var(--color-silver)')
-              }
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-silver)'}
             >
-              {item}
-            </Link>
+              {item.nombre}
+            </a>
           ))}
         </div>
 
@@ -198,9 +199,9 @@ export default function Header() {
         }}
       >
         {navLinks.map((item) => (
-          <Link
-            key={item}
-            href="#"
+          <a
+            key={item.nombre}
+            href={item.href}
             onClick={() => setMenuOpen(false)}
             style={{
               fontSize: '13px',
@@ -213,8 +214,8 @@ export default function Header() {
               fontFamily: 'var(--font-inter)',
             }}
           >
-            {item}
-          </Link>
+            {item.nombre}
+          </a>
         ))}
       </div>
     </header>

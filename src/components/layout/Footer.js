@@ -6,9 +6,9 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   const links = {
-    Coleccion: ['Clasicos', 'Urbano', 'Vintage', 'Premium', 'Ofertas'],
-    Informacion: ['Sobre Nosotros', 'Envios', 'Politica de Cambios', 'Preguntas Frecuentes'],
-    Contacto: ['WhatsApp', 'Instagram', 'Facebook', 'TikTok'],
+  Coleccion: ['Clasicos', 'Urbano', 'Premium'],
+  Informacion: ['Sobre Nosotros', 'Envios', 'Politica de Cambios', 'Preguntas Frecuentes'],
+  Contacto: ['WhatsApp', 'Instagram', 'TikTok'],
   }
 
   return (
@@ -86,55 +86,62 @@ export default function Footer() {
           </div>
 
           {/* Links */}
-          {Object.entries(links).map(([categoria, items]) => (
-            <div key={categoria}>
-              <h3
-                style={{
-                  fontSize: '11px',
-                  fontWeight: '600',
-                  color: 'var(--color-white)',
-                  letterSpacing: '0.25em',
-                  textTransform: 'uppercase',
-                  marginBottom: '20px',
-                  fontFamily: 'var(--font-inter)',
-                }}
-              >
-                {categoria}
-              </h3>
-
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '12px',
-                }}
-              >
-                {items.map((item) => (
-                  <Link
-                    key={item}
-                    href="#"
-                    style={{
-                      fontSize: 'clamp(12px, 1.5vw, 13px)',
-                      color: 'var(--color-gray)',
-                      textDecoration: 'none',
-                      fontFamily: 'var(--font-inter)',
-                      transition: 'color 0.3s ease',
-                      letterSpacing: '0.03em',
-                      fontWeight: '300',
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = 'var(--color-green)')
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.color = 'var(--color-gray)')
-                    }
-                  >
-                    {item}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+      {Object.entries(links).map(([categoria, items]) => (
+        <div key={categoria}>
+          <h3 style={{
+            fontSize: '11px',
+            fontWeight: '600',
+            color: 'var(--color-white)',
+            letterSpacing: '0.25em',
+            textTransform: 'uppercase',
+            marginBottom: '20px',
+            fontFamily: 'var(--font-inter)',
+          }}>
+            {categoria}
+          </h3>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+          }}>
+            {items.map((item) => {
+              const hrefs = {
+                'WhatsApp': 'https://wa.me/573133635338',
+                'Instagram': 'https://www.instagram.com/crownlux.co/',
+                'TikTok': 'https://www.tiktok.com/@crownluxco',
+                'Clasicos': '#coleccion',
+                'Urbano': '#coleccion',
+                'Premium': '#coleccion',
+                'Sobre Nosotros': '#',
+                'Envios': '#',
+                'Politica de Cambios': '#',
+                'Preguntas Frecuentes': '#',
+              }
+              return (
+                <a
+                  key={item}
+                  href={hrefs[item] || '#'}
+                  target={['WhatsApp', 'Instagram', 'TikTok'].includes(item) ? '_blank' : undefined}
+                  rel={['WhatsApp', 'Instagram', 'TikTok'].includes(item) ? 'noopener noreferrer' : undefined}
+                  style={{
+                    fontSize: 'clamp(12px, 1.5vw, 13px)',
+                    color: 'var(--color-gray)',
+                    textDecoration: 'none',
+                    fontFamily: 'var(--font-inter)',
+                    transition: 'color 0.3s ease',
+                    letterSpacing: '0.03em',
+                    fontWeight: '300',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-gray)'}
+                >
+                  {item}
+                </a>
+              )
+            })}
+          </div>
+        </div>
+      ))}
         </div>
 
         {/* Separador */}
