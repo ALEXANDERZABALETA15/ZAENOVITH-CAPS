@@ -50,3 +50,57 @@ export async function getGorraById(id) {
     fotos: [data.foto1, data.foto2, data.foto3].filter(Boolean),
   }
 }
+
+export async function getGorrasNuevas() {
+  const { data, error } = await supabase
+    .from('gorras')
+    .select('*')
+    .eq('badge', 'Nuevo')
+    .eq('estado', 'activo')
+    .order('id', { ascending: false })
+
+  if (error) {
+    console.error('Error al obtener novedades:', error)
+    return []
+  }
+
+  return data.map((gorra) => ({
+    id: gorra.id,
+    nombre: gorra.nombre,
+    precio: gorra.precio,
+    precioAnterior: gorra.precio_anterior,
+    coleccion: gorra.coleccion,
+    color: gorra.color,
+    descripcion: gorra.descripcion,
+    estado: gorra.estado,
+    badge: gorra.badge,
+    fotos: [gorra.foto1, gorra.foto2, gorra.foto3].filter(Boolean),
+  }))
+}
+
+export async function getGorrasOfertas() {
+  const { data, error } = await supabase
+    .from('gorras')
+    .select('*')
+    .eq('badge', 'Oferta')
+    .eq('estado', 'activo')
+    .order('id', { ascending: false })
+
+  if (error) {
+    console.error('Error al obtener ofertas:', error)
+    return []
+  }
+
+  return data.map((gorra) => ({
+    id: gorra.id,
+    nombre: gorra.nombre,
+    precio: gorra.precio,
+    precioAnterior: gorra.precio_anterior,
+    coleccion: gorra.coleccion,
+    color: gorra.color,
+    descripcion: gorra.descripcion,
+    estado: gorra.estado,
+    badge: gorra.badge,
+    fotos: [gorra.foto1, gorra.foto2, gorra.foto3].filter(Boolean),
+  }))
+}
