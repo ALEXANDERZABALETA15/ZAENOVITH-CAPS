@@ -21,7 +21,7 @@ export default function Footer() {
     'Sobre Nosotros': '/sobre-nosotros',
     'Envios': '#',
     'Politica de Cambios': '#',
-    'Preguntas Frecuentes': '#',
+    'Preguntas Frecuentes': '/#faq',
   }
 
   const esExterno = (item) => ['WhatsApp', 'Instagram', 'TikTok'].includes(item)
