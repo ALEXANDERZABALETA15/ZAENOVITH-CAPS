@@ -19,9 +19,9 @@ export default function Footer() {
     'Urbano': '/#coleccion',
     'Premium': '/#coleccion',
     'Sobre Nosotros': '/sobre-nosotros',
-    'Envios': '#',
-    'Politica de Cambios': '#',
-    'Preguntas Frecuentes': '/#faq',
+    'Envios': '/como-comprar',
+    'Politica de Cambios': '/politica-de-cambios',
+    'Preguntas Frecuentes': '/preguntas-frecuentes',
   }
 
   const esExterno = (item) => ['WhatsApp', 'Instagram', 'TikTok'].includes(item)
