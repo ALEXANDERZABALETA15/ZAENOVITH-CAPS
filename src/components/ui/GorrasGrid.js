@@ -7,7 +7,7 @@ import { getGorras } from '@/lib/getGorras'
 import { useColeccion } from '@/lib/ColeccionContext'
 
 const colecciones = ['Todas', 'Clasicos', 'Urbano', 'Premium']
-const GORRAS_POR_PAGINA = 4
+const GORRAS_POR_PAGINA = 12
 
 export default function GorrasGrid() {
   const { coleccionActiva, setColeccionActiva } = useColeccion()
