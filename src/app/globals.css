@@ -102,3 +102,29 @@ img {
 .btn-whatsapp:hover {
   background-color: var(--color-green-light) !important;
 }
+
+.relacionadas-flechas {
+  display: flex;
+}
+
+.relacionadas-grid-desktop {
+  display: grid;
+}
+
+.relacionadas-scroll-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .relacionadas-flechas {
+    display: none;
+  }
+
+  .relacionadas-grid-desktop {
+    display: none;
+  }
+
+  .relacionadas-scroll-mobile {
+    display: flex !important;
+  }
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import GorraCard from './GorraCard'
+import GorraCardMini from './GorraCardMini'
 import { getGorrasRelacionadas } from '@/lib/getGorras'
 
 export default function Relacionadas({ coleccion, idActual }) {
@@ -20,16 +20,16 @@ export default function Relacionadas({ coleccion, idActual }) {
 
   if (!cargando && gorras.length === 0) return null
 
-  const visibles = gorras.slice(inicio, inicio + 3)
+  const visibles = gorras.slice(inicio, inicio + 4)
   const hayAnterior = inicio > 0
-  const haySiguiente = inicio + 3 < gorras.length
+  const haySiguiente = inicio + 4 < gorras.length
 
   function anterior() {
-    setInicio((prev) => Math.max(0, prev - 3))
+    setInicio((prev) => Math.max(0, prev - 4))
   }
 
   function siguiente() {
-    setInicio((prev) => Math.min(gorras.length - 3, prev + 3))
+    setInicio((prev) => prev + 4)
   }
 
   return (
@@ -43,7 +43,7 @@ export default function Relacionadas({ coleccion, idActual }) {
 
       <div style={{
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         justifyContent: 'space-between',
         marginBottom: 'clamp(24px, 4vw, 36px)',
         flexWrap: 'wrap',
@@ -59,22 +59,22 @@ export default function Relacionadas({ coleccion, idActual }) {
             fontWeight: '600',
             margin: '0 0 6px',
           }}>
-            {coleccion}
+            Tambien te puede interesar
           </p>
           <h2 style={{
-            fontSize: 'clamp(18px, 3vw, 26px)',
-            fontWeight: '700',
+            fontSize: 'clamp(22px, 4vw, 34px)',
+            fontWeight: '800',
             color: 'var(--color-white)',
             fontFamily: 'var(--font-cinzel)',
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
             margin: 0,
           }}>
-            Tambien Te Puede Interesar
+            {coleccion}
           </h2>
         </div>
 
-        {gorras.length > 3 && (
+        {gorras.length > 4 && (
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
               onClick={anterior}
@@ -133,11 +133,12 @@ export default function Relacionadas({ coleccion, idActual }) {
       ) : (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(220px, 30vw, 280px), 1fr))',
-          gap: 'clamp(16px, 3vw, 24px)',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(140px, 22vw, 220px), 1fr))',
+          gap: 'clamp(14px, 2vw, 20px)',
+          paddingBottom: 'clamp(32px, 5vw, 48px)',
         }}>
           {visibles.map((gorra) => (
-            <GorraCard key={gorra.id} gorra={gorra} />
+            <GorraCardMini key={gorra.id} gorra={gorra} />
           ))}
         </div>
       )}
