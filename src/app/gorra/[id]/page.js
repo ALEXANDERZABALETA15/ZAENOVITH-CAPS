@@ -1,5 +1,6 @@
 import { getGorraById } from '@/lib/getGorras'
 import GaleriaDetalle from '@/components/ui/GaleriaDetalle'
+import Relacionadas from '@/components/ui/Relacionadas'
 import Link from 'next/link'
 
 export async function generateMetadata({ params }) {
@@ -301,6 +302,9 @@ export default async function GorraDetalle({ params }) {
 
         </div>
       </div>
+
+      <Relacionadas coleccion={gorra.coleccion} idActual={gorra.id} />
+
     </main>
   )
 }
