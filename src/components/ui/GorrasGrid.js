@@ -9,11 +9,19 @@ import { useColeccion } from '@/lib/ColeccionContext'
 const colecciones = ['Todas', 'Clasicos', 'Urbanos', 'Premium']
 const GORRAS_POR_PAGINA = 12
 
+const opcionesOrden = [
+  { valor: 'relevante', label: 'Mas Relevante' },
+  { valor: 'precio-asc', label: 'Menor Precio' },
+  { valor: 'precio-desc', label: 'Mayor Precio' },
+  { valor: 'alfabetico', label: 'Alfabetico A-Z' },
+]
+
 export default function GorrasGrid() {
   const { coleccionActiva, setColeccionActiva } = useColeccion()
   const [cantidad, setCantidad] = useState(GORRAS_POR_PAGINA)
   const [gorras, setGorras] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [orden, setOrden] = useState('relevante')
 
   useEffect(() => {
     async function cargarGorras() {
@@ -29,8 +37,16 @@ export default function GorrasGrid() {
     ? gorras
     : gorras.filter((g) => g.coleccion === coleccionActiva)
 
-  const gorrasVisibles = gorrasFiltradas.slice(0, cantidad)
-  const hayMas = cantidad < gorrasFiltradas.length
+  const gorrasOrdenadas = [...gorrasFiltradas].sort((a, b) => {
+    if (orden === 'precio-asc') return a.precio - b.precio
+    if (orden === 'precio-desc') return b.precio - a.precio
+    if (orden === 'alfabetico') return a.nombre.localeCompare(b.nombre)
+    // relevante = mas recientes primero
+    return new Date(b.createdAt) - new Date(a.createdAt)
+  })
+
+  const gorrasVisibles = gorrasOrdenadas.slice(0, cantidad)
+  const hayMas = cantidad < gorrasOrdenadas.length
 
   function verMas() {
     setCantidad((prev) => prev + GORRAS_POR_PAGINA)
@@ -38,6 +54,11 @@ export default function GorrasGrid() {
 
   function cambiarColeccion(col) {
     setColeccionActiva(col)
+    setCantidad(GORRAS_POR_PAGINA)
+  }
+
+  function cambiarOrden(e) {
+    setOrden(e.target.value)
     setCantidad(GORRAS_POR_PAGINA)
   }
 
@@ -104,7 +125,7 @@ export default function GorrasGrid() {
           </p>
         </motion.div>
 
-        {/* Filtros */}
+        {/* Fila de filtros + orden */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -112,52 +133,99 @@ export default function GorrasGrid() {
           transition={{ duration: 0.5, delay: 0.2 }}
           style={{
             display: 'flex',
-            gap: 'clamp(8px, 2vw, 12px)',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             flexWrap: 'wrap',
+            gap: 'clamp(12px, 2vw, 16px)',
             marginBottom: 'clamp(32px, 6vw, 56px)',
           }}
         >
-          {colecciones.map((col) => (
-            <button
-              key={col}
-              onClick={() => cambiarColeccion(col)}
-              style={{
-                padding: 'clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px)',
-                backgroundColor: coleccionActiva === col
-                  ? 'var(--color-green)'
-                  : 'transparent',
-                color: coleccionActiva === col
-                  ? 'var(--color-white)'
-                  : 'var(--color-gray)',
-                border: coleccionActiva === col
-                  ? '1px solid var(--color-green)'
-                  : '1px solid rgba(199,199,199,0.1)',
-                fontSize: 'clamp(10px, 1.5vw, 12px)',
-                fontWeight: '600',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                fontFamily: 'var(--font-inter)',
-                borderRadius: '1px',
-              }}
-              onMouseEnter={(e) => {
-                if (coleccionActiva !== col) {
-                  e.currentTarget.style.borderColor = 'var(--color-green)'
-                  e.currentTarget.style.color = 'var(--color-green)'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (coleccionActiva !== col) {
-                  e.currentTarget.style.borderColor = 'rgba(199,199,199,0.1)'
-                  e.currentTarget.style.color = 'var(--color-gray)'
-                }
-              }}
-            >
-              {col}
-            </button>
-          ))}
+          {/* Filtros de colección */}
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(8px, 2vw, 12px)',
+            flexWrap: 'wrap',
+          }}>
+            {colecciones.map((col) => (
+              <button
+                key={col}
+                onClick={() => cambiarColeccion(col)}
+                style={{
+                  padding: 'clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px)',
+                  backgroundColor: coleccionActiva === col
+                    ? 'var(--color-green)'
+                    : 'transparent',
+                  color: coleccionActiva === col
+                    ? 'var(--color-white)'
+                    : 'var(--color-gray)',
+                  border: coleccionActiva === col
+                    ? '1px solid var(--color-green)'
+                    : '1px solid rgba(199,199,199,0.1)',
+                  fontSize: 'clamp(10px, 1.5vw, 12px)',
+                  fontWeight: '600',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  fontFamily: 'var(--font-inter)',
+                  borderRadius: '1px',
+                }}
+                onMouseEnter={(e) => {
+                  if (coleccionActiva !== col) {
+                    e.currentTarget.style.borderColor = 'var(--color-green)'
+                    e.currentTarget.style.color = 'var(--color-green)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (coleccionActiva !== col) {
+                    e.currentTarget.style.borderColor = 'rgba(199,199,199,0.1)'
+                    e.currentTarget.style.color = 'var(--color-gray)'
+                  }
+                }}
+              >
+                {col}
+              </button>
+            ))}
+          </div>
+
+          {/* Dropdown de orden */}
+          <select
+            value={orden}
+            onChange={cambiarOrden}
+            style={{
+              padding: 'clamp(8px, 1.5vw, 10px) clamp(14px, 2.5vw, 20px)',
+              backgroundColor: 'var(--color-black-card)',
+              color: 'var(--color-white)',
+              border: '1px solid rgba(199,199,199,0.15)',
+              fontSize: 'clamp(10px, 1.5vw, 12px)',
+              fontWeight: '600',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-inter)',
+              borderRadius: '1px',
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231e6b52'><path d='M7 10l5 5 5-5z'/></svg>")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 10px center',
+              backgroundSize: '16px',
+              paddingRight: '32px',
+            }}
+          >
+            {opcionesOrden.map((op) => (
+              <option
+                key={op.valor}
+                value={op.valor}
+                style={{
+                  backgroundColor: 'var(--color-black-card)',
+                  color: 'var(--color-white)',
+                }}
+              >
+                {op.label}
+              </option>
+            ))}
+          </select>
         </motion.div>
 
         {/* Cargando */}
@@ -198,7 +266,7 @@ export default function GorrasGrid() {
         )}
 
         {/* Sin resultados */}
-        {!cargando && gorrasFiltradas.length === 0 && (
+        {!cargando && gorrasOrdenadas.length === 0 && (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
             <p style={{
               fontSize: '14px',

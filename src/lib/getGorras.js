@@ -22,6 +22,7 @@ export async function getGorras() {
     estado: gorra.estado,
     badge: gorra.badge,
     fotos: [gorra.foto1, gorra.foto2, gorra.foto3].filter(Boolean),
+    createdAt: gorra.created_at,
   }))
 }
 
