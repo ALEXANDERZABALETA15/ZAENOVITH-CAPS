@@ -6,7 +6,7 @@ import GorraCard from '@/components/ui/GorraCard'
 import { getGorras } from '@/lib/getGorras'
 import { useColeccion } from '@/lib/ColeccionContext'
 
-const colecciones = ['Todas', 'Clasicos', 'Urbano', 'Premium']
+const colecciones = ['Todas', 'Clasicos', 'Urbanos', 'Premium']
 const GORRAS_POR_PAGINA = 12
 
 export default function GorrasGrid() {
