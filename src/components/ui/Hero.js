@@ -1,12 +1,43 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+
 export default function Hero() {
+  const [dispositivo, setDispositivo] = useState('desktop')
+
+  useEffect(() => {
+    const checkDispositivo = () => {
+      const ancho = window.innerWidth
+      if (ancho < 768) {
+        setDispositivo('movil')
+      } else if (ancho < 1024) {
+        setDispositivo('tablet')
+      } else {
+        setDispositivo('desktop')
+      }
+    }
+    checkDispositivo()
+    window.addEventListener('resize', checkDispositivo)
+    return () => window.removeEventListener('resize', checkDispositivo)
+  }, [])
+
+  const imagenesFondo = {
+    movil: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1788281701/Formato_916_ok7qen.png',
+    tablet: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1790816826/Formato_4_3_u9ofke.jpg',
+    desktop: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1787713702/Modifying_logo_in_image_2K_202608202128_uutkt2.jpg',
+  }
+
+  const imagenFondo = imagenesFondo[dispositivo]
+
   return (
     <section
       style={{
         minHeight: '100vh',
         width: '100%',
-        backgroundColor: 'var(--color-black)',
+        backgroundImage: `url(${imagenFondo})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -16,17 +47,11 @@ export default function Hero() {
       }}
     >
 
-      {/* Fondo decorativo verde */}
+      {/* Overlay oscuro para legibilidad */}
       <div style={{
         position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 'clamp(300px, 60vw, 700px)',
-        height: 'clamp(300px, 60vw, 700px)',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(30,107,82,0.08) 0%, rgba(10,10,10,0) 70%)',
-        pointerEvents: 'none',
+        inset: 0,
+        backgroundColor: 'rgba(0,0,0,0.35)',
       }} />
 
       {/* Línea decorativa izquierda */}
@@ -38,6 +63,7 @@ export default function Hero() {
         width: '1px',
         height: 'clamp(80px, 15vw, 150px)',
         background: 'linear-gradient(to bottom, transparent, var(--color-silver), transparent)',
+        zIndex: 1,
       }} />
 
       {/* Línea decorativa derecha */}
@@ -49,12 +75,13 @@ export default function Hero() {
         width: '1px',
         height: 'clamp(80px, 15vw, 150px)',
         background: 'linear-gradient(to bottom, transparent, var(--color-silver), transparent)',
+        zIndex: 1,
       }} />
 
       {/* Contenido principal */}
       <div style={{
         textAlign: 'center',
-        zIndex: 1,
+        zIndex: 2,
         padding: '0 clamp(16px, 5vw, 40px)',
         maxWidth: '900px',
         width: '100%',
@@ -65,7 +92,11 @@ export default function Hero() {
           display: 'inline-flex',
           alignItems: 'center',
           gap: '12px',
-          marginBottom: 'clamp(16px, 3vw, 24px)',
+          marginBottom: dispositivo === 'movil'
+            ? 'clamp(180px, 55vw, 260px)'
+            : dispositivo === 'tablet'
+              ? 'clamp(220px, 45vw, 320px)'
+              : 'clamp(280px, 40vw, 420px)',
         }}>
           <div style={{ width: 'clamp(30px, 5vw, 50px)', height: '1px', backgroundColor: 'var(--color-green)' }} />
           <p style={{
@@ -75,54 +106,11 @@ export default function Hero() {
             letterSpacing: '0.4em',
             textTransform: 'uppercase',
             fontFamily: 'var(--font-inter)',
-            margin: 0,
           }}>
             Coleccion Exclusiva
           </p>
           <div style={{ width: 'clamp(30px, 5vw, 50px)', height: '1px', backgroundColor: 'var(--color-green)' }} />
         </div>
-
-        {/* Título principal */}
-        <h1 style={{
-          fontSize: 'clamp(36px, 8vw, 96px)',
-          fontWeight: '900',
-          color: 'var(--color-white)',
-          letterSpacing: '0.1em',
-          lineHeight: '1',
-          marginBottom: 'clamp(8px, 2vw, 16px)',
-          fontFamily: 'var(--font-cinzel)',
-          textTransform: 'uppercase',
-        }}>
-          CROWNLUX
-        </h1>
-
-        {/* Subtítulo */}
-        <h2 style={{
-          fontSize: 'clamp(10px, 2vw, 14px)',
-          fontWeight: '400',
-          color: 'var(--color-silver)',
-          letterSpacing: '0.5em',
-          textTransform: 'uppercase',
-          marginBottom: 'clamp(16px, 4vw, 32px)',
-          fontFamily: 'var(--font-inter)',
-        }}>
-          Premium Caps
-        </h2>
-
-        {/* Descripción */}
-        <p style={{
-          fontSize: 'clamp(13px, 2vw, 15px)',
-          color: 'var(--color-gray)',
-          lineHeight: '1.8',
-          maxWidth: '480px',
-          margin: '0 auto',
-          marginBottom: 'clamp(32px, 6vw, 56px)',
-          fontFamily: 'var(--font-inter)',
-          fontWeight: '300',
-        }}>
-          Gorras de edicion limitada con disenos exclusivos.
-          Cada pieza cuenta una historia unica.
-        </p>
 
         {/* Botones */}
         <div style={{
@@ -132,6 +120,7 @@ export default function Hero() {
           flexWrap: 'wrap',
         }}>
 
+          {/* Botón principal */}
           <a
             href="#coleccion"
             style={{
@@ -160,6 +149,7 @@ export default function Hero() {
             Ver Coleccion
           </a>
 
+          {/* Botón secundario */}
           <a
             href="#contacto"
             style={{
@@ -206,7 +196,6 @@ export default function Hero() {
             letterSpacing: '0.4em',
             textTransform: 'uppercase',
             fontFamily: 'var(--font-inter)',
-            margin: 0,
           }}>
             Scroll
           </p>
