@@ -10,7 +10,7 @@ export default function Hero() {
       const ancho = window.innerWidth
       if (ancho < 768) {
         setDispositivo('movil')
-      } else if (ancho < 1024) {
+      } else if (ancho < 1200) {
         setDispositivo('tablet')
       } else {
         setDispositivo('desktop')

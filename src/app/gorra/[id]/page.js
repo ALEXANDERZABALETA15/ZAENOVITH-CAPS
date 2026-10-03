@@ -6,10 +6,38 @@ import Link from 'next/link'
 export async function generateMetadata({ params }) {
   const { id } = await params
   const gorra = await getGorraById(Number(id))
-  if (!gorra) return { title: 'Producto no encontrado' }
+
+  if (!gorra) return { title: 'Producto no encontrado — CROWNLUX' }
+
+  const titulo = `${gorra.nombre} — CROWNLUX`
+  const descripcionSeo = `${gorra.descripcion} Precio: $${gorra.precio.toLocaleString('es-CO')}. Envios a todo Colombia.`
+  const imagenGorra = gorra.fotos[0]
+
   return {
-    title: `${gorra.nombre} — CROWNLUX`,
-    description: gorra.descripcion,
+    title: titulo,
+    description: descripcionSeo,
+    openGraph: {
+      title: titulo,
+      description: descripcionSeo,
+      url: `https://zaenovith-caps.vercel.app/gorra/${gorra.id}`,
+      siteName: 'CROWNLUX',
+      images: [
+        {
+          url: imagenGorra,
+          width: 1200,
+          height: 1200,
+          alt: gorra.nombre,
+        },
+      ],
+      locale: 'es_CO',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: titulo,
+      description: descripcionSeo,
+      images: [imagenGorra],
+    },
   }
 }
 
