@@ -22,7 +22,6 @@ function formatPrecio(precio) {
 }
 
 export default function GorraCard({ gorra }) {
-  const [fotoActual, setFotoActual] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
   const badge = badgeColors[gorra.badge] || badgeColors['Nuevo']
@@ -55,10 +54,7 @@ export default function GorraCard({ gorra }) {
           height: '100%',
         }}
         onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => {
-          setIsHovered(false)
-          setFotoActual(0)
-        }}
+        onMouseLeave={() => setIsHovered(false)}
       >
 
         {/* Imagen */}
@@ -69,7 +65,7 @@ export default function GorraCard({ gorra }) {
           flexShrink: 0,
         }}>
           <img
-            src={gorra.fotos[fotoActual]}
+            src={gorra.fotos[0]}
             alt={gorra.nombre}
             style={{
               width: '100%',
@@ -109,38 +105,6 @@ export default function GorraCard({ gorra }) {
             {gorra.badge}
           </div>
 
-          {/* Puntos indicadores */}
-          <div style={{
-            position: 'absolute',
-            bottom: '12px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: '6px',
-          }}>
-            {gorra.fotos.map((_, index) => (
-              <button
-                key={index}
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  setFotoActual(index)
-                }}
-                style={{
-                  width: fotoActual === index ? '20px' : '6px',
-                  height: '6px',
-                  borderRadius: '3px',
-                  backgroundColor: fotoActual === index
-                    ? 'var(--color-green)'
-                    : 'rgba(255,255,255,0.4)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  padding: 0,
-                }}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Información */}
