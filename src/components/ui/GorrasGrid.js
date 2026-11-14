@@ -9,6 +9,8 @@ import { useColeccion } from '@/lib/ColeccionContext'
 const colecciones = ['Todas', 'Clasicos', 'Urbanos', 'Premium']
 const GORRAS_POR_PAGINA = 12
 
+const PRIORIDAD_ESTADO = { activo: 0, proximo: 1, agotado: 2 }
+
 const opcionesOrden = [
   { valor: 'relevante', label: 'Mas Relevante' },
   { valor: 'precio-asc', label: 'Menor Precio' },
@@ -38,6 +40,10 @@ export default function GorrasGrid() {
     : gorras.filter((g) => g.coleccion === coleccionActiva)
 
   const gorrasOrdenadas = [...gorrasFiltradas].sort((a, b) => {
+    // Disponibles primero, luego proximas, agotadas al final (en cualquier orden elegido)
+    const porDisponibilidad = (PRIORIDAD_ESTADO[a.estado] ?? 1) - (PRIORIDAD_ESTADO[b.estado] ?? 1)
+    if (porDisponibilidad !== 0) return porDisponibilidad
+
     if (orden === 'precio-asc') return a.precio - b.precio
     if (orden === 'precio-desc') return b.precio - a.precio
     if (orden === 'alfabetico') return a.nombre.localeCompare(b.nombre)
