@@ -2,6 +2,7 @@ import { getGorraById } from '@/lib/getGorras'
 import GaleriaDetalle from '@/components/ui/GaleriaDetalle'
 import Relacionadas from '@/components/ui/Relacionadas'
 import Link from 'next/link'
+import { whatsappLink, mensajePedido } from '@/lib/contacto'
 
 export async function generateMetadata({ params }) {
   const { id } = await params
@@ -78,21 +79,7 @@ export default async function GorraDetalle({ params }) {
   const agotado = gorra.estado === 'agotado'
   const proximo = gorra.estado === 'proximo'
 
-  const mensaje =
-    'Hola, quiero realizar un pedido!\n\n' +
-    'Gorra: ' + gorra.nombre + '\n' +
-    'Color: ' + gorra.color + '\n' +
-    'Precio: $' + gorra.precio.toLocaleString('es-CO') + '\n' +
-    'Cantidad: 1\n\n' +
-    'Datos de envio:\n' +
-    'Nombre completo: \n' +
-    'Ciudad: \n' +
-    'Direccion: \n' +
-    'Barrio: \n' +
-    'Telefono: \n\n' +
-    'Quedo atento a tu confirmacion!'
-
-  const whatsappURL = 'https://wa.me/573133635338?text=' + encodeURIComponent(mensaje)
+  const whatsappURL = whatsappLink(mensajePedido(gorra))
 
   return (
     <main style={{
