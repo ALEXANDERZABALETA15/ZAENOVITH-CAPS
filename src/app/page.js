@@ -1,5 +1,7 @@
 'use client'
 
+import { Suspense } from 'react'
+import SincronizarColeccionURL from '@/components/ui/SincronizarColeccionURL'
 import Hero from '@/components/ui/Hero'
 import Confianza from '@/components/ui/Confianza'
 import Colecciones from '@/components/ui/Colecciones'
@@ -13,6 +15,9 @@ import { ColeccionProvider } from '@/lib/ColeccionContext'
 export default function Home() {
   return (
     <ColeccionProvider>
+      <Suspense fallback={null}>
+        <SincronizarColeccionURL />
+      </Suspense>
       <main>
         <Hero />
         <Confianza />

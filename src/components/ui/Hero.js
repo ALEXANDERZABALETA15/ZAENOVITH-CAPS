@@ -87,6 +87,10 @@ export default function Hero() {
         width: '100%',
       }}>
 
+        {/* H1 del home para buscadores y lectores de pantalla. La marca ya está en la imagen;
+            un titular comercial visible es una decisión de diseño pendiente. */}
+        <h1 className="sr-only">CROWNLUX: gorras premium con envíos a toda Colombia</h1>
+
         {/* Etiqueta superior */}
         <div style={{
           display: 'inline-flex',

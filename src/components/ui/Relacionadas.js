@@ -52,14 +52,14 @@ export default function Relacionadas({ coleccion, idActual }) {
         <div>
           <p style={{
             fontSize: '10px',
-            color: 'var(--color-green)',
+            color: 'var(--color-green-text)',
             letterSpacing: '0.3em',
             textTransform: 'uppercase',
             fontFamily: 'var(--font-inter)',
             fontWeight: '600',
             margin: '0 0 6px',
           }}>
-            Tambien te puede interesar
+            Sigue explorando
           </p>
           <h2 style={{
             fontSize: 'clamp(22px, 4vw, 34px)',
@@ -70,7 +70,7 @@ export default function Relacionadas({ coleccion, idActual }) {
             textTransform: 'uppercase',
             margin: 0,
           }}>
-            {coleccion}
+            También te puede interesar
           </h2>
         </div>
 
@@ -78,6 +78,7 @@ export default function Relacionadas({ coleccion, idActual }) {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
               onClick={anterior}
+              aria-label="Ver anteriores"
               disabled={!hayAnterior}
               style={{
                 width: '38px',
@@ -97,6 +98,7 @@ export default function Relacionadas({ coleccion, idActual }) {
             </button>
             <button
               onClick={siguiente}
+              aria-label="Ver siguientes"
               disabled={!haySiguiente}
               style={{
                 width: '38px',

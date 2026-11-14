@@ -137,3 +137,86 @@ img {
     display: flex !important;
   }
 }
+
+/* ===== Detalle de producto ===== */
+
+/* Galería deslizable sin barra de scroll visible */
+.galeria-pista {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.galeria-pista::-webkit-scrollbar {
+  display: none;
+}
+
+/* Barra fija de compra: solo en móvil */
+.barra-compra-movil {
+  display: none;
+}
+
+/* Texto solo para lectores de pantalla y buscadores */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.solo-movil {
+  display: none;
+}
+
+/* Secciones desplegables del detalle */
+.desplegable summary {
+  list-style: none;
+  cursor: pointer;
+}
+.desplegable summary::-webkit-details-marker {
+  display: none;
+}
+.desplegable summary .desplegable-signo {
+  transition: transform 0.25s ease;
+}
+.desplegable[open] summary .desplegable-signo {
+  transform: rotate(45deg);
+}
+
+@media (max-width: 768px) {
+  .barra-compra-movil {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background-color: rgba(17, 17, 17, 0.97);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(199, 199, 199, 0.12);
+    transition: transform 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* Espacio para que la barra fija no tape el final de la página (incluido el footer) */
+  body:has(.pagina-detalle) {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .solo-movil {
+    display: inline;
+  }
+  .solo-escritorio {
+    display: none;
+  }
+
+  /* En el detalle la barra ya lleva a WhatsApp: el botón flotante sobra y la taparía */
+  .whatsapp-flotante--detalle {
+    display: none !important;
+  }
+}

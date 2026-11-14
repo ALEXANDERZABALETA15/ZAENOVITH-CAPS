@@ -266,7 +266,7 @@ export default function Header() {
           textTransform: 'uppercase',
           margin: 0,
         }}>
-          Envíos a toda Colombia · Garantía de 7 días
+          Envío gratis en Ibagué · Envíos a toda Colombia
         </p>
       </div>
 
@@ -284,7 +284,9 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none' }}>
           <div>
-            <h1 style={{
+            {/* No es <h1>: cada página tiene el suyo (el del home está en el Hero) */}
+            <p style={{
+              display: 'block',
               fontSize: 'clamp(16px, 3.5vw, 24px)',
               fontWeight: '800',
               color: 'var(--color-white)',
@@ -298,7 +300,7 @@ export default function Header() {
               onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-white)'}
             >
               CROWNLUX
-            </h1>
+            </p>
             <p style={{
               fontSize: 'clamp(7px, 1.5vw, 9px)',
               color: 'var(--color-silver)',

@@ -6,7 +6,7 @@ const items = [
   {
     icono: '🚚',
     titulo: 'Envíos a Toda Colombia',
-    descripcion: 'Recíbela en 2 a 5 días hábiles en cualquier ciudad del país.',
+    descripcion: 'Gratis en Ibagué. Al resto del país en 2 a 5 días hábiles.',
   },
   {
     icono: '✨',

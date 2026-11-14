@@ -1,18 +1,25 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { whatsappLink } from '@/lib/contacto'
 
 export default function WhatsAppButton() {
   const [isHovered, setIsHovered] = useState(false)
+  const pathname = usePathname()
 
-  const whatsappURL = 'https://wa.me/573133635338?text=' +
-    encodeURIComponent('Hola, estoy visitando CROWNLUX y quiero más información sobre sus gorras.')
+  // En el detalle de producto, en móvil, lo reemplaza la barra fija de compra
+  const enDetalle = pathname?.startsWith('/gorra/')
+
+  const whatsappURL = whatsappLink('Hola, estoy visitando CROWNLUX y quiero más información sobre sus gorras.')
 
   return (
     <a
       href={whatsappURL}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label="Escríbenos por WhatsApp"
+      className={enDetalle ? 'whatsapp-flotante--detalle' : undefined}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{

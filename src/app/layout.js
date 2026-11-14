@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import LoadingScreen from '@/components/ui/LoadingScreen'
+import Analitica from '@/components/Analitica'
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -57,6 +58,7 @@ export default function RootLayout({ children }) {
         {children}
         <Footer />
         <WhatsAppButton />
+        <Analitica />
       </body>
     </html>
   )
