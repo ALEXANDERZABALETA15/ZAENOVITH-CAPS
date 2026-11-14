@@ -3,60 +3,56 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
+// IMPORTANTE: estas reseñas deben ser de clientes reales y verificables (Ley 1480).
+// Reemplazar por reseñas reales (capturas de WhatsApp/Instagram, Google) antes de promocionar.
 const resenas = [
   {
     id: 1,
     nombre: 'Santiago M.',
-    ciudad: 'Bogota',
+    ciudad: 'Bogotá',
     estrellas: 5,
-    comentario: 'Increible calidad, la gorra llego perfecta y el bordado es de otro nivel. Definitivamente volvere a comprar.',
+    comentario: 'Increíble calidad, la gorra llegó perfecta y el bordado es de otro nivel. Definitivamente volveré a comprar.',
     gorra: 'Gold Edition',
-    fecha: 'Hace 2 dias',
   },
   {
     id: 2,
     nombre: 'Valentina R.',
-    ciudad: 'Medellin',
+    ciudad: 'Medellín',
     estrellas: 5,
-    comentario: 'Super rapido el envio y la atencion por WhatsApp fue excelente. La gorra es exactamente como en las fotos.',
+    comentario: 'Súper rápido el envío y la atención por WhatsApp fue excelente. La gorra es exactamente como en las fotos.',
     gorra: 'LA Curva',
-    fecha: 'Hace 5 dias',
   },
   {
     id: 3,
     nombre: 'Andres P.',
     ciudad: 'Cali',
     estrellas: 5,
-    comentario: 'Me encanto el diseno exclusivo. Mis amigos me preguntan donde la compre. Total recomendado.',
+    comentario: 'Me encantó el diseño exclusivo. Mis amigos me preguntan dónde la compré. Total recomendado.',
     gorra: 'NY Snapback',
-    fecha: 'Hace 1 semana',
   },
   {
     id: 4,
     nombre: 'Camila T.',
-    ciudad: 'Ibague',
+    ciudad: 'Ibagué',
     estrellas: 5,
     comentario: 'La mejor tienda de gorras que he encontrado. Calidad premium a buen precio. Muy feliz con mi compra.',
     gorra: 'Retro Vintage',
-    fecha: 'Hace 2 semanas',
   },
   {
     id: 5,
     nombre: 'Felipe G.',
     ciudad: 'Barranquilla',
     estrellas: 5,
-    comentario: 'Excelente experiencia de compra. El empaque es muy elegante y la gorra supero mis expectativas.',
+    comentario: 'Excelente experiencia de compra. El empaque es muy elegante y la gorra superó mis expectativas.',
     gorra: 'Urban Street',
-    fecha: 'Hace 3 semanas',
   },
   {
     id: 6,
     nombre: 'Isabella C.',
     ciudad: 'Pereira',
     estrellas: 5,
-    comentario: 'La gorra Chrome Hearts es una obra de arte. Vale cada peso. Envio rapido y seguro.',
+    comentario: 'La gorra Chrome Hearts es una obra de arte. Vale cada peso. Envío rápido y seguro.',
     gorra: 'Chrome Hearts',
-    fecha: 'Hace 1 mes',
   },
 ]
 
@@ -64,7 +60,7 @@ function Estrellas({ cantidad }) {
   return (
     <div style={{ display: 'flex', gap: '3px' }}>
       {Array.from({ length: cantidad }).map((_, i) => (
-        <span key={i} style={{ color: 'var(--color-green)', fontSize: '14px' }}>★</span>
+        <span key={i} style={{ color: 'var(--color-green-text)', fontSize: '14px' }}>★</span>
       ))}
     </div>
   )
@@ -107,7 +103,7 @@ export default function Resenas() {
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
@@ -130,43 +126,6 @@ export default function Resenas() {
             Clientes Satisfechos
           </h2>
 
-          {/* Estadísticas */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 'clamp(24px, 5vw, 56px)',
-            flexWrap: 'wrap',
-            marginTop: '24px',
-          }}>
-            {[
-              { numero: '500+', label: 'Clientes felices' },
-              { numero: '5.0', label: 'Calificacion promedio' },
-              { numero: '100%', label: 'Recomendarian' },
-            ].map((stat) => (
-              <div key={stat.label} style={{ textAlign: 'center' }}>
-                <p style={{
-                  fontSize: 'clamp(24px, 4vw, 36px)',
-                  fontWeight: '800',
-                  color: 'var(--color-green)',
-                  fontFamily: 'var(--font-cinzel)',
-                  lineHeight: '1',
-                  marginBottom: '6px',
-                }}>
-                  {stat.numero}
-                </p>
-                <p style={{
-                  fontSize: '11px',
-                  color: 'var(--color-gray)',
-                  fontFamily: 'var(--font-inter)',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  fontWeight: '300',
-                }}>
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
         </motion.div>
 
         {/* Carrusel */}
@@ -188,7 +147,7 @@ export default function Resenas() {
           >
             <p style={{
               fontSize: '48px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               lineHeight: '1',
               marginBottom: '16px',
               opacity: 0.4,
@@ -236,7 +195,7 @@ export default function Resenas() {
               letterSpacing: '0.1em',
               fontWeight: '300',
             }}>
-              {resena.ciudad} · {resena.gorra} · {resena.fecha}
+              {resena.ciudad} · {resena.gorra}
             </p>
           </motion.div>
 
@@ -249,6 +208,7 @@ export default function Resenas() {
           }}>
             <button
               onClick={anterior}
+              aria-label="Reseña anterior"
               style={{
                 width: '40px',
                 height: '40px',
@@ -282,6 +242,7 @@ export default function Resenas() {
                 <button
                   key={index}
                   onClick={() => setActiva(index)}
+                  aria-label={`Ver reseña ${index + 1}`}
                   style={{
                     width: activa === index ? '20px' : '6px',
                     height: '6px',
@@ -300,6 +261,7 @@ export default function Resenas() {
 
             <button
               onClick={siguiente}
+              aria-label="Reseña siguiente"
               style={{
                 width: '40px',
                 height: '40px',

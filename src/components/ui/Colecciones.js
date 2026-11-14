@@ -2,25 +2,23 @@
 
 import { motion } from 'framer-motion'
 import { useColeccion } from '@/lib/ColeccionContext'
+import { claveColeccion } from '@/lib/colecciones'
 
 const colecciones = [
   {
-    nombre: 'Clasicos',
+    nombre: 'Clásicos',
     descripcion: 'Estilos atemporales',
     imagen: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1783091995/fila-1-columna-1_1_lberf5.png',
-    cantidad: '2 estilos',
   },
   {
     nombre: 'Urbano',
     descripcion: 'Streetwear premium',
     imagen: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1783091995/fila-1-columna-2_o1ldv4.png',
-    cantidad: '2 estilos',
   },
   {
     nombre: 'Premium',
-    descripcion: 'Lo mas exclusivo',
+    descripcion: 'Lo más exclusivo',
     imagen: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1783091995/fila-1-columna-3_wnwu3e.png',
-    cantidad: '1 estilo',
   },
 ]
 
@@ -28,7 +26,7 @@ export default function Colecciones() {
   const { setColeccionActiva } = useColeccion()
 
   function handleColeccion(nombre) {
-    setColeccionActiva(nombre)
+    setColeccionActiva(claveColeccion(nombre))
     const catalogo = document.getElementById('catalogo')
     if (catalogo) {
       catalogo.scrollIntoView({ behavior: 'smooth' })
@@ -37,7 +35,7 @@ export default function Colecciones() {
 
   return (
     <section style={{
-      backgroundColor: 'var(--color-black-soft)',
+      backgroundColor: 'var(--color-black)',
       padding: 'clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px)',
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -62,7 +60,7 @@ export default function Colecciones() {
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
@@ -108,24 +106,31 @@ export default function Colecciones() {
 
 function ColeccionCard({ col, index, onClick }) {
   return (
-    <motion.div
+    <motion.button
+      type="button"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       onClick={onClick}
+      aria-label={`Ver colección ${col.nombre}`}
       style={{
         position: 'relative',
         overflow: 'hidden',
         borderRadius: '2px',
         cursor: 'pointer',
         aspectRatio: '3/4',
+        width: '100%',
+        padding: 0,
+        background: 'none',
+        textAlign: 'left',
+        display: 'block',
       }}
       whileHover={{ scale: 1.02 }}
     >
       <img
         src={col.imagen}
-        alt={col.nombre}
+        alt=""
         style={{
           width: '100%',
           height: '100%',
@@ -148,18 +153,6 @@ function ColeccionCard({ col, index, onClick }) {
         right: 0,
         padding: 'clamp(16px, 3vw, 24px)',
       }}>
-        <p style={{
-          fontSize: '9px',
-          color: 'var(--color-green)',
-          fontWeight: '600',
-          letterSpacing: '0.25em',
-          textTransform: 'uppercase',
-          fontFamily: 'var(--font-inter)',
-          marginBottom: '6px',
-        }}>
-          {col.cantidad}
-        </p>
-
         <h3 style={{
           fontSize: 'clamp(16px, 2.5vw, 22px)',
           fontWeight: '700',
@@ -182,13 +175,18 @@ function ColeccionCard({ col, index, onClick }) {
           {col.descripcion}
         </p>
 
-        <div style={{
-          width: '24px',
-          height: '1px',
-          backgroundColor: 'var(--color-green)',
-          marginTop: '12px',
-        }} />
+        <p style={{
+          fontSize: '11px',
+          color: 'var(--color-green-text)',
+          fontWeight: '600',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          fontFamily: 'var(--font-inter)',
+          marginTop: '14px',
+        }}>
+          Ver colección →
+        </p>
       </div>
-    </motion.div>
+    </motion.button>
   )
 }

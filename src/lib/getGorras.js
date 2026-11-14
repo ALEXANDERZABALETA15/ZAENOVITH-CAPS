@@ -1,5 +1,28 @@
 import { supabase } from './supabase'
 
+function mapGorra(gorra) {
+  return {
+    id: gorra.id,
+    nombre: gorra.nombre,
+    precio: gorra.precio,
+    precioAnterior: gorra.precio_anterior,
+    coleccion: gorra.coleccion,
+    color: gorra.color,
+    descripcion: gorra.descripcion,
+    estado: gorra.estado,
+    badge: gorra.badge,
+    fotos: [gorra.foto1, gorra.foto2, gorra.foto3, gorra.foto4, gorra.foto5, gorra.foto6].filter(Boolean),
+    createdAt: gorra.created_at,
+    // Ficha técnica y stock (ver supabase/gorras_ficha.sql). Pueden venir vacíos.
+    marca: gorra.marca ?? null,
+    tipo: gorra.tipo ?? null,
+    talla: gorra.talla ?? null,
+    material: gorra.material ?? null,
+    visera: gorra.visera ?? null,
+    stock: typeof gorra.stock === 'number' ? gorra.stock : null,
+  }
+}
+
 export async function getGorras() {
   const { data, error } = await supabase
     .from('gorras')
@@ -11,19 +34,7 @@ export async function getGorras() {
     return []
   }
 
-  return data.map((gorra) => ({
-    id: gorra.id,
-    nombre: gorra.nombre,
-    precio: gorra.precio,
-    precioAnterior: gorra.precio_anterior,
-    coleccion: gorra.coleccion,
-    color: gorra.color,
-    descripcion: gorra.descripcion,
-    estado: gorra.estado,
-    badge: gorra.badge,
-    fotos: [gorra.foto1, gorra.foto2, gorra.foto3].filter(Boolean),
-    createdAt: gorra.created_at,
-  }))
+  return data.map(mapGorra)
 }
 
 export async function getGorraById(id) {
@@ -38,18 +49,7 @@ export async function getGorraById(id) {
     return null
   }
 
-  return {
-    id: data.id,
-    nombre: data.nombre,
-    precio: data.precio,
-    precioAnterior: data.precio_anterior,
-    coleccion: data.coleccion,
-    color: data.color,
-    descripcion: data.descripcion,
-    estado: data.estado,
-    badge: data.badge,
-    fotos: [data.foto1, data.foto2, data.foto3].filter(Boolean),
-  }
+  return mapGorra(data)
 }
 
 export async function getGorrasNuevas() {
@@ -65,18 +65,7 @@ export async function getGorrasNuevas() {
     return []
   }
 
-  return data.map((gorra) => ({
-    id: gorra.id,
-    nombre: gorra.nombre,
-    precio: gorra.precio,
-    precioAnterior: gorra.precio_anterior,
-    coleccion: gorra.coleccion,
-    color: gorra.color,
-    descripcion: gorra.descripcion,
-    estado: gorra.estado,
-    badge: gorra.badge,
-    fotos: [gorra.foto1, gorra.foto2, gorra.foto3].filter(Boolean),
-  }))
+  return data.map(mapGorra)
 }
 
 export async function getGorrasOfertas() {
@@ -92,44 +81,44 @@ export async function getGorrasOfertas() {
     return []
   }
 
-  return data.map((gorra) => ({
-    id: gorra.id,
-    nombre: gorra.nombre,
-    precio: gorra.precio,
-    precioAnterior: gorra.precio_anterior,
-    coleccion: gorra.coleccion,
-    color: gorra.color,
-    descripcion: gorra.descripcion,
-    estado: gorra.estado,
-    badge: gorra.badge,
-    fotos: [gorra.foto1, gorra.foto2, gorra.foto3].filter(Boolean),
-  }))
+  return data.map(mapGorra)
 }
+
+const MINIMO_RELACIONADAS = 4
+const MAXIMO_RELACIONADAS = 8
+
+// Primero gorras de la misma colección; si hay pocas, completa con otras disponibles
+// para que el detalle nunca termine sin salida.
 export async function getGorrasRelacionadas(coleccion, idExcluir) {
-  const { data, error } = await supabase
+  const { data: mismas, error } = await supabase
     .from('gorras')
     .select('*')
     .eq('coleccion', coleccion)
     .eq('estado', 'activo')
     .neq('id', idExcluir)
     .order('id', { ascending: false })
-    .limit(6)
+    .limit(MAXIMO_RELACIONADAS)
 
   if (error) {
     console.error('Error al obtener relacionadas:', error)
     return []
   }
 
-  return data.map((gorra) => ({
-    id: gorra.id,
-    nombre: gorra.nombre,
-    precio: gorra.precio,
-    precioAnterior: gorra.precio_anterior,
-    coleccion: gorra.coleccion,
-    color: gorra.color,
-    descripcion: gorra.descripcion,
-    estado: gorra.estado,
-    badge: gorra.badge,
-    fotos: [gorra.foto1, gorra.foto2, gorra.foto3].filter(Boolean),
-  }))
+  if (mismas.length >= MINIMO_RELACIONADAS) return mismas.map(mapGorra)
+
+  const excluir = [idExcluir, ...mismas.map((g) => g.id)]
+  const { data: otras, error: errorOtras } = await supabase
+    .from('gorras')
+    .select('*')
+    .eq('estado', 'activo')
+    .not('id', 'in', `(${excluir.join(',')})`)
+    .order('id', { ascending: false })
+    .limit(MAXIMO_RELACIONADAS - mismas.length)
+
+  if (errorOtras) {
+    console.error('Error al completar relacionadas:', errorOtras)
+    return mismas.map(mapGorra)
+  }
+
+  return [...mismas, ...otras].map(mapGorra)
 }

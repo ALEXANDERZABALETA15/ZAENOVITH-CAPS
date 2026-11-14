@@ -31,14 +31,14 @@ export default function Contacto() {
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-inter)',
               margin: 0,
             }}>
-              Siguenos
+              Síguenos
             </p>
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>
@@ -52,7 +52,7 @@ export default function Contacto() {
             textTransform: 'uppercase',
             margin: '0 0 16px',
           }}>
-            Encuentranos
+            Encuéntranos
           </h2>
 
           <p style={{
@@ -64,7 +64,7 @@ export default function Contacto() {
             margin: '0 auto',
             lineHeight: '1.8',
           }}>
-            Siguenos en redes y se el primero en ver las nuevas colecciones
+            Síguenos en redes y sé el primero en ver las nuevas colecciones
           </p>
         </motion.div>
 

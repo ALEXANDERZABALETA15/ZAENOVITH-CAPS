@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import GorraCard from './GorraCard'
 import { getGorrasNuevas } from '@/lib/getGorras'
 
-export default function Novedades() {
+// limite: cuántas mostrar (en el home se muestra una vitrina corta con link a /novedades)
+export default function Novedades({ limite }) {
   const [gorras, setGorras] = useState([])
   const [cargando, setCargando] = useState(true)
 
@@ -19,6 +21,9 @@ export default function Novedades() {
   }, [])
 
   if (!cargando && gorras.length === 0) return null
+
+  const visibles = limite ? gorras.slice(0, limite) : gorras
+  const hayMas = limite && gorras.length > limite
 
   return (
     <section
@@ -48,14 +53,14 @@ export default function Novedades() {
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-inter)',
               margin: 0,
             }}>
-              Recien Llegadas
+              Recién Llegadas
             </p>
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>
@@ -81,7 +86,7 @@ export default function Novedades() {
             fontFamily: 'var(--font-inter)',
             fontWeight: '300',
           }}>
-            Las ultimas piezas que llegaron a CROWNLUX. Se el primero en tenerlas.
+            Las últimas piezas que llegaron a CROWNLUX. Sé el primero en tenerlas.
           </p>
         </motion.div>
 
@@ -107,9 +112,31 @@ export default function Novedades() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(240px, 30vw, 300px), 1fr))',
             gap: 'clamp(16px, 3vw, 28px)',
           }}>
-            {gorras.map((gorra) => (
+            {visibles.map((gorra) => (
               <GorraCard key={gorra.id} gorra={gorra} />
             ))}
+          </div>
+        )}
+
+        {!cargando && hayMas && (
+          <div style={{ textAlign: 'center', marginTop: 'clamp(32px, 5vw, 48px)' }}>
+            <Link
+              href="/novedades"
+              style={{
+                display: 'inline-block',
+                padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 56px)',
+                color: 'var(--color-green-text)',
+                border: '1px solid var(--color-green)',
+                fontSize: 'clamp(11px, 1.5vw, 13px)',
+                fontWeight: '600',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-inter)',
+                borderRadius: '1px',
+              }}
+            >
+              Ver todas las novedades →
+            </Link>
           </div>
         )}
 

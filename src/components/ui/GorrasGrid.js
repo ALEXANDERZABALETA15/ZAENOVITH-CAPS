@@ -5,17 +5,17 @@ import { motion } from 'framer-motion'
 import GorraCard from '@/components/ui/GorraCard'
 import { getGorras } from '@/lib/getGorras'
 import { useColeccion } from '@/lib/ColeccionContext'
+import { TODAS, claveColeccion, coleccionesDisponibles } from '@/lib/colecciones'
 
-const colecciones = ['Todas', 'Clasicos', 'Urbanos', 'Premium']
 const GORRAS_POR_PAGINA = 12
 
 const PRIORIDAD_ESTADO = { activo: 0, proximo: 1, agotado: 2 }
 
 const opcionesOrden = [
-  { valor: 'relevante', label: 'Mas Relevante' },
-  { valor: 'precio-asc', label: 'Menor Precio' },
-  { valor: 'precio-desc', label: 'Mayor Precio' },
-  { valor: 'alfabetico', label: 'Alfabetico A-Z' },
+  { valor: 'relevante', label: 'Más recientes' },
+  { valor: 'precio-asc', label: 'Menor precio' },
+  { valor: 'precio-desc', label: 'Mayor precio' },
+  { valor: 'alfabetico', label: 'Alfabético A-Z' },
 ]
 
 export default function GorrasGrid() {
@@ -35,9 +35,12 @@ export default function GorrasGrid() {
     cargarGorras()
   }, [])
 
-  const gorrasFiltradas = coleccionActiva === 'Todas'
+  // Los chips salen del catálogo real, así una colección nueva en la base aparece sola
+  const colecciones = [{ clave: TODAS, nombre: 'Todas' }, ...coleccionesDisponibles(gorras)]
+
+  const gorrasFiltradas = coleccionActiva === TODAS
     ? gorras
-    : gorras.filter((g) => g.coleccion === coleccionActiva)
+    : gorras.filter((g) => claveColeccion(g.coleccion) === coleccionActiva)
 
   const gorrasOrdenadas = [...gorrasFiltradas].sort((a, b) => {
     // Disponibles primero, luego proximas, agotadas al final (en cualquier orden elegido)
@@ -95,7 +98,7 @@ export default function GorrasGrid() {
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
@@ -127,7 +130,7 @@ export default function GorrasGrid() {
             fontFamily: 'var(--font-inter)',
             fontWeight: '300',
           }}>
-            Cada diseno es unico. Cada gorra cuenta una historia.
+            Cada diseño es único. Cada gorra cuenta una historia.
           </p>
         </motion.div>
 
@@ -154,17 +157,18 @@ export default function GorrasGrid() {
           }}>
             {colecciones.map((col) => (
               <button
-                key={col}
-                onClick={() => cambiarColeccion(col)}
+                key={col.clave}
+                onClick={() => cambiarColeccion(col.clave)}
+                aria-pressed={coleccionActiva === col.clave}
                 style={{
                   padding: 'clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px)',
-                  backgroundColor: coleccionActiva === col
+                  backgroundColor: coleccionActiva === col.clave
                     ? 'var(--color-green)'
                     : 'transparent',
-                  color: coleccionActiva === col
+                  color: coleccionActiva === col.clave
                     ? 'var(--color-white)'
                     : 'var(--color-gray)',
-                  border: coleccionActiva === col
+                  border: coleccionActiva === col.clave
                     ? '1px solid var(--color-green)'
                     : '1px solid rgba(199,199,199,0.1)',
                   fontSize: 'clamp(10px, 1.5vw, 12px)',
@@ -177,19 +181,19 @@ export default function GorrasGrid() {
                   borderRadius: '1px',
                 }}
                 onMouseEnter={(e) => {
-                  if (coleccionActiva !== col) {
+                  if (coleccionActiva !== col.clave) {
                     e.currentTarget.style.borderColor = 'var(--color-green)'
-                    e.currentTarget.style.color = 'var(--color-green)'
+                    e.currentTarget.style.color = 'var(--color-green-text)'
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (coleccionActiva !== col) {
+                  if (coleccionActiva !== col.clave) {
                     e.currentTarget.style.borderColor = 'rgba(199,199,199,0.1)'
                     e.currentTarget.style.color = 'var(--color-gray)'
                   }
                 }}
               >
-                {col}
+                {col.nombre}
               </button>
             ))}
           </div>
@@ -298,7 +302,7 @@ export default function GorrasGrid() {
               style={{
                 padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 56px)',
                 backgroundColor: 'transparent',
-                color: 'var(--color-green)',
+                color: 'var(--color-green-text)',
                 border: '1px solid var(--color-green)',
                 fontSize: 'clamp(11px, 1.5vw, 13px)',
                 fontWeight: '600',
@@ -315,10 +319,10 @@ export default function GorrasGrid() {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.color = 'var(--color-green)'
+                e.currentTarget.style.color = 'var(--color-green-text)'
               }}
             >
-              Ver Mas Gorras
+              Ver más gorras
             </button>
           </motion.div>
         )}

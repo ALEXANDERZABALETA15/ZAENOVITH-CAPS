@@ -75,7 +75,7 @@
 //                 transition: 'color 0.3s ease',
 //               }}
 //               onMouseEnter={(e) =>
-//                 (e.currentTarget.style.color = 'var(--color-green)')
+//                 (e.currentTarget.style.color = 'var(--color-green-text)')
 //               }
 //               onMouseLeave={(e) =>
 //                 (e.currentTarget.style.color = 'var(--color-white)')
@@ -122,7 +122,7 @@
 //                 whiteSpace: 'nowrap',
 //                 fontFamily: 'var(--font-inter)',
 //               }}
-//               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+//               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
 //               onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-silver)'}
 //             >
 //               {item.nombre}
@@ -266,7 +266,7 @@ export default function Header() {
           textTransform: 'uppercase',
           margin: 0,
         }}>
-          Envios a Todo Colombia — Calidad Premium
+          Envío gratis en Ibagué · Envíos a toda Colombia
         </p>
       </div>
 
@@ -284,7 +284,9 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none' }}>
           <div>
-            <h1 style={{
+            {/* No es <h1>: cada página tiene el suyo (el del home está en el Hero) */}
+            <p style={{
+              display: 'block',
               fontSize: 'clamp(16px, 3.5vw, 24px)',
               fontWeight: '800',
               color: 'var(--color-white)',
@@ -294,11 +296,11 @@ export default function Header() {
               transition: 'color 0.3s ease',
               margin: 0,
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-white)'}
             >
               CROWNLUX
-            </h1>
+            </p>
             <p style={{
               fontSize: 'clamp(7px, 1.5vw, 9px)',
               color: 'var(--color-silver)',
@@ -336,7 +338,7 @@ export default function Header() {
                 whiteSpace: 'nowrap',
                 fontFamily: 'var(--font-inter)',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-silver)'}
             >
               {item.nombre}
@@ -357,7 +359,8 @@ export default function Header() {
             gap: '5px',
             cursor: 'pointer',
           }}
-          aria-label="Abrir menu"
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
         >
           <span style={{
             display: 'block',

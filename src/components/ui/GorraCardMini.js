@@ -1,17 +1,26 @@
 'use client'
 
 import Link from 'next/link'
+import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
+import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
 
-function formatPrecio(precio) {
-  return precio.toLocaleString('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0,
-  })
+const estiloEtiqueta = {
+  position: 'absolute',
+  top: '8px',
+  fontSize: '9px',
+  fontWeight: '700',
+  letterSpacing: '0.12em',
+  textTransform: 'uppercase',
+  padding: '3px 7px',
+  borderRadius: '4px',
+  fontFamily: 'var(--font-inter)',
 }
 
 export default function GorraCardMini({ gorra }) {
   const agotado = gorra.estado === 'agotado'
+  const proximo = gorra.estado === 'proximo'
+  const descuento = agotado ? null : porcentajeDescuento(gorra.precio, gorra.precioAnterior)
+  const badge = estiloBadge(gorra.badge)
 
   return (
     <Link
@@ -39,15 +48,49 @@ export default function GorraCardMini({ gorra }) {
           <img
             src={gorra.fotos[0]}
             alt={gorra.nombre}
+            loading="lazy"
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               objectPosition: 'center',
               display: 'block',
-              filter: agotado ? 'grayscale(60%)' : 'none',
+              filter: agotado ? 'grayscale(70%) brightness(0.7)' : 'none',
             }}
           />
+
+          {mostrarBadge(gorra) && (
+            <span style={{ ...estiloEtiqueta, left: '8px', backgroundColor: badge.bg, color: badge.color }}>
+              {textoBadge(gorra.badge)}
+            </span>
+          )}
+
+          {descuento && (
+            <span style={{ ...estiloEtiqueta, right: '8px', backgroundColor: '#f87171', color: '#0a0a0a', fontSize: '10px', letterSpacing: '0.04em' }}>
+              -{descuento}%
+            </span>
+          )}
+
+          {agotado && (
+            <span style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              border: '1px solid var(--color-silver)',
+              backgroundColor: 'rgba(10,10,10,0.6)',
+              color: 'var(--color-white)',
+              fontSize: '10px',
+              fontWeight: '700',
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              padding: '5px 10px',
+              fontFamily: 'var(--font-inter)',
+              whiteSpace: 'nowrap',
+            }}>
+              Agotada
+            </span>
+          )}
         </div>
 
         <div style={{ padding: '12px 14px' }}>
@@ -66,13 +109,30 @@ export default function GorraCardMini({ gorra }) {
             {gorra.nombre}
           </h3>
           <p style={{
-            fontSize: 'clamp(12px, 1.6vw, 14px)',
-            fontWeight: '700',
-            color: agotado ? 'var(--color-gray)' : 'var(--color-green)',
-            fontFamily: 'var(--font-inter)',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '8px',
+            flexWrap: 'wrap',
             margin: 0,
+            fontFamily: 'var(--font-inter)',
           }}>
-            {formatPrecio(gorra.precio)}
+            <span style={{
+              fontSize: 'clamp(12px, 1.6vw, 14px)',
+              fontWeight: '700',
+              color: agotado ? 'var(--color-gray)' : 'var(--color-green-text)',
+            }}>
+              {formatPrecio(gorra.precio)}
+            </span>
+            {gorra.precioAnterior && !agotado && (
+              <span style={{ fontSize: '11px', color: 'var(--color-gray)', textDecoration: 'line-through' }}>
+                {formatPrecio(gorra.precioAnterior)}
+              </span>
+            )}
+            {proximo && (
+              <span style={{ fontSize: '10px', color: 'var(--color-silver)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                Próximamente
+              </span>
+            )}
           </p>
         </div>
 
