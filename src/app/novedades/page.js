@@ -133,7 +133,7 @@ export default function NovedadesPage() {
               Proximamente nuevas llegadas
             </p>
             <Link
-              href="/"
+              href="/#catalogo"
               style={{
                 display: 'inline-block',
                 padding: '12px 32px',
@@ -148,7 +148,7 @@ export default function NovedadesPage() {
                 borderRadius: '1px',
               }}
             >
-              Ver Catalogo
+              Ver Catálogo
             </Link>
           </div>
         )}

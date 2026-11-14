@@ -7,7 +7,7 @@ const pasos = [
     numero: '01',
     icono: '🧢',
     titulo: 'Elige tu Gorra',
-    descripcion: 'Explora el catalogo y encuentra la que te identifica',
+    descripcion: 'Explora el catálogo y encuentra la que te identifica',
     acento: 'green',
   },
   {

@@ -29,7 +29,7 @@ export default function Colecciones() {
 
   function handleColeccion(nombre) {
     setColeccionActiva(nombre)
-    const catalogo = document.getElementById('coleccion')
+    const catalogo = document.getElementById('catalogo')
     if (catalogo) {
       catalogo.scrollIntoView({ behavior: 'smooth' })
     }

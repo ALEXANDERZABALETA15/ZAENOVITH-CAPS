@@ -64,7 +64,7 @@ export default function GorrasGrid() {
 
   return (
     <section
-      id="coleccion"
+      id="catalogo"
       style={{
         backgroundColor: 'var(--color-black)',
         padding: 'clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px)',
@@ -95,7 +95,7 @@ export default function GorrasGrid() {
               textTransform: 'uppercase',
               fontFamily: 'var(--font-inter)',
             }}>
-              Coleccion Exclusiva
+              Todos los modelos
             </p>
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>
@@ -109,7 +109,7 @@ export default function GorrasGrid() {
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
           }}>
-            Catalogo Premium
+            Catálogo Premium
           </h2>
 
           <p style={{
@@ -246,7 +246,7 @@ export default function GorrasGrid() {
               fontFamily: 'var(--font-inter)',
               letterSpacing: '0.1em',
             }}>
-              Cargando coleccion...
+              Cargando catálogo...
             </p>
           </div>
         )}
@@ -274,7 +274,7 @@ export default function GorrasGrid() {
               fontFamily: 'var(--font-inter)',
               letterSpacing: '0.1em',
             }}>
-              No hay gorras en esta coleccion por el momento.
+              No hay gorras en esta colección por el momento.
             </p>
           </div>
         )}

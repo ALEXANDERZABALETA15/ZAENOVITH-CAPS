@@ -110,7 +110,7 @@ export default async function GorraDetalle({ params }) {
         marginBottom: 'clamp(24px, 4vw, 40px)',
       }}>
         <Link
-          href="/"
+          href="/#catalogo"
           className="btn-volver"
           style={{
             display: 'inline-flex',
@@ -124,7 +124,7 @@ export default async function GorraDetalle({ params }) {
           }}
         >
           <span style={{ fontSize: '16px' }}>←</span>
-          Volver al catalogo
+          Volver al catálogo
         </Link>
       </div>
 
