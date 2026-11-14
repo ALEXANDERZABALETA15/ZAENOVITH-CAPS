@@ -558,6 +558,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+const CLAVE_INTRO = 'crownlux_intro_visto'
+
 export default function LoadingScreen() {
   const [visible, setVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -571,28 +573,29 @@ export default function LoadingScreen() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  // El intro solo se muestra la primera vez que alguien entra por el home.
+  // Quien llega a un producto (anuncio, link de Instagram) va directo a comprar.
   useEffect(() => {
-    const navegacionInterna = sessionStorage.getItem('crownlux_spa')
+    if (window.location.pathname !== '/') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    if (!navegacionInterna) {
-      setVisible(true)
-    }
+    let yaVisto = false
+    try {
+      yaVisto = localStorage.getItem(CLAVE_INTRO) === '1'
+    } catch {}
 
-    const handleBeforeUnload = () => {
-      sessionStorage.removeItem('crownlux_spa')
-    }
-
-    window.addEventListener('beforeunload', handleBeforeUnload)
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
+    if (!yaVisto) setVisible(true)
   }, [])
 
   useEffect(() => {
     if (!visible) return
     const timer = setTimeout(() => cerrar(), 5000)
-    return () => clearTimeout(timer)
+    const conEscape = (e) => { if (e.key === 'Escape') cerrar() }
+    window.addEventListener('keydown', conEscape)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('keydown', conEscape)
+    }
   }, [visible])
 
   useEffect(() => {
@@ -602,7 +605,9 @@ export default function LoadingScreen() {
   }, [visible, isMobile])
 
   function cerrar() {
-    sessionStorage.setItem('crownlux_spa', 'true')
+    try {
+      localStorage.setItem(CLAVE_INTRO, '1')
+    } catch {}
     setVisible(false)
   }
 
@@ -735,6 +740,31 @@ export default function LoadingScreen() {
               />
             </video>
           )}
+
+          <button
+            type="button"
+            onClick={cerrar}
+            autoFocus
+            style={{
+              position: 'absolute',
+              right: 'clamp(16px, 4vw, 32px)',
+              bottom: 'clamp(24px, 5vw, 40px)',
+              zIndex: 1,
+              padding: '10px 18px',
+              backgroundColor: 'rgba(10,10,10,0.55)',
+              color: '#f5f3ec',
+              border: '1px solid rgba(199,199,199,0.4)',
+              borderRadius: '999px',
+              fontSize: '11px',
+              fontWeight: '600',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-inter)',
+              backdropFilter: 'blur(6px)',
+            }}
+          >
+            Saltar intro →
+          </button>
 
         </motion.div>
       )}

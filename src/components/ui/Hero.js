@@ -101,7 +101,7 @@ export default function Hero() {
           <div style={{ width: 'clamp(30px, 5vw, 50px)', height: '1px', backgroundColor: 'var(--color-green)' }} />
           <p style={{
             fontSize: 'clamp(9px, 1.5vw, 11px)',
-            color: 'var(--color-green)',
+            color: 'var(--color-green-text)',
             fontWeight: '600',
             letterSpacing: '0.4em',
             textTransform: 'uppercase',
@@ -169,7 +169,7 @@ export default function Hero() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = 'var(--color-green)'
-              e.currentTarget.style.color = 'var(--color-green)'
+              e.currentTarget.style.color = 'var(--color-green-text)'
               e.currentTarget.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={(e) => {
@@ -178,7 +178,7 @@ export default function Hero() {
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
-            Contactanos
+            Contáctanos
           </a>
         </div>
 

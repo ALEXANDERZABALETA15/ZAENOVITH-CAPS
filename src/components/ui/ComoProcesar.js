@@ -13,7 +13,7 @@ const pasos = [
   {
     numero: '02',
     icono: '💬',
-    titulo: 'Escribenos',
+    titulo: 'Escríbenos',
     descripcion: 'Te redirigimos a WhatsApp con tu pedido listo',
     acento: 'green',
   },
@@ -34,10 +34,10 @@ const pasos = [
 ]
 
 const garantias = [
-  { label: 'Envios', valor: 'Toda Colombia', acento: 'green' },
-  { label: 'Tiempo', valor: '2 a 4 dias habiles', acento: 'green' },
+  { label: 'Envíos', valor: 'Toda Colombia', acento: 'green' },
+  { label: 'Tiempo', valor: '2 a 5 días hábiles', acento: 'green' },
   { label: 'Pagos', valor: 'Nequi · Bancolombia', acento: 'silver' },
-  { label: 'Garantia', valor: 'Cambios en 5 dias', acento: 'green' },
+  { label: 'Garantía', valor: 'Cambios en 7 días', acento: 'green' },
 ]
 
 export default function ComoProcesar() {
@@ -67,7 +67,7 @@ export default function ComoProcesar() {
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '10px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               fontWeight: '600',
               letterSpacing: '0.35em',
               textTransform: 'uppercase',
@@ -88,7 +88,7 @@ export default function ComoProcesar() {
             textTransform: 'uppercase',
             margin: 0,
           }}>
-            Asi De Facil
+            Así De Fácil
           </h2>
         </motion.div>
 
@@ -136,7 +136,7 @@ export default function ComoProcesar() {
               {/* Número */}
               <p style={{
                 fontSize: '9px',
-                color: 'var(--color-green)',
+                color: 'var(--color-green-text)',
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
                 fontFamily: 'var(--font-inter)',
@@ -214,7 +214,7 @@ export default function ComoProcesar() {
               <div>
                 <p style={{
                   fontSize: '9px',
-                  color: 'var(--color-green)',
+                  color: 'var(--color-green-text)',
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
                   fontFamily: 'var(--font-inter)',

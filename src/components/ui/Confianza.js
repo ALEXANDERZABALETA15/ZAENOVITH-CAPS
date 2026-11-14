@@ -5,23 +5,23 @@ import { motion } from 'framer-motion'
 const items = [
   {
     icono: '🚚',
-    titulo: 'Envios a Todo Colombia',
-    descripcion: 'Despachamos a cualquier ciudad del pais. Rapido y seguro.',
+    titulo: 'Envíos a Toda Colombia',
+    descripcion: 'Recíbela en 2 a 5 días hábiles en cualquier ciudad del país.',
   },
   {
     icono: '✨',
     titulo: 'Calidad Premium',
-    descripcion: 'Materiales de primera calidad. Cada gorra es inspeccionada antes de enviar.',
+    descripcion: 'Cada gorra se inspecciona y te enviamos foto del empaque antes de despacharla.',
   },
   {
     icono: '🔒',
-    titulo: 'Compra Segura',
-    descripcion: 'Tu pedido esta protegido. Confirmamos cada detalle antes de despachar.',
+    titulo: 'Paga Como Prefieras',
+    descripcion: 'Nequi, Bancolombia, efectivo o transferencia. Confirmamos tu pedido por WhatsApp.',
   },
   {
-    icono: '↩️',
-    titulo: 'Cambios y Devoluciones',
-    descripcion: 'Si no queda perfecto, lo solucionamos. Tu satisfaccion es primero.',
+    icono: '🛡️',
+    titulo: 'Garantía de 7 Días',
+    descripcion: 'Si tu gorra llega con algún daño, te la cambiamos sin costo adicional.',
   },
 ]
 
@@ -52,13 +52,13 @@ export default function Confianza() {
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
             <p style={{
               fontSize: '11px',
-              color: 'var(--color-green)',
+              color: 'var(--color-green-text)',
               fontWeight: '600',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-inter)',
             }}>
-              Por Que Elegirnos
+              Por Qué Elegirnos
             </p>
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>

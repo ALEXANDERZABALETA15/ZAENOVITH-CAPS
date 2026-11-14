@@ -75,7 +75,7 @@
 //                 transition: 'color 0.3s ease',
 //               }}
 //               onMouseEnter={(e) =>
-//                 (e.currentTarget.style.color = 'var(--color-green)')
+//                 (e.currentTarget.style.color = 'var(--color-green-text)')
 //               }
 //               onMouseLeave={(e) =>
 //                 (e.currentTarget.style.color = 'var(--color-white)')
@@ -122,7 +122,7 @@
 //                 whiteSpace: 'nowrap',
 //                 fontFamily: 'var(--font-inter)',
 //               }}
-//               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+//               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
 //               onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-silver)'}
 //             >
 //               {item.nombre}
@@ -266,7 +266,7 @@ export default function Header() {
           textTransform: 'uppercase',
           margin: 0,
         }}>
-          Envios a Todo Colombia — Calidad Premium
+          Envíos a toda Colombia · Garantía de 7 días
         </p>
       </div>
 
@@ -294,7 +294,7 @@ export default function Header() {
               transition: 'color 0.3s ease',
               margin: 0,
             }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-white)'}
             >
               CROWNLUX
@@ -336,7 +336,7 @@ export default function Header() {
                 whiteSpace: 'nowrap',
                 fontFamily: 'var(--font-inter)',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-silver)'}
             >
               {item.nombre}
@@ -357,7 +357,8 @@ export default function Header() {
             gap: '5px',
             cursor: 'pointer',
           }}
-          aria-label="Abrir menu"
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
         >
           <span style={{
             display: 'block',

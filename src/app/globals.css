@@ -10,11 +10,15 @@
   --color-green:        #1e6b52;
   --color-green-light:  #2a8f6f;
   --color-green-dark:   #164d3b;
+  /* Verde para TEXTO sobre fondos oscuros: --color-green da ~3:1 y no pasa WCAG AA.
+     Este da ~7:1 sobre negro. Usar --color-green solo para fondos, bordes y líneas. */
+  --color-green-text:   #3fb68b;
 
   /* Paleta secundaria */
   --color-silver:       #c7c7c7;
   --color-silver-dark:  #8a8a8a;
-  --color-gray:         #7a7a7a;
+  /* Aclarado desde #7a7a7a para pasar AA (4.5:1) también sobre las cards #1c1c1c */
+  --color-gray:         #8a8a8a;
   --color-gray-soft:    #2a2a2a;
 
   /* Tipografia */
@@ -58,7 +62,12 @@ a {
 button {
   cursor: pointer;
   border: none;
-  outline: none;
+}
+
+/* Foco visible solo al navegar con teclado (no aparece al hacer clic) */
+:focus-visible {
+  outline: 2px solid var(--color-green-text);
+  outline-offset: 3px;
 }
 
 img {

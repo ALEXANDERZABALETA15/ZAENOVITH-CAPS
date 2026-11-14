@@ -6,7 +6,7 @@ export default function WhatsAppButton() {
   const [isHovered, setIsHovered] = useState(false)
 
   const whatsappURL = 'https://wa.me/573133635338?text=' +
-    encodeURIComponent('Hola, estoy visitando CROWNLUX y quiero mas informacion sobre sus gorras.')
+    encodeURIComponent('Hola, estoy visitando CROWNLUX y quiero más información sobre sus gorras.')
 
   return (
     <a

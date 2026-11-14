@@ -6,8 +6,8 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   const links = {
-    Colecciones: ['Clasicos', 'Urbanos', 'Premium'],
-    Informacion: ['Sobre Nosotros', 'Envios', 'Politica de Cambios', 'Preguntas Frecuentes'],
+    Colecciones: ['Clásicos', 'Urbano', 'Premium'],
+    Información: ['Sobre Nosotros', 'Envíos', 'Política de Cambios', 'Preguntas Frecuentes'],
     Contacto: ['WhatsApp', 'Instagram', 'TikTok'],
   }
 
@@ -15,12 +15,12 @@ export default function Footer() {
     'WhatsApp': 'https://wa.me/573133635338',
     'Instagram': 'https://www.instagram.com/crownlux.co/',
     'TikTok': 'https://www.tiktok.com/@crownluxco',
-    'Clasicos': '/#catalogo',
-    'Urbanos': '/#catalogo',
+    'Clásicos': '/#catalogo',
+    'Urbano': '/#catalogo',
     'Premium': '/#catalogo',
     'Sobre Nosotros': '/sobre-nosotros',
-    'Envios': '/como-comprar',
-    'Politica de Cambios': '/politica-de-cambios',
+    'Envíos': '/como-comprar',
+    'Política de Cambios': '/politica-de-cambios',
     'Preguntas Frecuentes': '/preguntas-frecuentes',
   }
 
@@ -83,7 +83,7 @@ export default function Footer() {
               fontFamily: 'var(--font-inter)',
               fontWeight: '300',
             }}>
-              Gorras de edicion limitada con disenos exclusivos. Cada pieza cuenta una historia unica.
+              Gorras de edición limitada con diseños exclusivos. Cada pieza cuenta una historia única.
             </p>
             <div style={{
               width: '40px',
@@ -120,7 +120,7 @@ export default function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       style={linkStyle}
-                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
                       onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-gray)'}
                     >
                       {item}
@@ -130,7 +130,7 @@ export default function Footer() {
                       key={item}
                       href={hrefs[item] || '#'}
                       style={linkStyle}
-                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green)'}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
                       onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-gray)'}
                     >
                       {item}
