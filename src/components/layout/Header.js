@@ -229,7 +229,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 const navLinks = [
-  { nombre: 'Coleccion', href: '/#coleccion' },
+  { nombre: 'Catálogo', href: '/#catalogo' },
   { nombre: 'Novedades', href: '/novedades' },
   { nombre: 'Ofertas', href: '/ofertas' },
   { nombre: 'Contacto', href: '/#contacto' },

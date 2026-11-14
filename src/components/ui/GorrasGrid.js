@@ -9,6 +9,8 @@ import { useColeccion } from '@/lib/ColeccionContext'
 const colecciones = ['Todas', 'Clasicos', 'Urbanos', 'Premium']
 const GORRAS_POR_PAGINA = 12
 
+const PRIORIDAD_ESTADO = { activo: 0, proximo: 1, agotado: 2 }
+
 const opcionesOrden = [
   { valor: 'relevante', label: 'Mas Relevante' },
   { valor: 'precio-asc', label: 'Menor Precio' },
@@ -38,6 +40,10 @@ export default function GorrasGrid() {
     : gorras.filter((g) => g.coleccion === coleccionActiva)
 
   const gorrasOrdenadas = [...gorrasFiltradas].sort((a, b) => {
+    // Disponibles primero, luego proximas, agotadas al final (en cualquier orden elegido)
+    const porDisponibilidad = (PRIORIDAD_ESTADO[a.estado] ?? 1) - (PRIORIDAD_ESTADO[b.estado] ?? 1)
+    if (porDisponibilidad !== 0) return porDisponibilidad
+
     if (orden === 'precio-asc') return a.precio - b.precio
     if (orden === 'precio-desc') return b.precio - a.precio
     if (orden === 'alfabetico') return a.nombre.localeCompare(b.nombre)
@@ -64,7 +70,7 @@ export default function GorrasGrid() {
 
   return (
     <section
-      id="coleccion"
+      id="catalogo"
       style={{
         backgroundColor: 'var(--color-black)',
         padding: 'clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px)',
@@ -95,7 +101,7 @@ export default function GorrasGrid() {
               textTransform: 'uppercase',
               fontFamily: 'var(--font-inter)',
             }}>
-              Coleccion Exclusiva
+              Todos los modelos
             </p>
             <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-green)' }} />
           </div>
@@ -109,7 +115,7 @@ export default function GorrasGrid() {
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
           }}>
-            Catalogo Premium
+            Catálogo Premium
           </h2>
 
           <p style={{
@@ -246,7 +252,7 @@ export default function GorrasGrid() {
               fontFamily: 'var(--font-inter)',
               letterSpacing: '0.1em',
             }}>
-              Cargando coleccion...
+              Cargando catálogo...
             </p>
           </div>
         )}
@@ -274,7 +280,7 @@ export default function GorrasGrid() {
               fontFamily: 'var(--font-inter)',
               letterSpacing: '0.1em',
             }}>
-              No hay gorras en esta coleccion por el momento.
+              No hay gorras en esta colección por el momento.
             </p>
           </div>
         )}

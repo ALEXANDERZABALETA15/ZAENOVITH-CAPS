@@ -155,7 +155,7 @@ export default function SobreNosotrosPage() {
           }}
         >
           <Link
-            href="/#coleccion"
+            href="/#catalogo"
             style={{
               display: 'inline-block',
               padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 48px)',
@@ -170,7 +170,7 @@ export default function SobreNosotrosPage() {
               borderRadius: '1px',
             }}
           >
-            Ver Coleccion
+            Ver Catálogo
           </Link>
         </motion.div>
 

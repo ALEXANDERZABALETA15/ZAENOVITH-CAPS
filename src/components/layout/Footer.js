@@ -6,7 +6,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   const links = {
-    Coleccion: ['Clasicos', 'Urbano', 'Premium'],
+    Colecciones: ['Clasicos', 'Urbanos', 'Premium'],
     Informacion: ['Sobre Nosotros', 'Envios', 'Politica de Cambios', 'Preguntas Frecuentes'],
     Contacto: ['WhatsApp', 'Instagram', 'TikTok'],
   }
@@ -15,9 +15,9 @@ export default function Footer() {
     'WhatsApp': 'https://wa.me/573133635338',
     'Instagram': 'https://www.instagram.com/crownlux.co/',
     'TikTok': 'https://www.tiktok.com/@crownluxco',
-    'Clasicos': '/#coleccion',
-    'Urbano': '/#coleccion',
-    'Premium': '/#coleccion',
+    'Clasicos': '/#catalogo',
+    'Urbanos': '/#catalogo',
+    'Premium': '/#catalogo',
     'Sobre Nosotros': '/sobre-nosotros',
     'Envios': '/como-comprar',
     'Politica de Cambios': '/politica-de-cambios',

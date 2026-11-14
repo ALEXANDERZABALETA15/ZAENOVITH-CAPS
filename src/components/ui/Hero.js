@@ -107,7 +107,7 @@ export default function Hero() {
             textTransform: 'uppercase',
             fontFamily: 'var(--font-inter)',
           }}>
-            Coleccion Exclusiva
+            Colección Exclusiva
           </p>
           <div style={{ width: 'clamp(30px, 5vw, 50px)', height: '1px', backgroundColor: 'var(--color-green)' }} />
         </div>
@@ -122,7 +122,7 @@ export default function Hero() {
 
           {/* Botón principal */}
           <a
-            href="#coleccion"
+            href="#catalogo"
             style={{
               display: 'inline-block',
               padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 40px)',
@@ -146,7 +146,7 @@ export default function Hero() {
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
-            Ver Coleccion
+            Ver Catálogo
           </a>
 
           {/* Botón secundario */}
