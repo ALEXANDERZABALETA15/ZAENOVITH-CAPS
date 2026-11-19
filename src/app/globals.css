@@ -220,3 +220,19 @@ img {
     display: none !important;
   }
 }
+
+/* Hero: espacio bajo la etiqueta para dejar ver el logo de la imagen de fondo.
+   Mismos cortes que las imágenes del <picture> en Hero.js */
+.hero-etiqueta {
+  margin-bottom: clamp(280px, 40vw, 420px);
+}
+@media (max-width: 1199px) {
+  .hero-etiqueta {
+    margin-bottom: clamp(220px, 45vw, 320px);
+  }
+}
+@media (max-width: 767px) {
+  .hero-etiqueta {
+    margin-bottom: clamp(180px, 55vw, 260px);
+  }
+}

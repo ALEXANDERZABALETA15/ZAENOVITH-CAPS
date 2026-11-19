@@ -135,7 +135,7 @@ export default function ComoComprarPage() {
             textTransform: 'uppercase',
             margin: 0,
           }}>
-            Como Comprar
+            Cómo Comprar
           </h1>
         </motion.div>
 

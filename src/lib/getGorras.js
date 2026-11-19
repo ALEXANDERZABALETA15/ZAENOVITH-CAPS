@@ -1,6 +1,26 @@
+// Consultas del catálogo. Se ejecutan SOLO en el servidor, al generar las páginas.
+// Las páginas quedan en caché (ISR, ver `revalidate` en cada page.js), así que Supabase
+// recibe unas pocas consultas por hora en total, no una por visitante.
+//
+// Regla importante: si Supabase falla, estas funciones LANZAN el error en vez de devolver
+// una lista vacía. Así Next conserva la última versión buena de la página en lugar de
+// guardar en caché un catálogo vacío o un 404 falso durante todo el período de revalidación.
+import 'server-only'
+import { cache } from 'react'
 import { supabase } from './supabase'
+import { FOTO_RESPALDO } from './imagenes'
+
+// Columnas explícitas: si la tabla gana columnas internas (costos, notas), no se publican solas
+const COLUMNAS = [
+  'id', 'nombre', 'precio', 'precio_anterior', 'coleccion', 'color', 'descripcion',
+  'estado', 'badge', 'created_at', 'updated_at',
+  'foto1', 'foto2', 'foto3', 'foto4', 'foto5', 'foto6',
+  'marca', 'tipo', 'talla', 'material', 'visera', 'stock',
+].join(',')
 
 function mapGorra(gorra) {
+  const fotos = [gorra.foto1, gorra.foto2, gorra.foto3, gorra.foto4, gorra.foto5, gorra.foto6].filter(Boolean)
+
   return {
     id: gorra.id,
     nombre: gorra.nombre,
@@ -11,8 +31,11 @@ function mapGorra(gorra) {
     descripcion: gorra.descripcion,
     estado: gorra.estado,
     badge: gorra.badge,
-    fotos: [gorra.foto1, gorra.foto2, gorra.foto3, gorra.foto4, gorra.foto5, gorra.foto6].filter(Boolean),
+    // Nunca vacío: las cards, la galería y la vista previa siempre tienen qué mostrar
+    fotos: fotos.length ? fotos : [FOTO_RESPALDO],
     createdAt: gorra.created_at,
+    // Se actualiza sola en cada edición (trigger en supabase/gorras_updated_at.sql)
+    updatedAt: gorra.updated_at ?? gorra.created_at,
     // Ficha técnica y stock (ver supabase/gorras_ficha.sql). Pueden venir vacíos.
     marca: gorra.marca ?? null,
     tipo: gorra.tipo ?? null,
@@ -23,102 +46,60 @@ function mapGorra(gorra) {
   }
 }
 
-export async function getGorras() {
+function fallo(contexto, error) {
+  return new Error(`Supabase: no se pudo ${contexto}: ${error.message || error}`)
+}
+
+// Todo el catálogo en una sola consulta. Home, novedades, ofertas, relacionadas y sitemap
+// salen de aquí filtrando en memoria. `cache` evita repetir la consulta dentro de una misma generación.
+export const getGorras = cache(async () => {
   const { data, error } = await supabase
     .from('gorras')
-    .select('*')
+    .select(COLUMNAS)
     .order('id', { ascending: true })
 
-  if (error) {
-    console.error('Error al obtener gorras:', error)
-    return []
-  }
-
+  if (error) throw fallo('obtener el catálogo', error)
   return data.map(mapGorra)
-}
+})
 
-export async function getGorraById(id) {
+// null = la gorra no existe (la página responde 404). Un error de conexión se lanza.
+export const getGorraById = cache(async (id) => {
   const { data, error } = await supabase
     .from('gorras')
-    .select('*')
+    .select(COLUMNAS)
     .eq('id', id)
-    .single()
+    .maybeSingle()
 
-  if (error) {
-    console.error('Error al obtener gorra:', error)
-    return null
-  }
+  if (error) throw fallo(`obtener la gorra ${id}`, error)
+  return data ? mapGorra(data) : null
+})
 
-  return mapGorra(data)
+const masNuevaPrimero = (a, b) => b.id - a.id
+
+export function filtrarNovedades(gorras) {
+  return gorras.filter((g) => g.badge === 'Nuevo' && g.estado === 'activo').sort(masNuevaPrimero)
 }
 
-export async function getGorrasNuevas() {
-  const { data, error } = await supabase
-    .from('gorras')
-    .select('*')
-    .eq('badge', 'Nuevo')
-    .eq('estado', 'activo')
-    .order('id', { ascending: false })
-
-  if (error) {
-    console.error('Error al obtener novedades:', error)
-    return []
-  }
-
-  return data.map(mapGorra)
-}
-
-export async function getGorrasOfertas() {
-  const { data, error } = await supabase
-    .from('gorras')
-    .select('*')
-    .eq('badge', 'Oferta')
-    .eq('estado', 'activo')
-    .order('id', { ascending: false })
-
-  if (error) {
-    console.error('Error al obtener ofertas:', error)
-    return []
-  }
-
-  return data.map(mapGorra)
+export function filtrarOfertas(gorras) {
+  return gorras.filter((g) => g.badge === 'Oferta' && g.estado === 'activo').sort(masNuevaPrimero)
 }
 
 const MINIMO_RELACIONADAS = 4
 const MAXIMO_RELACIONADAS = 8
 
-// Primero gorras de la misma colección; si hay pocas, completa con otras disponibles
-// para que el detalle nunca termine sin salida.
+// Primero gorras disponibles de la misma colección; si hay pocas, completa con otras
+// disponibles para que el detalle nunca termine sin salida.
 export async function getGorrasRelacionadas(coleccion, idExcluir) {
-  const { data: mismas, error } = await supabase
-    .from('gorras')
-    .select('*')
-    .eq('coleccion', coleccion)
-    .eq('estado', 'activo')
-    .neq('id', idExcluir)
-    .order('id', { ascending: false })
-    .limit(MAXIMO_RELACIONADAS)
+  const disponibles = (await getGorras())
+    .filter((g) => g.estado === 'activo' && g.id !== idExcluir)
+    .sort(masNuevaPrimero)
 
-  if (error) {
-    console.error('Error al obtener relacionadas:', error)
-    return []
-  }
+  const mismas = disponibles.filter((g) => g.coleccion === coleccion).slice(0, MAXIMO_RELACIONADAS)
+  if (mismas.length >= MINIMO_RELACIONADAS) return mismas
 
-  if (mismas.length >= MINIMO_RELACIONADAS) return mismas.map(mapGorra)
+  const otras = disponibles
+    .filter((g) => g.coleccion !== coleccion)
+    .slice(0, MAXIMO_RELACIONADAS - mismas.length)
 
-  const excluir = [idExcluir, ...mismas.map((g) => g.id)]
-  const { data: otras, error: errorOtras } = await supabase
-    .from('gorras')
-    .select('*')
-    .eq('estado', 'activo')
-    .not('id', 'in', `(${excluir.join(',')})`)
-    .order('id', { ascending: false })
-    .limit(MAXIMO_RELACIONADAS - mismas.length)
-
-  if (errorOtras) {
-    console.error('Error al completar relacionadas:', errorOtras)
-    return mismas.map(mapGorra)
-  }
-
-  return [...mismas, ...otras].map(mapGorra)
+  return [...mismas, ...otras]
 }

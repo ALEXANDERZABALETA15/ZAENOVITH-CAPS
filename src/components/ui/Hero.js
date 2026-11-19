@@ -1,43 +1,36 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { getImageProps } from 'next/image'
+
+// Una imagen por tipo de pantalla. El navegador elige con <picture> ANTES de descargar,
+// así un celular baja solo la versión móvil (antes bajaba también la de escritorio).
+const IMAGENES_FONDO = {
+  movil: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1788281701/Formato_916_ok7qen.png',
+  tablet: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1790816826/Formato_4_3_u9ofke.jpg',
+  desktop: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1787713702/Modifying_logo_in_image_2K_202608202128_uutkt2.jpg',
+}
+
+// Mismos cortes que usaba el JavaScript anterior: < 768 móvil, < 1200 tablet
+const fuente = (src, width, height) =>
+  getImageProps({ src, width, height, alt: '', sizes: '100vw' }).props.srcSet
+
+const SRCSET_MOVIL = fuente(IMAGENES_FONDO.movil, 1080, 1920)
+const SRCSET_TABLET = fuente(IMAGENES_FONDO.tablet, 1600, 1200)
+const { props: propsEscritorio } = getImageProps({
+  src: IMAGENES_FONDO.desktop,
+  width: 1920,
+  height: 1080,
+  alt: '',
+  sizes: '100vw',
+})
 
 export default function Hero() {
-  const [dispositivo, setDispositivo] = useState('desktop')
-
-  useEffect(() => {
-    const checkDispositivo = () => {
-      const ancho = window.innerWidth
-      if (ancho < 768) {
-        setDispositivo('movil')
-      } else if (ancho < 1200) {
-        setDispositivo('tablet')
-      } else {
-        setDispositivo('desktop')
-      }
-    }
-    checkDispositivo()
-    window.addEventListener('resize', checkDispositivo)
-    return () => window.removeEventListener('resize', checkDispositivo)
-  }, [])
-
-  const imagenesFondo = {
-    movil: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1788281701/Formato_916_ok7qen.png',
-    tablet: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1790816826/Formato_4_3_u9ofke.jpg',
-    desktop: 'https://res.cloudinary.com/dg4kazsno/image/upload/v1787713702/Modifying_logo_in_image_2K_202608202128_uutkt2.jpg',
-  }
-
-  const imagenFondo = imagenesFondo[dispositivo]
-
   return (
     <section
       style={{
         minHeight: '100vh',
         width: '100%',
-        backgroundImage: `url(${imagenFondo})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'var(--color-black)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -46,6 +39,26 @@ export default function Hero() {
         paddingTop: 'clamp(100px, 15vw, 130px)',
       }}
     >
+
+      {/* Fondo: es la imagen principal del home, se pide con prioridad alta */}
+      <picture>
+        <source media="(max-width: 767px)" srcSet={SRCSET_MOVIL} sizes="100vw" />
+        <source media="(max-width: 1199px)" srcSet={SRCSET_TABLET} sizes="100vw" />
+        <img
+          {...propsEscritorio}
+          alt=""
+          loading="eager"
+          fetchPriority="high"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
+        />
+      </picture>
 
       {/* Overlay oscuro para legibilidad */}
       <div style={{
@@ -91,16 +104,11 @@ export default function Hero() {
             un titular comercial visible es una decisión de diseño pendiente. */}
         <h1 className="sr-only">CROWNLUX: gorras premium con envíos a toda Colombia</h1>
 
-        {/* Etiqueta superior */}
-        <div style={{
+        {/* Etiqueta superior (el espacio inferior depende de la pantalla: ver .hero-etiqueta en globals.css) */}
+        <div className="hero-etiqueta" style={{
           display: 'inline-flex',
           alignItems: 'center',
           gap: '12px',
-          marginBottom: dispositivo === 'movil'
-            ? 'clamp(180px, 55vw, 260px)'
-            : dispositivo === 'tablet'
-              ? 'clamp(220px, 45vw, 320px)'
-              : 'clamp(280px, 40vw, 420px)',
         }}>
           <div style={{ width: 'clamp(30px, 5vw, 50px)', height: '1px', backgroundColor: 'var(--color-green)' }} />
           <p style={{

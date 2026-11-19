@@ -6,6 +6,7 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 import Analitica from '@/components/Analitica'
 import { SITIO_URL } from '@/lib/contacto'  // Trae la dirección oficial del sitio desde un solo lugar
+import { NOMBRE_SITIO, TITULO_SITIO, DESCRIPCION_SITIO, IMAGEN_COMPARTIR_SITIO } from '@/lib/seo'
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -19,36 +20,26 @@ const inter = Inter({
   weight: ['300', '400', '500', '600', '700'],
 })
 
-const imagenPreview = 'https://res.cloudinary.com/dg4kazsno/image/upload/v1787713702/Modifying_logo_in_image_2K_202608202128_uutkt2.jpg'
-const titulo = 'CROWNLUX — Gorras Premium en Colombia'
-const descripcion = 'Tienda online de gorras premium: New Era, Supreme, Kith y mas. Ediciones exclusivas y limitadas con envios a todo Colombia. Calidad original garantizada.'
-
+// Valores por defecto para las páginas que no definen los suyos.
+// El canonical NO va aquí: Next lo heredaría a todas las páginas y cada gorra le diría a Google
+// "mi versión oficial es el inicio". Cada página declara el suyo (ver metadatosPagina en src/lib/seo.js).
 export const metadata = {
-  metadataBase: new URL(SITIO_URL),   // NUEVO: dirección base; Next la usa para completar los links
-  alternates: { canonical: '/' },     // NUEVO: le dice a Google cuál es la dirección oficial del inicio
-  title: titulo,
-  description: descripcion,
+  metadataBase: new URL(SITIO_URL),   // Dirección base; Next la usa para completar los links relativos
+  title: TITULO_SITIO,
+  description: DESCRIPCION_SITIO,
   openGraph: {
-    title: titulo,
-    description: descripcion,
-    url: SITIO_URL,                   // CAMBIA: antes era 'https://zaenovith-caps.vercel.app'
-    siteName: 'CROWNLUX',
-    images: [
-      {
-        url: imagenPreview,
-        width: 1200,
-        height: 630,
-        alt: 'CROWNLUX — Premium Caps',
-      },
-    ],
+    title: TITULO_SITIO,
+    description: DESCRIPCION_SITIO,
+    siteName: NOMBRE_SITIO,
+    images: [IMAGEN_COMPARTIR_SITIO],
     locale: 'es_CO',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: titulo,
-    description: descripcion,
-    images: [imagenPreview],
+    title: TITULO_SITIO,
+    description: DESCRIPCION_SITIO,
+    images: [IMAGEN_COMPARTIR_SITIO.url],
   },
 }
 

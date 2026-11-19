@@ -557,8 +557,13 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { urlVideo } from '@/lib/imagenes'
 
 const CLAVE_INTRO = 'crownlux_intro_visto'
+
+// Videos comprimidos por Cloudinary al ancho de cada pantalla (antes: originales de 1,6 y 2,2 MB)
+const VIDEO_MOVIL = urlVideo('https://res.cloudinary.com/dg4kazsno/video/upload/v1785816704/Luxury_brand_intro_video_generation_202608032309_fnomgn.mp4', 720)
+const VIDEO_ESCRITORIO = urlVideo('https://res.cloudinary.com/dg4kazsno/video/upload/v1784774524/Logo_animation_with_teal_lights_202607222139_mxzuuk.mp4', 1280)
 
 export default function LoadingScreen() {
   const [visible, setVisible] = useState(false)
@@ -708,7 +713,7 @@ export default function LoadingScreen() {
               }}
             >
               <source
-                src="https://res.cloudinary.com/dg4kazsno/video/upload/v1785816704/Luxury_brand_intro_video_generation_202608032309_fnomgn.mp4"
+                src={VIDEO_MOVIL}
                 type="video/mp4"
               />
             </video>
@@ -735,7 +740,7 @@ export default function LoadingScreen() {
               }}
             >
               <source
-                src="https://res.cloudinary.com/dg4kazsno/video/upload/v1784774524/Logo_animation_with_teal_lights_202607222139_mxzuuk.mp4"
+                src={VIDEO_ESCRITORIO}
                 type="video/mp4"
               />
             </video>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import Image from 'next/image'
 import VisorFotos from './VisorFotos'
 
 // Galería deslizable: en móvil se pasa con el dedo (scroll-snap nativo),
@@ -65,6 +66,7 @@ export default function GaleriaDetalle({ fotos, nombre }) {
               onClick={() => setVisorAbierto(true)}
               aria-label={`Ampliar foto ${index + 1}`}
               style={{
+                position: 'relative',
                 flex: '0 0 100%',
                 width: '100%',
                 height: '100%',
@@ -74,18 +76,17 @@ export default function GaleriaDetalle({ fotos, nombre }) {
                 cursor: 'zoom-in',
               }}
             >
-              <img
+              {/* La primera foto es lo más importante de la página: se precarga.
+                  80vw en celular: las pantallas 3x reciben ~1080 px, suficiente y la mitad de peso.
+                  Para ver el detalle está el visor (pantalla completa con zoom). */}
+              <Image
                 src={foto}
                 alt={index === 0 ? nombre : `${nombre}, vista ${index + 1}`}
-                loading={index === 0 ? 'eager' : 'lazy'}
+                fill
+                sizes="(max-width: 1024px) 80vw, 560px"
+                preload={index === 0}
                 draggable={false}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  display: 'block',
-                }}
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
             </button>
           ))}
@@ -154,6 +155,7 @@ export default function GaleriaDetalle({ fotos, nombre }) {
               aria-label={`Ver foto ${index + 1} de ${fotos.length}`}
               aria-current={actual === index ? 'true' : undefined}
               style={{
+                position: 'relative',
                 aspectRatio: '1/1',
                 overflow: 'hidden',
                 borderRadius: '2px',
@@ -166,17 +168,12 @@ export default function GaleriaDetalle({ fotos, nombre }) {
                 opacity: actual === index ? 1 : 0.6,
               }}
             >
-              <img
+              <Image
                 src={foto}
                 alt=""
-                loading="lazy"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  display: 'block',
-                }}
+                fill
+                sizes="120px"
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
             </button>
           ))}

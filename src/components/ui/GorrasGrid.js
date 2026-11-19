@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import GorraCard from '@/components/ui/GorraCard'
-import { getGorras } from '@/lib/getGorras'
 import { useColeccion } from '@/lib/ColeccionContext'
 import { TODAS, claveColeccion, coleccionesDisponibles } from '@/lib/colecciones'
 
@@ -18,22 +17,11 @@ const opcionesOrden = [
   { valor: 'alfabetico', label: 'Alfabético A-Z' },
 ]
 
-export default function GorrasGrid() {
+// Recibe el catálogo ya cargado en el servidor (src/app/page.js): no consulta Supabase desde el navegador
+export default function GorrasGrid({ gorras = [] }) {
   const { coleccionActiva, setColeccionActiva } = useColeccion()
   const [cantidad, setCantidad] = useState(GORRAS_POR_PAGINA)
-  const [gorras, setGorras] = useState([])
-  const [cargando, setCargando] = useState(true)
   const [orden, setOrden] = useState('relevante')
-
-  useEffect(() => {
-    async function cargarGorras() {
-      setCargando(true)
-      const data = await getGorras()
-      setGorras(data)
-      setCargando(false)
-    }
-    cargarGorras()
-  }, [])
 
   // Los chips salen del catálogo real, así una colección nueva en la base aparece sola
   const colecciones = [{ clave: TODAS, nombre: 'Todas' }, ...coleccionesDisponibles(gorras)]
@@ -238,31 +226,8 @@ export default function GorrasGrid() {
           </select>
         </motion.div>
 
-        {/* Cargando */}
-        {cargando && (
-          <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              border: '2px solid rgba(30,107,82,0.2)',
-              borderTop: '2px solid var(--color-green)',
-              borderRadius: '50%',
-              margin: '0 auto 16px',
-              animation: 'spin 1s linear infinite',
-            }} />
-            <p style={{
-              color: 'var(--color-gray)',
-              fontSize: '13px',
-              fontFamily: 'var(--font-inter)',
-              letterSpacing: '0.1em',
-            }}>
-              Cargando catálogo...
-            </p>
-          </div>
-        )}
-
         {/* Grid */}
-        {!cargando && (
+        {gorrasVisibles.length > 0 && (
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(240px, 30vw, 300px), 1fr))',
@@ -276,7 +241,7 @@ export default function GorrasGrid() {
         )}
 
         {/* Sin resultados */}
-        {!cargando && gorrasOrdenadas.length === 0 && (
+        {gorrasOrdenadas.length === 0 && (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
             <p style={{
               fontSize: '14px',
@@ -290,7 +255,7 @@ export default function GorrasGrid() {
         )}
 
         {/* Botón Ver más */}
-        {!cargando && hayMas && (
+        {hayMas && (
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

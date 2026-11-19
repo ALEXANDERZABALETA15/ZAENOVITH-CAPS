@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import Image from 'next/image'
 
 // Visor a pantalla completa. En móvil: deslizar entre fotos y zoom con dos dedos (nativo).
 // En escritorio: clic para acercar (2.5x) y mover el mouse para recorrer el detalle.
@@ -163,6 +164,7 @@ export default function VisorFotos({ fotos, nombre, inicial = 0, onCerrar }) {
             <div
               key={foto}
               style={{
+                position: 'relative',
                 flex: '0 0 100%',
                 height: '100%',
                 scrollSnapAlign: 'start',
@@ -173,15 +175,17 @@ export default function VisorFotos({ fotos, nombre, inicial = 0, onCerrar }) {
                 touchAction: 'pan-x pinch-zoom',
               }}
             >
-              <img
+              {/* Ancho de pantalla completa (hasta 1920 px) para que el zoom tenga detalle */}
+              <Image
                 src={foto}
                 alt={index === 0 ? nombre : `${nombre}, vista ${index + 1}`}
+                fill
+                sizes="100vw"
+                preload={index === inicial}
                 draggable={false}
                 onClick={index === actual ? alternarZoom : undefined}
                 onMouseMove={zoom && index === actual ? (e) => setOrigen(posicionMouse(e)) : undefined}
                 style={{
-                  maxWidth: '100%',
-                  maxHeight: '100%',
                   objectFit: 'contain',
                   transform: zoom && index === actual ? 'scale(2.5)' : 'scale(1)',
                   transformOrigin: origen,

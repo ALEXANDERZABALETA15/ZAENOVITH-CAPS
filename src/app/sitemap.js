@@ -24,7 +24,9 @@ export default async function sitemap() {
 
   const rutasGorras = gorras.map((gorra) => ({
     url: `${SITIO_URL}/gorra/${gorra.id}`,       // Ejemplo: https://www.crownlux.co/gorra/13
-    lastModified: new Date(gorra.createdAt),     // Fecha en que se creó la gorra
+    // Fecha de la última edición (precio, agotada, fotos): le indica a Google qué volver a revisar.
+    // La mantiene Supabase sola (ver supabase/gorras_updated_at.sql)
+    lastModified: new Date(gorra.updatedAt),
   }))
 
   // 3. Se juntan las dos listas en una sola

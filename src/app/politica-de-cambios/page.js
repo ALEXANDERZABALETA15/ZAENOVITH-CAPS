@@ -97,7 +97,7 @@ export default function PoliticaDeCambiosPage() {
             textTransform: 'uppercase',
             margin: '0 0 16px',
           }}>
-            Politica de Cambios
+            Política de Cambios
           </h1>
 
           <p style={{

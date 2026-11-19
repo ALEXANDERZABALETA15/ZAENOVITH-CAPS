@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useId } from 'react'
 import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { celularValido, normalizarCelular, registrarAviso } from '@/lib/avisos'
 import { whatsappLink, mensajeAvisoLlegada, mensajeAvisoRestock } from '@/lib/contacto'
 import { eventoAvisoRegistrado, eventoAvisoWhatsApp } from '@/lib/analitica'
@@ -155,10 +156,12 @@ export default function AvisoModal({ gorra, tipo, onCerrar }) {
         {/* Producto */}
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center', marginBottom: '20px', paddingRight: '28px' }}>
           {gorra.fotos?.[0] && (
-            <img
+            <Image
               src={gorra.fotos[0]}
               alt=""
-              style={{ width: '56px', height: '56px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }}
+              width={56}
+              height={56}
+              style={{ objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }}
             />
           )}
           <div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { useColeccion } from '@/lib/ColeccionContext'
 import { claveColeccion } from '@/lib/colecciones'
 
@@ -128,16 +129,12 @@ function ColeccionCard({ col, index, onClick }) {
       }}
       whileHover={{ scale: 1.02 }}
     >
-      <img
+      <Image
         src={col.imagen}
         alt=""
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
-          transition: 'transform 0.6s ease',
-        }}
+        fill
+        sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 400px"
+        style={{ objectFit: 'cover', transition: 'transform 0.6s ease' }}
       />
 
       <div style={{
