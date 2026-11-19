@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 import Analitica from '@/components/Analitica'
+import { SITIO_URL } from '@/lib/contacto'  // Trae la dirección oficial del sitio desde un solo lugar
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -19,16 +20,18 @@ const inter = Inter({
 })
 
 const imagenPreview = 'https://res.cloudinary.com/dg4kazsno/image/upload/v1787713702/Modifying_logo_in_image_2K_202608202128_uutkt2.jpg'
-const titulo = 'CROWNLUX — Gorras Premium Originales en Colombia'
+const titulo = 'CROWNLUX — Gorras Premium en Colombia'
 const descripcion = 'Tienda online de gorras premium: New Era, Supreme, Kith y mas. Ediciones exclusivas y limitadas con envios a todo Colombia. Calidad original garantizada.'
 
 export const metadata = {
+  metadataBase: new URL(SITIO_URL),   // NUEVO: dirección base; Next la usa para completar los links
+  alternates: { canonical: '/' },     // NUEVO: le dice a Google cuál es la dirección oficial del inicio
   title: titulo,
   description: descripcion,
   openGraph: {
     title: titulo,
     description: descripcion,
-    url: 'https://zaenovith-caps.vercel.app',
+    url: SITIO_URL,                   // CAMBIA: antes era 'https://zaenovith-caps.vercel.app'
     siteName: 'CROWNLUX',
     images: [
       {
