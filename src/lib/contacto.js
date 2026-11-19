@@ -1,5 +1,5 @@
 export const WHATSAPP_NUMERO = '573133635338'
-export const SITIO_URL = 'https://zaenovith-caps.vercel.app'
+export const SITIO_URL = 'https://www.crownlux.co'
 
 export function whatsappLink(mensaje) {
   const base = `https://wa.me/${WHATSAPP_NUMERO}`
