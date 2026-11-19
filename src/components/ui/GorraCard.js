@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { nombreColeccion } from '@/lib/colecciones'
 import { whatsappLink, mensajePedido } from '@/lib/contacto'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
@@ -86,12 +87,15 @@ export default function GorraCard({ gorra }) {
           aspectRatio: '1/1',
           flexShrink: 0,
         }}>
-          <img
+          {/* Cloudinary entrega el ancho justo según la pantalla (ver src/lib/cargadorImagenes.js).
+              En celular se declara 67vw aunque la card ocupe todo el ancho: así las pantallas 3x
+              reciben ~828 px (≈95 KB) en vez de 1440 px (≈250 KB). A esa distancia no se nota. */}
+          <Image
             src={gorra.fotos[0]}
             alt={gorra.nombre}
+            fill
+            sizes="(max-width: 600px) 67vw, (max-width: 1024px) 50vw, 340px"
             style={{
-              width: '100%',
-              height: '100%',
               objectFit: 'cover',
               objectPosition: 'center',
               transition: 'transform 0.6s ease',

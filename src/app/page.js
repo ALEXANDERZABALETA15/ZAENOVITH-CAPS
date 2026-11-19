@@ -1,5 +1,3 @@
-'use client'
-
 import { Suspense } from 'react'
 import SincronizarColeccionURL from '@/components/ui/SincronizarColeccionURL'
 import Hero from '@/components/ui/Hero'
@@ -11,10 +9,25 @@ import ComoProcesar from '@/components/ui/ComoProcesar'
 import Resenas from '@/components/ui/Resenas'
 import Contacto from '@/components/ui/Contacto'
 import { ColeccionProvider } from '@/lib/ColeccionContext'
+import { getGorras, filtrarNovedades } from '@/lib/getGorras'
+import { metadatosPagina, jsonLd, datosTienda, TITULO_SITIO, DESCRIPCION_SITIO } from '@/lib/seo'
 
-export default function Home() {
+// La página se genera en el servidor y queda en caché; se regenera como máximo cada 10 minutos
+// (o al instante con /api/revalidar). El catálogo llega en el HTML: Google lo ve y no hay spinner.
+export const revalidate = 600
+
+export const metadata = metadatosPagina({
+  titulo: TITULO_SITIO,
+  descripcion: DESCRIPCION_SITIO,
+  ruta: '/',
+})
+
+export default async function Home() {
+  const gorras = await getGorras()
+
   return (
     <ColeccionProvider>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(datosTienda())} />
       <Suspense fallback={null}>
         <SincronizarColeccionURL />
       </Suspense>
@@ -22,8 +35,8 @@ export default function Home() {
         <Hero />
         <Confianza />
         <Colecciones />
-        <Novedades limite={4} />
-        <GorrasGrid />
+        <Novedades gorras={filtrarNovedades(gorras)} limite={4} />
+        <GorrasGrid gorras={gorras} />
         <ComoProcesar />
         <Resenas />
         <Contacto />

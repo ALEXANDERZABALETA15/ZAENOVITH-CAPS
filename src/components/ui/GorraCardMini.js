@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
 import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
 
@@ -45,16 +46,14 @@ export default function GorraCardMini({ gorra }) {
           aspectRatio: '1/1',
           overflow: 'hidden',
         }}>
-          <img
+          <Image
             src={gorra.fotos[0]}
             alt={gorra.nombre}
-            loading="lazy"
+            fill
+            sizes="(max-width: 600px) 50vw, 220px"
             style={{
-              width: '100%',
-              height: '100%',
               objectFit: 'cover',
               objectPosition: 'center',
-              display: 'block',
               filter: agotado ? 'grayscale(70%) brightness(0.7)' : 'none',
             }}
           />

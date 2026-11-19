@@ -1,26 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import GorraCard from './GorraCard'
-import { getGorrasNuevas } from '@/lib/getGorras'
 
 // limite: cuántas mostrar (en el home se muestra una vitrina corta con link a /novedades)
-export default function Novedades({ limite }) {
-  const [gorras, setGorras] = useState([])
-  const [cargando, setCargando] = useState(true)
-
-  useEffect(() => {
-    async function cargar() {
-      const data = await getGorrasNuevas()
-      setGorras(data)
-      setCargando(false)
-    }
-    cargar()
-  }, [])
-
-  if (!cargando && gorras.length === 0) return null
+// gorras: novedades ya filtradas en el servidor (ver filtrarNovedades en src/lib/getGorras.js)
+export default function Novedades({ gorras = [], limite }) {
+  if (gorras.length === 0) return null
 
   const visibles = limite ? gorras.slice(0, limite) : gorras
   const hayMas = limite && gorras.length > limite
@@ -90,35 +77,18 @@ export default function Novedades({ limite }) {
           </p>
         </motion.div>
 
-        {/* Spinner */}
-        {cargando && (
-          <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              border: '2px solid rgba(30,107,82,0.2)',
-              borderTop: '2px solid var(--color-green)',
-              borderRadius: '50%',
-              margin: '0 auto',
-              animation: 'spin 1s linear infinite',
-            }} />
-          </div>
-        )}
-
         {/* Grid */}
-        {!cargando && (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(240px, 30vw, 300px), 1fr))',
-            gap: 'clamp(16px, 3vw, 28px)',
-          }}>
-            {visibles.map((gorra) => (
-              <GorraCard key={gorra.id} gorra={gorra} />
-            ))}
-          </div>
-        )}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(240px, 30vw, 300px), 1fr))',
+          gap: 'clamp(16px, 3vw, 28px)',
+        }}>
+          {visibles.map((gorra) => (
+            <GorraCard key={gorra.id} gorra={gorra} />
+          ))}
+        </div>
 
-        {!cargando && hayMas && (
+        {hayMas && (
           <div style={{ textAlign: 'center', marginTop: 'clamp(32px, 5vw, 48px)' }}>
             <Link
               href="/novedades"

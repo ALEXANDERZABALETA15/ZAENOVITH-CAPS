@@ -1,24 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import GorraCardMini from './GorraCardMini'
-import { getGorrasRelacionadas } from '@/lib/getGorras'
 
-export default function Relacionadas({ coleccion, idActual }) {
-  const [gorras, setGorras] = useState([])
-  const [cargando, setCargando] = useState(true)
+// gorras: relacionadas ya calculadas en el servidor (ver getGorrasRelacionadas)
+export default function Relacionadas({ gorras = [] }) {
   const [inicio, setInicio] = useState(0)
 
-  useEffect(() => {
-    async function cargar() {
-      const data = await getGorrasRelacionadas(coleccion, idActual)
-      setGorras(data)
-      setCargando(false)
-    }
-    cargar()
-  }, [coleccion, idActual])
-
-  if (!cargando && gorras.length === 0) return null
+  if (gorras.length === 0) return null
 
   const visibles = gorras.slice(inicio, inicio + 4)
   const hayAnterior = inicio > 0
@@ -120,30 +109,16 @@ export default function Relacionadas({ coleccion, idActual }) {
         )}
       </div>
 
-      {cargando ? (
-        <div style={{ textAlign: 'center', padding: '40px 0' }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            border: '2px solid rgba(30,107,82,0.2)',
-            borderTop: '2px solid var(--color-green)',
-            borderRadius: '50%',
-            margin: '0 auto',
-            animation: 'spin 1s linear infinite',
-          }} />
-        </div>
-      ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(140px, 22vw, 220px), 1fr))',
-          gap: 'clamp(14px, 2vw, 20px)',
-          paddingBottom: 'clamp(32px, 5vw, 48px)',
-        }}>
-          {visibles.map((gorra) => (
-            <GorraCardMini key={gorra.id} gorra={gorra} />
-          ))}
-        </div>
-      )}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(140px, 22vw, 220px), 1fr))',
+        gap: 'clamp(14px, 2vw, 20px)',
+        paddingBottom: 'clamp(32px, 5vw, 48px)',
+      }}>
+        {visibles.map((gorra) => (
+          <GorraCardMini key={gorra.id} gorra={gorra} />
+        ))}
+      </div>
 
     </section>
   )

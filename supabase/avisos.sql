@@ -14,6 +14,11 @@ create table if not exists public.avisos (
 
 alter table public.avisos enable row level security;
 
+-- Permiso de tabla: sin esto la API responde 401 "permission denied for table avisos",
+-- porque los proyectos nuevos de Supabase no lo otorgan solos a las tablas creadas por SQL.
+-- Solo INSERT: anon no puede leer, editar ni borrar (y además RLS filtra cada fila).
+grant insert on table public.avisos to anon;
+
 -- La web (clave anon) solo puede INSERTAR, y solo con autorización de datos aceptada.
 -- No hay política de SELECT: nadie puede leer los teléfonos desde la web.
 -- Se consultan desde el panel de Supabase (Table Editor).

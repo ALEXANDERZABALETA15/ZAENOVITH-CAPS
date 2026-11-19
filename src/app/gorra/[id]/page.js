@@ -1,51 +1,50 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getGorraById } from '@/lib/getGorras'
+import { getGorras, getGorraById, getGorrasRelacionadas } from '@/lib/getGorras'
 import { nombreColeccion, claveColeccion } from '@/lib/colecciones'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
 import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
 import { BENEFICIOS_COMPRA, INFO_DESPLEGABLE } from '@/lib/tienda'
 import { SITIO_URL } from '@/lib/contacto'
+import { urlCompartir, urlProductoGrande } from '@/lib/imagenes'
+import { metadatosPagina, jsonLd, datosMigas } from '@/lib/seo'
 import GaleriaDetalle from '@/components/ui/GaleriaDetalle'
 import CompraDetalle from '@/components/ui/CompraDetalle'
 import Relacionadas from '@/components/ui/Relacionadas'
 
-export async function generateMetadata({ params }) {
+// Cada gorra se genera una vez y queda en caché; se regenera como máximo cada 10 minutos
+// (o al instante con /api/revalidar). Las gorras nuevas se generan en su primera visita.
+export const revalidate = 600
+
+export async function generateStaticParams() {
+  const gorras = await getGorras()
+  return gorras.map((gorra) => ({ id: String(gorra.id) }))
+}
+
+// Solo ids numéricos: /gorra/abc responde 404 sin consultar Supabase
+async function cargarGorra(params) {
   const { id } = await params
+  if (!/^\d+$/.test(id)) notFound()
+
   const gorra = await getGorraById(Number(id))
-
   if (!gorra) notFound()
+  return gorra
+}
 
-  const titulo = `${gorra.nombre} — CROWNLUX`
-  const descripcionSeo = `${gorra.descripcion} Precio: ${formatPrecio(gorra.precio)}. Envío gratis en Ibagué y envíos a toda Colombia.`
-  const imagenGorra = gorra.fotos[0]
+export async function generateMetadata({ params }) {
+  const gorra = await cargarGorra(params)
 
-  return {
-    title: titulo,
-    description: descripcionSeo,
-    openGraph: {
-      title: titulo,
-      description: descripcionSeo,
-      url: `${SITIO_URL}/gorra/${gorra.id}`,
-      siteName: 'CROWNLUX',
-      images: [
-        {
-          url: imagenGorra,
-          width: 1200,
-          height: 1200,
-          alt: gorra.nombre,
-        },
-      ],
-      locale: 'es_CO',
-      type: 'website',
+  return metadatosPagina({
+    titulo: `${gorra.nombre} — CROWNLUX`,
+    descripcion: `${gorra.descripcion ? gorra.descripcion + ' ' : ''}Precio: ${formatPrecio(gorra.precio)}. Envío gratis en Ibagué y envíos a toda Colombia.`,
+    ruta: `/gorra/${gorra.id}`,
+    imagen: {
+      url: urlCompartir(gorra.fotos[0], { ancho: 1200, alto: 1200 }),
+      width: 1200,
+      height: 1200,
+      alt: gorra.nombre,
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: titulo,
-      description: descripcionSeo,
-      images: [imagenGorra],
-    },
-  }
+  })
 }
 
 const estiloMiga = {
@@ -56,11 +55,9 @@ const estiloMiga = {
 }
 
 export default async function GorraDetalle({ params }) {
-  const { id } = await params
-  const gorra = await getGorraById(Number(id))
-
   // Responde 404 real (no una página "no encontrado" con estado 200)
-  if (!gorra) notFound()
+  const gorra = await cargarGorra(params)
+  const relacionadas = await getGorrasRelacionadas(gorra.coleccion, gorra.id)
 
   const agotado = gorra.estado === 'agotado'
   const proximo = gorra.estado === 'proximo'
@@ -86,13 +83,14 @@ export default async function GorraDetalle({ params }) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: gorra.nombre,
-    image: gorra.fotos,
+    image: gorra.fotos.map(urlProductoGrande),
     description: gorra.descripcion || undefined,
     sku: String(gorra.id),
     category: coleccion,
     color: gorra.color || undefined,
     material: gorra.material || undefined,
-    brand: { '@type': 'Brand', name: gorra.marca || 'CROWNLUX' },
+    // Solo si está cargada: declarar CROWNLUX como marca de una New Era sería información falsa para Google
+    brand: gorra.marca ? { '@type': 'Brand', name: gorra.marca } : undefined,
     offers: {
       '@type': 'Offer',
       url: urlProducto,
@@ -108,6 +106,12 @@ export default async function GorraDetalle({ params }) {
     },
   }
 
+  const migas = datosMigas([
+    { nombre: 'Inicio', ruta: '/' },
+    { nombre: coleccion, ruta: `/?coleccion=${claveColeccion(gorra.coleccion)}` },
+    { nombre: gorra.nombre, ruta: `/gorra/${gorra.id}` },
+  ])
+
   return (
     <main
       className="pagina-detalle"
@@ -118,11 +122,8 @@ export default async function GorraDetalle({ params }) {
         paddingBottom: 'clamp(60px, 8vw, 100px)',
       }}
     >
-      <script
-        type="application/ld+json"
-        // Se escapa "<" para que ningún texto de la base pueda cerrar el <script>
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados).replace(/</g, '\\u003c') }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(datosEstructurados)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(migas)} />
 
       {/* Ruta de navegación */}
       <nav
@@ -472,7 +473,7 @@ export default async function GorraDetalle({ params }) {
         </div>
       </div>
 
-      <Relacionadas coleccion={gorra.coleccion} idActual={gorra.id} />
+      <Relacionadas key={gorra.id} gorras={relacionadas} />
 
     </main>
   )
