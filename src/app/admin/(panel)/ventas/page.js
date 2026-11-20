@@ -3,6 +3,7 @@ import { requerirAdmin } from '@/lib/admin/sesion'
 import { ESTADOS_VENTA, METODOS_PAGO, nombreDe, formatoFecha, hoyBogota } from '@/lib/admin/catalogos'
 import { ChipEstadoVenta } from '@/components/admin/Chips'
 import { formatPrecio } from '@/lib/precio'
+import { resumenVentas, utilidadVenta, margen } from '@/lib/admin/finanzas'
 
 export const metadata = { title: 'Ventas · Admin' }
 
@@ -19,6 +20,21 @@ function nombreMes(mes) {
   return texto.charAt(0).toUpperCase() + texto.slice(1)
 }
 
+// Utilidad de una venta. Con * si alguna gorra no tenía costo (la real es menor).
+function CeldaUtilidad({ venta }) {
+  if (venta.estado === 'cancelado') return <td className="adm-numero adm-suave">—</td>
+  const { utilidad, costoIncompleto } = utilidadVenta(venta)
+  return (
+    <td
+      className={`adm-numero ${utilidad < 0 ? 'adm-rojo' : 'adm-verde'}`}
+      title={costoIncompleto ? 'Alguna gorra de esta venta no tenía costo cargado: la utilidad real es menor.' : undefined}
+    >
+      {formatPrecio(utilidad)}
+      {costoIncompleto && <span aria-label=" (costo incompleto)">*</span>}
+    </td>
+  )
+}
+
 export default async function Ventas({ searchParams }) {
   const parametros = await searchParams
   const mes = /^\d{4}-\d{2}$/.test(parametros.mes || '') ? parametros.mes : hoyBogota().slice(0, 7)
@@ -28,15 +44,14 @@ export default async function Ventas({ searchParams }) {
   const { desde, hasta } = rangoMes(mes)
   const { data: ventas, error } = await supabase
     .from('ventas')
-    .select('id, fecha, cliente_nombre, ciudad, estado, metodo_pago, total, venta_items(gorra_nombre, cantidad)')
+    .select('id, fecha, cliente_nombre, ciudad, estado, metodo_pago, subtotal, descuento, total, venta_items(gorra_nombre, cantidad, costo_unitario)')
     .gte('fecha', desde)
     .lt('fecha', hasta)
     .order('fecha', { ascending: false })
   if (error) throw new Error(`No se pudieron leer las ventas: ${error.message}. ¿Ya ejecutaste supabase/admin.sql?`)
 
-  const validas = ventas.filter((v) => v.estado !== 'cancelado')
-  const totalMes = validas.reduce((s, v) => s + v.total, 0)
-  const unidadesMes = validas.reduce((s, v) => s + v.venta_items.reduce((t, i) => t + i.cantidad, 0), 0)
+  const delMes = resumenVentas(ventas)
+  const margenMes = margen(delMes.utilidad, delMes.neto)
   const porDespachar = ventas.filter((v) => v.estado === 'pendiente' || v.estado === 'pagado').length
   const lista = estado ? ventas.filter((v) => v.estado === estado) : ventas
 
@@ -66,8 +81,22 @@ export default async function Ventas({ searchParams }) {
       <div className="adm-kpis">
         <div className="adm-kpi">
           <div className="adm-kpi-etiqueta">Vendido en el mes</div>
-          <div className="adm-kpi-valor">{formatPrecio(totalMes)}</div>
-          <div className="adm-kpi-detalle">{validas.length} ventas · {unidadesMes} gorras</div>
+          <div className="adm-kpi-valor">{formatPrecio(delMes.ingresos)}</div>
+          <div className="adm-kpi-detalle">
+            {delMes.ventas} {delMes.ventas === 1 ? 'venta' : 'ventas'} · {delMes.unidades} {delMes.unidades === 1 ? 'gorra' : 'gorras'}
+          </div>
+        </div>
+        <div className="adm-kpi" data-tono="verde">
+          <div className="adm-kpi-etiqueta">Utilidad del mes</div>
+          <div className={`adm-kpi-valor ${delMes.utilidad < 0 ? 'adm-rojo' : 'adm-verde'}`}>{formatPrecio(delMes.utilidad)}</div>
+          <div className="adm-kpi-detalle">
+            {margenMes !== null ? `Margen ${margenMes}% · ` : ''}sin envíos ni canceladas
+          </div>
+          {delMes.costoIncompleto > 0 && (
+            <div className="adm-kpi-detalle adm-rojo">
+              {delMes.costoIncompleto} {delMes.costoIncompleto === 1 ? 'venta tiene' : 'ventas tienen'} gorras sin costo: la utilidad real es menor
+            </div>
+          )}
         </div>
         <div className="adm-kpi">
           <div className="adm-kpi-etiqueta">Por despachar</div>
@@ -100,6 +129,7 @@ export default async function Ventas({ searchParams }) {
                 <th>Pago</th>
                 <th>Estado</th>
                 <th className="adm-numero">Total</th>
+                <th className="adm-numero">Utilidad</th>
               </tr>
             </thead>
             <tbody>
@@ -119,12 +149,18 @@ export default async function Ventas({ searchParams }) {
                   <td className="adm-numero" style={v.estado === 'cancelado' ? { textDecoration: 'line-through', opacity: 0.5 } : undefined}>
                     {formatPrecio(v.total)}
                   </td>
+                  <CeldaUtilidad venta={v} />
                 </tr>
               ))}
             </tbody>
           </table>
           {!lista.length && <p className="adm-vacio">No hay ventas {estado ? 'con ese estado ' : ''}en este mes.</p>}
         </div>
+        {lista.some((v) => v.estado !== 'cancelado' && utilidadVenta(v).costoIncompleto) && (
+          <p className="adm-ayuda" style={{ marginTop: 12 }}>
+            * Alguna gorra de esa venta no tenía costo cargado cuando se registró: la utilidad real es menor.
+          </p>
+        )}
       </section>
     </>
   )

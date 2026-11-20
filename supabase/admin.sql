@@ -53,6 +53,11 @@ alter table public.gorras
   alter column stock set default 0,
   alter column stock set not null;
 
+-- La etiqueta es opcional: vacía = sin etiqueta (la tienda solo la muestra si existe).
+-- mover_stock la deja vacía cuando una gorra con etiqueta "Agotado" vuelve a tener stock,
+-- y el panel la guarda vacía al elegir "Sin etiqueta".
+alter table public.gorras alter column badge drop not null;
+
 -- Estados válidos. "oculto" = archivada: no sale en la web pero conserva su historial de ventas.
 -- Se reemplaza cualquier regla anterior sobre estado para poder agregar "oculto".
 do $$
