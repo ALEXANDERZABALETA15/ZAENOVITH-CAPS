@@ -1,17 +1,13 @@
 import Link from 'next/link'
 import { requerirAdmin } from '@/lib/admin/sesion'
 import { gorrasAdmin, coleccionesDe } from '@/lib/admin/consultas'
-import { ESTADOS_GORRA, miniatura } from '@/lib/admin/catalogos'
+import { ESTADOS_GORRA, miniatura, normalizar } from '@/lib/admin/catalogos'
 import { ChipEstadoGorra, ChipStock } from '@/components/admin/Chips'
 import { formatPrecio } from '@/lib/precio'
 import { claveColeccion } from '@/lib/colecciones'
 import { textoBadge } from '@/lib/badges'
 
 export const metadata = { title: 'Productos · Admin' }
-
-function normalizar(texto) {
-  return (texto || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
-}
 
 export default async function Productos({ searchParams }) {
   const { q = '', estado = '', coleccion = '', guardado } = await searchParams

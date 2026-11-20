@@ -3,7 +3,7 @@ import NavAdmin from '@/components/admin/NavAdmin'
 
 // Todas las páginas del panel pasan por aquí: sin sesión de admin, al login.
 export default async function PanelLayout({ children }) {
-  const { supabase } = await requerirAdmin()
+  const { supabase, user } = await requerirAdmin()
 
   const { count: avisosPendientes } = await supabase
     .from('avisos')
@@ -12,7 +12,7 @@ export default async function PanelLayout({ children }) {
 
   return (
     <div className="adm-shell">
-      <NavAdmin avisosPendientes={avisosPendientes || 0} />
+      <NavAdmin avisosPendientes={avisosPendientes || 0} correo={user.email} />
       <main className="adm-main">
         {children}
       </main>
