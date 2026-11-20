@@ -15,6 +15,12 @@ export function mensajeError(error, porDefecto = 'No se pudo guardar. Inténtalo
   if (error.code === 'P0001' && error.message) return error.message
   if (error.code === '42501') return 'No tienes permiso para hacer esto. Vuelve a iniciar sesión.'
   if (error.code === '23503') return 'No se puede: hay otros registros que dependen de este.'
+  // Reglas de la base de datos: se muestra cuál, para poder corregirla en Supabase
+  if (error.code === '23502') {
+    const columna = error.message?.match(/column "([^"]+)"/)?.[1]
+    return `La base de datos no acepta "${columna ?? 'un campo'}" vacío. Revisa supabase/admin.sql.`
+  }
+  if (error.code === '23514') return `Un valor no cumple las reglas de la base de datos (${error.message}).`
   if (error.code === '42P01' || error.code === 'PGRST202' || error.code === 'PGRST205') {
     return 'Falta preparar la base de datos: ejecuta supabase/admin.sql en Supabase.'
   }

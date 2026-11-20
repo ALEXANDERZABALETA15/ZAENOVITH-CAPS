@@ -4,35 +4,39 @@ import { gorrasAdmin } from '@/lib/admin/consultas'
 import { STOCK_BAJO, inicioDiaBogota, inicioSemanaBogota, inicioMesBogota, hoyBogota, formatoFecha, miniatura } from '@/lib/admin/catalogos'
 import { ChipEstadoVenta, ChipStock } from '@/components/admin/Chips'
 import { formatPrecio } from '@/lib/precio'
-
-function resumen(ventas) {
-  return ventas.reduce(
-    (r, v) => {
-      const costo = v.venta_items.reduce((s, i) => s + (i.costo_unitario ?? 0) * i.cantidad, 0)
-      r.ventas += 1
-      r.ingresos += v.total
-      r.ganancia += v.subtotal - v.descuento - costo
-      r.unidades += v.venta_items.reduce((s, i) => s + i.cantidad, 0)
-      return r
-    },
-    { ventas: 0, ingresos: 0, ganancia: 0, unidades: 0 }
-  )
-}
+import { resumenVentas, valorInventario, margen } from '@/lib/admin/finanzas'
 
 function mesAnterior() {
   const [anio, mes] = hoyBogota().split('-').map(Number)
   return mes === 1 ? `${anio - 1}-12-01` : `${anio}-${String(mes - 1).padStart(2, '0')}-01`
 }
 
-function Kpi({ etiqueta, datos, detalle }) {
+// Lo vendido en un periodo y, debajo, cuánto de eso es ganancia
+function KpiVentas({ etiqueta, datos, detalle }) {
   return (
     <div className="adm-kpi">
       <div className="adm-kpi-etiqueta">{etiqueta}</div>
       <div className="adm-kpi-valor">{formatPrecio(datos.ingresos)}</div>
       <div className="adm-kpi-detalle">
-        {datos.ventas} {datos.ventas === 1 ? 'venta' : 'ventas'} · {datos.unidades} gorras
-        {datos.ventas > 0 && <> · <span className="adm-verde">ganancia {formatPrecio(datos.ganancia)}</span></>}
+        {datos.ventas} {datos.ventas === 1 ? 'venta' : 'ventas'} · {datos.unidades} {datos.unidades === 1 ? 'gorra' : 'gorras'}
       </div>
+      <div className="adm-kpi-pie">
+        <span>Utilidad</span>
+        <strong className={datos.utilidad < 0 ? 'adm-rojo' : 'adm-verde'}>
+          {formatPrecio(datos.utilidad)}
+          {margen(datos.utilidad, datos.neto) !== null && <small> · {margen(datos.utilidad, datos.neto)}%</small>}
+        </strong>
+      </div>
+      {detalle && <div className="adm-kpi-detalle" style={{ marginTop: 6 }}>{detalle}</div>}
+    </div>
+  )
+}
+
+function KpiDinero({ etiqueta, valor, detalle, tono }) {
+  return (
+    <div className="adm-kpi" data-tono={tono}>
+      <div className="adm-kpi-etiqueta">{etiqueta}</div>
+      <div className={`adm-kpi-valor${tono === 'verde' ? ' adm-verde' : ''}`}>{formatPrecio(valor)}</div>
       {detalle && <div className="adm-kpi-detalle">{detalle}</div>}
     </div>
   )
@@ -62,11 +66,11 @@ export default async function Inicio() {
 
   const ventas = ventasRes.data
   const desde = (inicio) => ventas.filter((v) => new Date(v.fecha) >= new Date(inicio))
-  const hoy = resumen(desde(inicioDiaBogota()))
-  const semana = resumen(desde(inicioSemanaBogota()))
+  const hoy = resumenVentas(desde(inicioDiaBogota()))
+  const semana = resumenVentas(desde(inicioSemanaBogota()))
   const delMes = desde(inicioMesBogota())
-  const mes = resumen(delMes)
-  const pasado = resumen(ventas.filter((v) => new Date(v.fecha) < new Date(inicioMesBogota())))
+  const mes = resumenVentas(delMes)
+  const pasado = resumenVentas(ventas.filter((v) => new Date(v.fecha) < new Date(inicioMesBogota())))
 
   // Más vendidas del mes
   const conteo = new Map()
@@ -84,6 +88,7 @@ export default async function Inicio() {
   const stockBajo = visibles.filter((g) => g.estado === 'activo' && g.stock > 0 && g.stock <= STOCK_BAJO)
   const activasSinStock = visibles.filter((g) => g.estado === 'activo' && g.stock === 0)
   const sinCosto = visibles.filter((g) => g.costo === null).length
+  const bodega = valorInventario(gorras)
   const disponibles = new Set(visibles.filter((g) => g.estado === 'activo' && g.stock > 0).map((g) => g.id))
   const avisosListos = avisosRes.data.filter((a) => disponibles.has(a.gorra_id)).length
 
@@ -100,15 +105,61 @@ export default async function Inicio() {
         <Link href="/admin/ventas/nueva" className="adm-btn adm-btn--primario">+ Registrar venta</Link>
       </div>
 
-      <div className="adm-kpis">
-        <Kpi etiqueta="Hoy" datos={hoy} />
-        <Kpi etiqueta="Esta semana" datos={semana} />
-        <Kpi
-          etiqueta="Este mes"
-          datos={mes}
-          detalle={variacion !== null ? `${variacion >= 0 ? '+' : ''}${variacion}% vs. mes pasado (${formatPrecio(pasado.ingresos)})` : null}
-        />
-      </div>
+      <section className="adm-seccion" aria-labelledby="titulo-ventas">
+        <div className="adm-seccion-titulo">
+          <h2 id="titulo-ventas">Ventas</h2>
+          <span>Lo que entró y cuánto de eso es ganancia (sin envío ni ventas canceladas)</span>
+        </div>
+        <div className="adm-kpis">
+          <KpiVentas etiqueta="Vendido hoy" datos={hoy} />
+          <KpiVentas etiqueta="Vendido esta semana" datos={semana} />
+          <KpiVentas
+            etiqueta="Vendido este mes"
+            datos={mes}
+            detalle={variacion !== null ? `${variacion >= 0 ? '+' : ''}${variacion}% vs. mes pasado (${formatPrecio(pasado.ingresos)})` : null}
+          />
+        </div>
+      </section>
+
+      <section className="adm-seccion" aria-labelledby="titulo-bodega">
+        <div className="adm-seccion-titulo">
+          <h2 id="titulo-bodega">Inventario</h2>
+          <span>
+            {bodega.unidades} {bodega.unidades === 1 ? 'gorra' : 'gorras'} en stock ·{' '}
+            <Link href="/admin/inventario" style={{ textDecoration: 'underline' }}>Ver inventario</Link>
+          </span>
+        </div>
+        <div className="adm-kpis">
+          <KpiDinero
+            etiqueta="Dinero invertido"
+            valor={bodega.invertido}
+            detalle="Lo que te costó el stock que tienes hoy"
+          />
+          <KpiDinero
+            etiqueta="Si vendes todo"
+            valor={bodega.valorVenta}
+            detalle="Lo que entraría al precio actual"
+          />
+          <KpiDinero
+            etiqueta="Utilidad si vendes todo"
+            valor={bodega.utilidad}
+            tono="verde"
+            detalle={
+              margen(bodega.utilidad, bodega.valorVentaConCosto) !== null
+                ? `Margen ${margen(bodega.utilidad, bodega.valorVentaConCosto)}% · lo que ganarías después de recuperar la inversión`
+                : 'Lo que ganarías después de recuperar la inversión'
+            }
+          />
+        </div>
+        {bodega.sinCosto.gorras > 0 && (
+          <p className="adm-ayuda" style={{ marginTop: 10 }}>
+            {bodega.sinCosto.unidades} {bodega.sinCosto.unidades === 1 ? 'unidad' : 'unidades'} de {bodega.sinCosto.gorras}{' '}
+            {bodega.sinCosto.gorras === 1 ? 'gorra' : 'gorras'} sin costo cargado ({formatPrecio(bodega.sinCosto.valorVenta)} a precio de venta)
+            no entran en lo invertido ni en la utilidad.{' '}
+            <Link href="/admin/productos" style={{ textDecoration: 'underline' }}>Cargar costos</Link>
+          </p>
+        )}
+      </section>
 
       {(activasSinStock.length > 0 || avisosListos > 0 || sinCosto > 0) && (
         <div className="adm-form" style={{ gap: 8 }}>
