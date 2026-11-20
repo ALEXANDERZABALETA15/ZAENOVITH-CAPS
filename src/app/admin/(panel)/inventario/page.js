@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { requerirAdmin } from '@/lib/admin/sesion'
 import { gorrasAdmin } from '@/lib/admin/consultas'
-import { STOCK_BAJO, miniatura } from '@/lib/admin/catalogos'
+import { STOCK_BAJO, miniatura, normalizar } from '@/lib/admin/catalogos'
 import { ChipEstadoGorra, ChipStock } from '@/components/admin/Chips'
 import AjusteStock from '@/components/admin/AjusteStock'
 import { formatPrecio } from '@/lib/precio'
@@ -16,7 +16,7 @@ const FILTROS = [
 ]
 
 export default async function Inventario({ searchParams }) {
-  const { filtro = '', gorra: gorraResaltada } = await searchParams
+  const { filtro = '', q = '', gorra: gorraResaltada } = await searchParams
   const { supabase } = await requerirAdmin()
   const gorras = await gorrasAdmin(supabase)
 
@@ -31,12 +31,24 @@ export default async function Inventario({ searchParams }) {
   const sinCosto = visibles.filter((g) => g.stock > 0 && g.costo === null).length
   const activasSinStock = visibles.filter((g) => g.estado === 'activo' && g.stock === 0)
 
+  const busqueda = normalizar(q.trim().replace(/^#/, ''))
   const lista = (() => {
     if (filtro === 'bajo') return visibles.filter((g) => g.stock > 0 && g.stock <= STOCK_BAJO)
     if (filtro === 'cero') return visibles.filter((g) => g.stock === 0)
     if (filtro === 'ocultas') return gorras.filter((g) => g.estado === 'oculto')
     return visibles
-  })().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+  })()
+    .filter((g) => !busqueda || normalizar(`${g.nombre} ${g.color} ${g.marca} ${g.coleccion} ${g.id}`).includes(busqueda))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+
+  // Las pestañas conservan la búsqueda y la búsqueda conserva la pestaña
+  const enlaceFiltro = (valor) => {
+    const p = new URLSearchParams()
+    if (valor) p.set('filtro', valor)
+    if (q) p.set('q', q)
+    const cadena = p.toString()
+    return cadena ? `/admin/inventario?${cadena}` : '/admin/inventario'
+  }
 
   return (
     <>
@@ -74,16 +86,37 @@ export default async function Inventario({ searchParams }) {
       )}
 
       <section className="adm-tarjeta">
-        <nav className="adm-pestanas" style={{ marginBottom: 16 }} aria-label="Filtro">
-          {FILTROS.map((f) => (
-            <Link key={f.valor} href={f.valor ? `/admin/inventario?filtro=${f.valor}` : '/admin/inventario'} aria-current={filtro === f.valor ? 'true' : undefined}>
-              {f.nombre}
-            </Link>
-          ))}
-        </nav>
+        <div className="adm-barra-herramientas">
+          <nav className="adm-pestanas" aria-label="Filtro">
+            {FILTROS.map((f) => (
+              <Link key={f.valor} href={enlaceFiltro(f.valor)} aria-current={filtro === f.valor ? 'true' : undefined}>
+                {f.nombre}
+              </Link>
+            ))}
+          </nav>
+          <form className="adm-buscador" role="search">
+            {filtro && <input type="hidden" name="filtro" value={filtro} />}
+            <input
+              type="search"
+              name="q"
+              defaultValue={q}
+              placeholder="Buscar gorra: nombre, color, marca o #"
+              className="adm-input"
+              aria-label="Buscar gorra"
+            />
+            <button type="submit" className="adm-btn">Buscar</button>
+            {q && <Link href={filtro ? `/admin/inventario?filtro=${filtro}` : '/admin/inventario'} className="adm-btn adm-btn--fantasma">Limpiar</Link>}
+          </form>
+        </div>
+
+        {q && (
+          <p className="adm-ayuda" style={{ marginBottom: 8 }}>
+            {lista.length === 1 ? '1 gorra' : `${lista.length} gorras`} para “{q}”
+          </p>
+        )}
 
         <div className="adm-tabla-scroll">
-          <table className="adm-tabla">
+          <table className="adm-tabla adm-tabla--inventario">
             <thead>
               <tr>
                 <th>Gorra</th>
@@ -115,7 +148,7 @@ export default async function Inventario({ searchParams }) {
               ))}
             </tbody>
           </table>
-          {!lista.length && <p className="adm-vacio">Nada por aquí.</p>}
+          {!lista.length && <p className="adm-vacio">{q ? `Ninguna gorra coincide con “${q}”.` : 'Nada por aquí.'}</p>}
         </div>
       </section>
     </>

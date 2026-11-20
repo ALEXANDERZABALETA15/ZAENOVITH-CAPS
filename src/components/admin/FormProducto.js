@@ -154,9 +154,9 @@ export default function FormProducto({ gorra = null, colecciones = [] }) {
             <div className="adm-campo">
               <span className="adm-etiqueta">Stock</span>
               <span style={{ fontSize: 20, fontWeight: 700 }}>{gorra.stock} {gorra.stock === 1 ? 'unidad' : 'unidades'}</span>
-              <Link href={`/admin/inventario?gorra=${gorra.id}`} className="adm-ayuda" style={{ textDecoration: 'underline' }}>
-                Ajustar en Inventario
-              </Link>
+              <a href="#inventario" className="adm-ayuda" style={{ textDecoration: 'underline' }}>
+                Agregar o ajustar stock
+              </a>
             </div>
           )}
         </div>

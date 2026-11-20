@@ -54,6 +54,11 @@ export const MOTIVOS_MOVIMIENTO = {
   ajuste: 'Ajuste / conteo',
 }
 
+// Para buscar sin importar mayúsculas ni tildes: "Camión" → "camion"
+export function normalizar(texto) {
+  return String(texto ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+}
+
 export function nombreDe(lista, valor) {
   return lista.find((x) => x.valor === valor)?.nombre ?? valor ?? '—'
 }

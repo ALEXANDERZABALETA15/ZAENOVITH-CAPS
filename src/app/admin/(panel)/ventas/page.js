@@ -13,8 +13,10 @@ function rangoMes(mes) {
   return { desde: `${mes}-01T00:00:00-05:00`, hasta: `${siguiente}-01T00:00:00-05:00` }
 }
 
+// "noviembre de 2026" → "Noviembre de 2026" (solo la primera letra; capitalize ponía "De")
 function nombreMes(mes) {
-  return new Date(`${mes}-15T12:00:00-05:00`).toLocaleDateString('es-CO', { month: 'long', year: 'numeric', timeZone: 'America/Bogota' })
+  const texto = new Date(`${mes}-15T12:00:00-05:00`).toLocaleDateString('es-CO', { month: 'long', year: 'numeric', timeZone: 'America/Bogota' })
+  return texto.charAt(0).toUpperCase() + texto.slice(1)
 }
 
 export default async function Ventas({ searchParams }) {
@@ -49,7 +51,7 @@ export default async function Ventas({ searchParams }) {
       <div className="adm-encabezado">
         <div>
           <h1>Ventas</h1>
-          <p style={{ textTransform: 'capitalize' }}>{nombreMes(mes)}</p>
+          <p>{nombreMes(mes)}</p>
         </div>
         <div className="adm-acciones">
           <form className="adm-filtros">
