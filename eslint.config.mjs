@@ -1,16 +1,8 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
+import nextVitals from 'eslint-config-next/core-web-vitals'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
-
+// eslint-config-next 16 ya viene en formato "flat config": se usa directo (FlatCompat ya no funciona con él)
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals'),
+  ...nextVitals,
   {
     rules: {
       '@next/next/no-img-element': 'off',
