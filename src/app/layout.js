@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 import Analitica from '@/components/Analitica'
+import SoloTienda from '@/components/layout/SoloTienda'
 import { SITIO_URL } from '@/lib/contacto'  // Trae la dirección oficial del sitio desde un solo lugar
 import { NOMBRE_SITIO, TITULO_SITIO, DESCRIPCION_SITIO, IMAGEN_COMPARTIR_SITIO } from '@/lib/seo'
 
@@ -47,12 +48,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es" data-scroll-behavior="smooth">
       <body className={`${cinzel.variable} ${inter.variable}`}>
-        <LoadingScreen />
-        <Header />
+        <SoloTienda>
+          <LoadingScreen />
+          <Header />
+        </SoloTienda>
         {children}
-        <Footer />
-        <WhatsAppButton />
-        <Analitica />
+        <SoloTienda>
+          <Footer />
+          <WhatsAppButton />
+          <Analitica />
+        </SoloTienda>
       </body>
     </html>
   )
