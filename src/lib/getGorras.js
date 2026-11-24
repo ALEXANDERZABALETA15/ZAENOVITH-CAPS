@@ -9,11 +9,12 @@ import 'server-only'
 import { cache } from 'react'
 import { supabase } from './supabase'
 import { FOTO_RESPALDO } from './imagenes'
-import { slugValido } from './rutas'
+import { slugValido, slugTexto } from './rutas'
+import { claveColeccion } from './colecciones'
 
 // Columnas explícitas: si la tabla gana columnas internas (costos, notas), no se publican solas
 const COLUMNAS = [
-  'id', 'slug', 'nombre', 'precio', 'precio_anterior', 'coleccion', 'color', 'descripcion',
+  'id', 'slug', 'sku', 'nombre', 'precio', 'precio_anterior', 'coleccion', 'color', 'descripcion',
   'estado', 'badge', 'created_at', 'updated_at',
   'foto1', 'foto2', 'foto3', 'foto4', 'foto5', 'foto6',
   'marca', 'tipo', 'talla', 'material', 'visera', 'stock',
@@ -26,6 +27,7 @@ function mapGorra(gorra) {
     id: gorra.id,
     // Solo si sirve como URL (ver lib/rutas.js); si no, la gorra se enlaza por id
     slug: slugValido(gorra.slug) ? gorra.slug : null,
+    sku: gorra.sku?.trim() || null,
     nombre: gorra.nombre,
     precio: gorra.precio,
     precioAnterior: gorra.precio_anterior,
@@ -91,8 +93,60 @@ export const getGorraBySlug = cache(async (slug) => {
 
 const masNuevaPrimero =(a, b) => b.id - a.id
 
+const MAXIMO_NOVEDADES = 12
+
+// Las últimas gorras disponibles que llegaron, sin depender de que alguien les ponga la etiqueta:
+// así /novedades nunca queda vacía. Las marcadas "Nuevo" van primero.
 export function filtrarNovedades(gorras) {
-  return gorras.filter((g) => g.badge === 'Nuevo' && g.estado === 'activo').sort(masNuevaPrimero)
+  const esNueva = (g) => (g.badge === 'Nuevo' ? 0 : 1)
+  return gorras
+    .filter((g) => g.estado === 'activo')
+    .sort((a, b) =>
+      esNueva(a) - esNueva(b) ||
+      new Date(b.createdAt) - new Date(a.createdAt) ||
+      masNuevaPrimero(a, b))
+    .slice(0, MAXIMO_NOVEDADES)
+}
+
+// Mismo orden que el catálogo del inicio: disponibles, luego próximas, agotadas al final;
+// dentro de cada grupo, las más recientes primero
+const PRIORIDAD_ESTADO = { activo: 0, proximo: 1, agotado: 2 }
+
+export function ordenCatalogo(gorras) {
+  return [...gorras].sort((a, b) =>
+    (PRIORIDAD_ESTADO[a.estado] ?? 1) - (PRIORIDAD_ESTADO[b.estado] ?? 1) ||
+    new Date(b.createdAt) - new Date(a.createdAt) ||
+    masNuevaPrimero(a, b))
+}
+
+export function filtrarColeccion(gorras, clave) {
+  return ordenCatalogo(gorras.filter((g) => claveColeccion(g.coleccion) === clave))
+}
+
+// Marcas con al menos una gorra publicada: [{ slug, nombre, cantidad }].
+// "New Era" y "new era " cuentan como la misma; se muestra el nombre más usado.
+export function marcasDisponibles(gorras) {
+  const marcas = new Map()
+  gorras.forEach((g) => {
+    const slug = slugTexto(g.marca)
+    if (!slug) return
+    const m = marcas.get(slug) ?? { slug, cantidad: 0, nombres: {} }
+    const nombre = g.marca.trim()
+    m.cantidad += 1
+    m.nombres[nombre] = (m.nombres[nombre] ?? 0) + 1
+    marcas.set(slug, m)
+  })
+  return [...marcas.values()]
+    .map(({ slug, cantidad, nombres }) => ({
+      slug,
+      cantidad,
+      nombre: Object.entries(nombres).sort((a, b) => b[1] - a[1])[0][0],
+    }))
+    .sort((a, b) => b.cantidad - a.cantidad)
+}
+
+export function filtrarMarca(gorras, slug) {
+  return ordenCatalogo(gorras.filter((g) => slugTexto(g.marca) === slug))
 }
 
 export function filtrarOfertas(gorras) {

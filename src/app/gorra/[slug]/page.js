@@ -1,8 +1,8 @@
 import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { getGorras, getGorraById, getGorraBySlug, getGorrasRelacionadas } from '@/lib/getGorras'
-import { FORMATO_SLUG, rutaGorra } from '@/lib/rutas'
-import { nombreColeccion, claveColeccion } from '@/lib/colecciones'
+import { FORMATO_SLUG, rutaGorra, rutaMarca, slugTexto } from '@/lib/rutas'
+import { nombreColeccion, rutaColeccion } from '@/lib/colecciones'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
 import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
 import { BENEFICIOS_COMPRA, INFO_DESPLEGABLE } from '@/lib/tienda'
@@ -95,7 +95,15 @@ export default async function GorraDetalle({ params }) {
 
   // Solo se muestran las filas con dato (ver supabase/gorras_ficha.sql)
   const ficha = [
-    { label: 'Marca', value: gorra.marca },
+    {
+      label: 'Marca',
+      // Enlaza a la página de la marca (ver app/marca/[marca]/page.js)
+      value: slugTexto(gorra.marca) && (
+        <Link href={rutaMarca(gorra.marca)} style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+          {gorra.marca.trim()}
+        </Link>
+      ),
+    },
     { label: 'Tipo', value: gorra.tipo },
     { label: 'Talla', value: gorra.talla },
     { label: 'Material', value: gorra.material },
@@ -112,7 +120,7 @@ export default async function GorraDetalle({ params }) {
     name: gorra.nombre,
     image: gorra.fotos.map(urlProductoGrande),
     description: gorra.descripcion || undefined,
-    sku: String(gorra.id),
+    sku: gorra.sku ?? String(gorra.id),
     category: coleccion,
     color: gorra.color || undefined,
     material: gorra.material || undefined,
@@ -135,7 +143,7 @@ export default async function GorraDetalle({ params }) {
 
   const migas = datosMigas([
     { nombre: 'Inicio', ruta: '/' },
-    { nombre: coleccion, ruta: `/?coleccion=${claveColeccion(gorra.coleccion)}` },
+    { nombre: coleccion, ruta: rutaColeccion(gorra.coleccion) },
     { nombre: gorra.nombre, ruta: rutaGorra(gorra) },
   ])
 
@@ -175,7 +183,7 @@ export default async function GorraDetalle({ params }) {
           <li aria-hidden="true" style={estiloMiga}>/</li>
           <li>
             <Link
-              href={`/?coleccion=${claveColeccion(gorra.coleccion)}#catalogo`}
+              href={rutaColeccion(gorra.coleccion)}
               className="btn-volver"
               style={estiloMiga}
             >

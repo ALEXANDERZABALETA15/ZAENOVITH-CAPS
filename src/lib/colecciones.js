@@ -15,12 +15,37 @@ export const TODAS = 'todas'
 
 // Orden y nombre visible de las colecciones conocidas.
 // Una colección nueva en la base aparece igual, al final y con su nombre original.
-const COLECCIONES_CONOCIDAS = [
-  { clave: 'clasico', nombre: 'Clásicos' },
-  { clave: 'urbano', nombre: 'Urbano' },
-  { clave: 'premium', nombre: 'Premium' },
-  { clave: 'vintage', nombre: 'Vintage' },
+// titulo/descripcion: el encabezado de su página /coleccion/<clave> (lo que lee Google)
+export const COLECCIONES_CONOCIDAS = [
+  {
+    clave: 'clasico',
+    nombre: 'Clásicos',
+    titulo: 'Gorras clásicas',
+    descripcion: 'Estilos atemporales: gorras de líneas limpias y logos icónicos que combinan con todo.',
+  },
+  {
+    clave: 'urbano',
+    nombre: 'Urbano',
+    titulo: 'Gorras urbanas',
+    descripcion: 'Streetwear premium: snapbacks y diseños con actitud para el día a día.',
+  },
+  {
+    clave: 'premium',
+    nombre: 'Premium',
+    titulo: 'Gorras premium',
+    descripcion: 'Lo más exclusivo de CROWNLUX: ediciones especiales, colaboraciones y piezas limitadas.',
+  },
+  { clave: 'vintage', nombre: 'Vintage', titulo: 'Gorras vintage', descripcion: 'Diseños con aire retro.' },
 ]
+
+export function datosColeccion(clave) {
+  return COLECCIONES_CONOCIDAS.find((c) => c.clave === clave) ?? null
+}
+
+// Página propia de cada colección (ver app/coleccion/[clave]/page.js)
+export function rutaColeccion(nombre) {
+  return `/coleccion/${claveColeccion(nombre)}`
+}
 
 export function nombreColeccion(nombre) {
   const conocida = COLECCIONES_CONOCIDAS.find((c) => c.clave === claveColeccion(nombre))
