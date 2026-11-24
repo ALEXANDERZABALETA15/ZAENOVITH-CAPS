@@ -15,3 +15,20 @@ export function slugValido(slug) {
 export function rutaGorra(gorra) {
   return `/gorra/${slugValido(gorra.slug) ? gorra.slug : gorra.id}`
 }
+
+// "New Era Dodgers \"Black\" - 9FIFTY" → "new-era-dodgers-black-9fifty"
+export function slugTexto(texto) {
+  return String(texto ?? '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80)
+    .replace(/-+$/, '')
+}
+
+// Página de cada marca: /marca/new-era (ver app/marca/[marca]/page.js)
+export function rutaMarca(marca) {
+  return `/marca/${slugTexto(marca)}`
+}

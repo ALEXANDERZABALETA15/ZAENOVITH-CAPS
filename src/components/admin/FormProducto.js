@@ -118,7 +118,7 @@ export default function FormProducto({ gorra = null }) {
               {ESTADOS_GORRA.map((e) => <option key={e.valor} value={e.valor}>{e.nombre}</option>)}
             </select>
           </Campo>
-          <Campo id="badge" etiqueta="Etiqueta" ayuda="Nuevo → sale en Novedades. Oferta → sale en Ofertas.">
+          <Campo id="badge" etiqueta="Etiqueta" ayuda="Nuevo → aparece primero en Novedades. Oferta → sale en Ofertas.">
             <select {...campo('badge')} className="adm-select">
               <option value="">Sin etiqueta</option>
               {BADGES.map((b) => <option key={b} value={b}>{textoBadge(b)}</option>)}

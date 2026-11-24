@@ -66,6 +66,18 @@ export function datosTienda() {
       name: NOMBRE_SITIO,
       url: SITIO_URL,
       description: DESCRIPCION_SITIO,
+      // Logo para el panel de marca de Google: cuadrado y con fondo propio
+      // (Google lo muestra sobre blanco; el PNG transparente tiene letras claras y no se vería)
+      logo: `${SITIO_URL}/marca/crownlux-logo-cuadrado.png`,
+      image: IMAGEN_COMPARTIR_SITIO.url,
+      // Solo ciudad: no hay local abierto al público con dirección
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Ibagué',
+        addressRegion: 'Tolima',
+        addressCountry: 'CO',
+      },
+      areaServed: { '@type': 'Country', name: 'Colombia' },
       sameAs: REDES_SOCIALES,
       contactPoint: {
         '@type': 'ContactPoint',
@@ -85,6 +97,28 @@ export function datosTienda() {
       publisher: { '@id': `${SITIO_URL}/#tienda` },
     },
   ]
+}
+
+// Página de listado (colección, marca): qué es y qué gorras contiene, en orden.
+// rutasGorras: la URL relativa de cada gorra, en el orden en que se muestran
+export function datosListado({ nombre, descripcion, ruta, rutasGorras }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: nombre,
+    description: descripcion,
+    url: `${SITIO_URL}${ruta}`,
+    isPartOf: { '@id': `${SITIO_URL}/#sitio` },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: rutasGorras.length,
+      itemListElement: rutasGorras.map((r, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${SITIO_URL}${r}`,
+      })),
+    },
+  }
 }
 
 // Migas de pan: Google las muestra en el resultado en vez de la URL.

@@ -4,8 +4,9 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import GorraCard from '@/components/ui/GorraCard'
 
-// Página de listado (novedades, ofertas). Las gorras llegan ya filtradas desde el servidor.
-export default function ListadoGorras({ etiqueta, titulo, descripcion, textoVacio, gorras = [] }) {
+// Página de listado (novedades, ofertas, colecciones, marcas). Las gorras llegan ya filtradas desde el servidor.
+// relacionados: [{ nombre, href }] enlaces a otras colecciones o marcas ("Explora también")
+export default function ListadoGorras({ etiqueta, titulo, descripcion, textoVacio, gorras = [], relacionados = [] }) {
   return (
     <main style={{
       backgroundColor: 'var(--color-black)',
@@ -132,6 +133,45 @@ export default function ListadoGorras({ etiqueta, titulo, descripcion, textoVaci
               <GorraCard key={gorra.id} gorra={gorra} />
             ))}
           </div>
+        )}
+
+        {relacionados.length > 0 && (
+          <nav aria-label="Explora también" style={{ marginTop: 'clamp(48px, 7vw, 80px)', textAlign: 'center' }}>
+            <h2 style={{
+              fontSize: '11px',
+              color: 'var(--color-green-text)',
+              fontWeight: '600',
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-inter)',
+              margin: '0 0 18px',
+            }}>
+              Explora también
+            </h2>
+            <ul style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', listStyle: 'none', margin: 0, padding: 0 }}>
+              {relacionados.map((r) => (
+                <li key={r.href}>
+                  <Link
+                    href={r.href}
+                    className="btn-volver"
+                    style={{
+                      display: 'inline-block',
+                      padding: '9px 18px',
+                      border: '1px solid rgba(199,199,199,0.18)',
+                      borderRadius: '999px',
+                      color: 'var(--color-silver)',
+                      fontSize: '12px',
+                      letterSpacing: '0.08em',
+                      textDecoration: 'none',
+                      fontFamily: 'var(--font-inter)',
+                    }}
+                  >
+                    {r.nombre}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         )}
 
       </div>

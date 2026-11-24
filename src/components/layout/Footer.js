@@ -15,9 +15,10 @@ export default function Footer() {
     'WhatsApp': 'https://wa.me/573133635338',
     'Instagram': 'https://www.instagram.com/crownlux.co/',
     'TikTok': 'https://www.tiktok.com/@crownluxco',
-    'Clásicos': '/?coleccion=clasico#catalogo',
-    'Urbano': '/?coleccion=urbano#catalogo',
-    'Premium': '/?coleccion=premium#catalogo',
+    // Páginas propias de cada colección (ver app/coleccion/[clave]/page.js)
+    'Clásicos': '/coleccion/clasico',
+    'Urbano': '/coleccion/urbano',
+    'Premium': '/coleccion/premium',
     'Sobre Nosotros': '/sobre-nosotros',
     'Envíos': '/como-comprar',
     'Política de Cambios': '/politica-de-cambios',
