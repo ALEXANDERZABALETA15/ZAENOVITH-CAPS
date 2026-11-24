@@ -5,6 +5,7 @@ import { formatoFecha, mensajeGorraDisponible, whatsappCliente } from '@/lib/adm
 import { ChipEstadoGorra } from '@/components/admin/Chips'
 import AccionesAviso from '@/components/admin/AccionesAviso'
 import { SITIO_URL } from '@/lib/contacto'
+import { rutaGorra } from '@/lib/rutas'
 
 export const metadata = { title: 'Avisos · Admin' }
 
@@ -68,7 +69,7 @@ export default async function Avisos({ searchParams }) {
                 const g = porId.get(a.gorra_id)
                 const lista = disponibles(a)
                 const enlace = lista
-                  ? whatsappCliente(a.telefono, mensajeGorraDisponible(g.nombre, `${SITIO_URL}/gorra/${g.id}`))
+                  ? whatsappCliente(a.telefono, mensajeGorraDisponible(g.nombre, `${SITIO_URL}${rutaGorra(g)}`))
                   : null
                 return (
                   <tr key={a.id}>

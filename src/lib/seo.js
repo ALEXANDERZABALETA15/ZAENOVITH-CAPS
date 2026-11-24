@@ -23,7 +23,7 @@ export const IMAGEN_COMPARTIR_SITIO = {
   alt: 'CROWNLUX — Premium Caps',
 }
 
-// ruta: '/novedades', '/gorra/12'… (metadataBase del layout la completa con el dominio)
+// ruta: '/novedades', '/gorra/new-era-…-12'… (metadataBase del layout la completa con el dominio)
 export function metadatosPagina({ titulo, descripcion, ruta, imagen = IMAGEN_COMPARTIR_SITIO }) {
   return {
     title: titulo,

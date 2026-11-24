@@ -9,6 +9,7 @@ import { whatsappLink, mensajePedido } from '@/lib/contacto'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
 import { estiloBadge, textoBadge, mostrarBadge as debeMostrarBadge } from '@/lib/badges'
 import { eventoComprar } from '@/lib/analitica'
+import { rutaGorra } from '@/lib/rutas'
 import AvisoModal from './AvisoModal'
 import { IconoWhatsApp, IconoCampana } from './Iconos'
 
@@ -37,7 +38,7 @@ export default function GorraCard({ gorra }) {
 
   const agotado = gorra.estado === 'agotado'
   const proximo = gorra.estado === 'proximo'
-  const href = `/gorra/${gorra.id}`
+  const href = rutaGorra(gorra)
 
   // El sello "Agotado" sobre la foto reemplaza al badge
   const mostrarBadge = debeMostrarBadge(gorra)
