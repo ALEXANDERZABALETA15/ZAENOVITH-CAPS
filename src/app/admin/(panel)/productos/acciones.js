@@ -3,7 +3,7 @@
 import { requerirAdmin } from '@/lib/admin/sesion'
 import { firmaSubida, borrarFotos } from '@/lib/admin/cloudinary'
 import { refrescarTienda, mensajeError, entero, texto } from '@/lib/admin/servidor'
-import { ESTADOS_GORRA, BADGES } from '@/lib/admin/catalogos'
+import { ESTADOS_GORRA, BADGES, COLECCIONES, slugDe } from '@/lib/admin/catalogos'
 
 const MAXIMO_FOTOS = 6
 const COLUMNAS_FOTOS = ['foto1', 'foto2', 'foto3', 'foto4', 'foto5', 'foto6']
@@ -25,6 +25,8 @@ function validar(datos) {
   const fotos = (Array.isArray(datos.fotos) ? datos.fotos : []).filter((f) => typeof f === 'string' && f.startsWith('https://'))
 
   if (!nombre) return { error: 'El nombre es obligatorio.' }
+  if (!COLECCIONES.some((c) => c.valor === datos.coleccion)) return { error: 'Elige una colección.' }
+  if (!texto(datos.color)) return { error: 'El color es obligatorio.' }
   if (precio === null || precio <= 0) return { error: 'El precio debe ser mayor que 0.' }
   if (precioAnterior !== null && precioAnterior <= precio) {
     return { error: 'El precio anterior debe ser mayor que el precio actual (o dejarlo vacío).' }
@@ -38,9 +40,9 @@ function validar(datos) {
     nombre,
     precio,
     precio_anterior: precioAnterior,
-    coleccion: texto(datos.coleccion),
+    coleccion: datos.coleccion,
     color: texto(datos.color),
-    descripcion: texto(datos.descripcion),
+    descripcion: texto(datos.descripcion) ?? '', // la base no acepta null, pero sí vacío
     estado: datos.estado,
     badge: datos.badge || null,
     marca: texto(datos.marca),
@@ -75,9 +77,25 @@ export async function guardarGorra(id, datos) {
     const stockInicial = entero(datos.stockInicial) ?? 0
     if (stockInicial < 0) return { error: 'El stock inicial no puede ser negativo.' }
 
+    // slug y sku siguen el formato de las gorras existentes ("nombre-en-slug-12", "CRW-0012"),
+    // pero llevan el id, que solo se conoce después de insertar: se crea con valores temporales
+    // únicos y luego se completan. Al editar no se cambian, para no romper enlaces.
+    const base = slugDe(fila.nombre)
+    const marca = Date.now().toString(36)
+
     // La gorra nace con 0 y el stock inicial entra como movimiento, así queda en el historial
-    const { data, error } = await supabase.from('gorras').insert({ ...fila, stock: 0 }).select('id').single()
+    const { data, error } = await supabase
+      .from('gorras')
+      .insert({ ...fila, stock: 0, slug: `${base}-${marca}`, sku: `CRW-TMP-${marca}` })
+      .select('id')
+      .single()
     if (error) return { error: mensajeError(error) }
+
+    const { error: errorSlug } = await supabase
+      .from('gorras')
+      .update({ slug: `${base}-${data.id}`, sku: `CRW-${String(data.id).padStart(4, '0')}` })
+      .eq('id', data.id)
+    if (errorSlug) console.error('Supabase (slug/sku):', errorSlug) // la gorra ya quedó con valores válidos
 
     const errorCosto = await guardarCosto(supabase, data.id, costo)
     if (errorCosto) return { error: mensajeError(errorCosto, 'La gorra se creó, pero no se pudo guardar el costo.'), id: data.id }

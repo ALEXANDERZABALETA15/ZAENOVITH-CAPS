@@ -20,6 +20,7 @@ export function mensajeError(error, porDefecto = 'No se pudo guardar. Inténtalo
     const columna = error.message?.match(/column "([^"]+)"/)?.[1]
     return `La base de datos no acepta "${columna ?? 'un campo'}" vacío. Revisa supabase/admin.sql.`
   }
+  if (error.code === '23505') return 'Ya existe un registro con ese mismo valor (nombre, slug o SKU repetido).'
   if (error.code === '23514') return `Un valor no cumple las reglas de la base de datos (${error.message}).`
   if (error.code === '42P01' || error.code === 'PGRST202' || error.code === 'PGRST205') {
     return 'Falta preparar la base de datos: ejecuta supabase/admin.sql en Supabase.'

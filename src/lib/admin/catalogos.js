@@ -11,7 +11,14 @@ export const ESTADOS_GORRA = [
 // Los mismos de src/lib/badges.js
 export const BADGES = ['Nuevo', 'Destacado', 'Oferta', 'Exclusivo', 'Proximamente', 'Agotado']
 
-export const TIPOS_GORRA = ['Snapback', 'Fitted', 'Trucker', 'Dad hat', 'Strapback']
+// Las únicas que acepta la base (regla chk_coleccion de la tabla gorras): valor exacto, sin tilde
+export const COLECCIONES = [
+  { valor: 'Clasicos', nombre: 'Clásicos' },
+  { valor: 'Urbanos', nombre: 'Urbanos' },
+  { valor: 'Premium', nombre: 'Premium' },
+]
+
+export const TIPOS_GORRA =['Snapback', 'Fitted', 'Trucker', 'Dad hat', 'Strapback']
 export const VISERAS = ['Curva', 'Plana']
 
 export const ESTADOS_VENTA = [
@@ -55,6 +62,11 @@ export const MOTIVOS_MOVIMIENTO = {
 }
 
 // Para buscar sin importar mayúsculas ni tildes: "Camión" → "camion"
+// "New Era Dodgers \"Black\" - 9FIFTY" → "new-era-dodgers-black-9fifty"
+export function slugDe(texto) {
+  return normalizar(texto).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80).replace(/-+$/, '') || 'gorra'
+}
+
 export function normalizar(texto) {
   return String(texto ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 }
