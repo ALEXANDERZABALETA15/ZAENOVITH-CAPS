@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requerirAdmin } from '@/lib/admin/sesion'
 import { gorrasAdmin } from '@/lib/admin/consultas'
+import { rutaGorra } from '@/lib/rutas'
 import FormProducto from '@/components/admin/FormProducto'
 import AjusteStock from '@/components/admin/AjusteStock'
 import { ChipEstadoGorra } from '@/components/admin/Chips'
@@ -54,7 +55,7 @@ export default async function EditarGorra({ params }) {
         </div>
         <div className="adm-acciones">
           {gorra.estado !== 'oculto' && (
-            <a href={`/gorra/${gorra.id}`} target="_blank" rel="noopener noreferrer" className="adm-btn">Ver en la tienda ↗</a>
+            <a href={rutaGorra(gorra)} target="_blank" rel="noopener noreferrer" className="adm-btn">Ver en la tienda ↗</a>
           )}
         </div>
       </div>

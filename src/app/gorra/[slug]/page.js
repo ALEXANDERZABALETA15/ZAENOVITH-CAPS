@@ -1,6 +1,7 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
-import { getGorras, getGorraById, getGorrasRelacionadas } from '@/lib/getGorras'
+import { getGorras, getGorraById, getGorraBySlug, getGorrasRelacionadas } from '@/lib/getGorras'
+import { FORMATO_SLUG, rutaGorra } from '@/lib/rutas'
 import { nombreColeccion, claveColeccion } from '@/lib/colecciones'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
 import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
@@ -18,17 +19,43 @@ export const revalidate = 600
 
 export async function generateStaticParams() {
   const gorras = await getGorras()
-  return gorras.map((gorra) => ({ id: String(gorra.id) }))
+  return gorras.filter((g) => g.slug).map((g) => ({ slug: g.slug }))
 }
 
-// Solo ids numéricos: /gorra/abc responde 404 sin consultar Supabase
-async function cargarGorra(params) {
-  const { id } = await params
-  if (!/^\d+$/.test(id)) notFound()
-
-  const gorra = await getGorraById(Number(id))
+// Redirige a la URL oficial de la gorra (permanente: Google pasa el posicionamiento a la nueva)
+async function irALaOficial(id) {
+  const gorra = await getGorraById(id)
   if (!gorra) notFound()
-  return gorra
+  // Sin slug válido, la URL con número ES la oficial: se muestra sin redirigir (evita un bucle)
+  if (!gorra.slug) return gorra
+  permanentRedirect(rutaGorra(gorra))
+}
+
+// /gorra/<slug>        → la gorra
+// /gorra/6             → redirige a /gorra/<slug> (enlaces viejos, Google, WhatsApp)
+// /gorra/otro-texto-6  → slug viejo o mal escrito que termina en el id: redirige al correcto
+// cualquier otra cosa  → 404 real, sin consultar Supabase si el formato no sirve
+async function cargarGorra(params) {
+  const { slug } = await params
+  let segmento
+  try {
+    segmento = decodeURIComponent(slug).trim().toLowerCase()
+  } catch {
+    notFound() // "%" suelto u otra codificación inválida
+  }
+
+  if (/^\d+$/.test(segmento)) return irALaOficial(Number(segmento))
+  if (!FORMATO_SLUG.test(segmento)) notFound()
+
+  const gorra = await getGorraBySlug(segmento)
+  if (gorra) {
+    if (segmento !== slug) permanentRedirect(rutaGorra(gorra)) // llegó con mayúsculas o espacios
+    return gorra
+  }
+
+  const id = segmento.match(/-(\d+)$/)?.[1]
+  if (id) return irALaOficial(Number(id))
+  notFound()
 }
 
 export async function generateMetadata({ params }) {
@@ -37,7 +64,7 @@ export async function generateMetadata({ params }) {
   return metadatosPagina({
     titulo: `${gorra.nombre} — CROWNLUX`,
     descripcion: `${gorra.descripcion ? gorra.descripcion + ' ' : ''}Precio: ${formatPrecio(gorra.precio)}. Envío gratis en Ibagué y envíos a toda Colombia.`,
-    ruta: `/gorra/${gorra.id}`,
+    ruta: rutaGorra(gorra),
     imagen: {
       url: urlCompartir(gorra.fotos[0], { ancho: 1200, alto: 1200 }),
       width: 1200,
@@ -78,7 +105,7 @@ export default async function GorraDetalle({ params }) {
   ].filter((fila) => fila.value)
 
   // Datos estructurados: Google puede mostrar precio y disponibilidad en los resultados
-  const urlProducto = `${SITIO_URL}/gorra/${gorra.id}`
+  const urlProducto = `${SITIO_URL}${rutaGorra(gorra)}`
   const datosEstructurados = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -109,7 +136,7 @@ export default async function GorraDetalle({ params }) {
   const migas = datosMigas([
     { nombre: 'Inicio', ruta: '/' },
     { nombre: coleccion, ruta: `/?coleccion=${claveColeccion(gorra.coleccion)}` },
-    { nombre: gorra.nombre, ruta: `/gorra/${gorra.id}` },
+    { nombre: gorra.nombre, ruta: rutaGorra(gorra) },
   ])
 
   return (

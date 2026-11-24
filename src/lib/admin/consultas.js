@@ -4,7 +4,7 @@ import 'server-only'
 // por eso ven también las gorras ocultas y los costos.
 
 const COLUMNAS_GORRA = [
-  'id', 'nombre', 'precio', 'precio_anterior', 'coleccion', 'color', 'descripcion',
+  'id', 'slug', 'nombre', 'precio', 'precio_anterior', 'coleccion', 'color', 'descripcion',
   'estado', 'badge', 'stock', 'marca', 'tipo', 'talla', 'material', 'visera',
   'foto1', 'foto2', 'foto3', 'foto4', 'foto5', 'foto6', 'updated_at',
   'gorras_costos(costo)',
@@ -14,6 +14,7 @@ function mapGorra(g) {
   const costo = Array.isArray(g.gorras_costos) ? g.gorras_costos[0]?.costo : g.gorras_costos?.costo
   return {
     id: g.id,
+    slug: g.slug,
     nombre: g.nombre,
     precio: g.precio,
     precioAnterior: g.precio_anterior,

@@ -9,10 +9,11 @@ import 'server-only'
 import { cache } from 'react'
 import { supabase } from './supabase'
 import { FOTO_RESPALDO } from './imagenes'
+import { slugValido } from './rutas'
 
 // Columnas explícitas: si la tabla gana columnas internas (costos, notas), no se publican solas
 const COLUMNAS = [
-  'id', 'nombre', 'precio', 'precio_anterior', 'coleccion', 'color', 'descripcion',
+  'id', 'slug', 'nombre', 'precio', 'precio_anterior', 'coleccion', 'color', 'descripcion',
   'estado', 'badge', 'created_at', 'updated_at',
   'foto1', 'foto2', 'foto3', 'foto4', 'foto5', 'foto6',
   'marca', 'tipo', 'talla', 'material', 'visera', 'stock',
@@ -23,6 +24,8 @@ function mapGorra(gorra) {
 
   return {
     id: gorra.id,
+    // Solo si sirve como URL (ver lib/rutas.js); si no, la gorra se enlaza por id
+    slug: slugValido(gorra.slug) ? gorra.slug : null,
     nombre: gorra.nombre,
     precio: gorra.precio,
     precioAnterior: gorra.precio_anterior,
@@ -74,7 +77,19 @@ export const getGorraById = cache(async (id) => {
   return data ? mapGorra(data) : null
 })
 
-const masNuevaPrimero = (a, b) => b.id - a.id
+// null = no hay gorra con ese slug. Un error de conexión se lanza.
+export const getGorraBySlug = cache(async (slug) => {
+  const { data, error } = await supabase
+    .from('gorras')
+    .select(COLUMNAS)
+    .eq('slug', slug)
+    .maybeSingle()
+
+  if (error) throw fallo(`obtener la gorra ${slug}`, error)
+  return data ? mapGorra(data) : null
+})
+
+const masNuevaPrimero =(a, b) => b.id - a.id
 
 export function filtrarNovedades(gorras) {
   return gorras.filter((g) => g.badge === 'Nuevo' && g.estado === 'activo').sort(masNuevaPrimero)

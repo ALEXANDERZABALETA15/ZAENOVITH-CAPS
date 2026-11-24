@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
 import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
+import { rutaGorra } from '@/lib/rutas'
 
 const estiloEtiqueta = {
   position: 'absolute',
@@ -25,7 +26,7 @@ export default function GorraCardMini({ gorra }) {
 
   return (
     <Link
-      href={`/gorra/${gorra.id}`}
+      href={rutaGorra(gorra)}
       style={{
         textDecoration: 'none',
         display: 'block',
