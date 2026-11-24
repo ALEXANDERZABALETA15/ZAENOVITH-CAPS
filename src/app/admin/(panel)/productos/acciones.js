@@ -3,7 +3,8 @@
 import { requerirAdmin } from '@/lib/admin/sesion'
 import { firmaSubida, borrarFotos } from '@/lib/admin/cloudinary'
 import { refrescarTienda, mensajeError, entero, texto } from '@/lib/admin/servidor'
-import { ESTADOS_GORRA, BADGES, COLECCIONES, slugDe } from '@/lib/admin/catalogos'
+import { ESTADOS_GORRA, BADGES, COLECCIONES } from '@/lib/admin/catalogos'
+import { slugUnico } from '@/lib/rutas'
 
 const MAXIMO_FOTOS = 6
 const COLUMNAS_FOTOS = ['foto1', 'foto2', 'foto3', 'foto4', 'foto5', 'foto6']
@@ -77,25 +78,36 @@ export async function guardarGorra(id, datos) {
     const stockInicial = entero(datos.stockInicial) ?? 0
     if (stockInicial < 0) return { error: 'El stock inicial no puede ser negativo.' }
 
-    // slug y sku siguen el formato de las gorras existentes ("nombre-en-slug-12", "CRW-0012"),
-    // pero llevan el id, que solo se conoce después de insertar: se crea con valores temporales
-    // únicos y luego se completan. Al editar no se cambian, para no romper enlaces.
-    const base = slugDe(fila.nombre)
-    const marca = Date.now().toString(36)
+    // slug = la URL de la tienda: solo el nombre, sin id (ver slugUnico en lib/rutas.js).
+    // Al editar no se cambia, para no romper enlaces.
+    const { data: existentes, error: errorSlugs } = await supabase.from('gorras').select('slug')
+    if (errorSlugs) return { error: mensajeError(errorSlugs) }
+    const ocupados = new Set(existentes.map((g) => g.slug))
 
-    // La gorra nace con 0 y el stock inicial entra como movimiento, así queda en el historial
-    const { data, error } = await supabase
-      .from('gorras')
-      .insert({ ...fila, stock: 0, slug: `${base}-${marca}`, sku: `CRW-TMP-${marca}` })
-      .select('id')
-      .single()
+    // El sku ("CRW-0012") sí lleva el id, que solo se conoce después de insertar:
+    // se crea con uno temporal único y luego se completa
+    const temporal = `CRW-TMP-${Date.now().toString(36)}`
+
+    // La gorra nace con 0 y el stock inicial entra como movimiento, así queda en el historial.
+    // Si justo otra gorra tomó el mismo slug (uq_slug), se reintenta con el siguiente libre.
+    let data, error
+    for (let intento = 0; intento < 3; intento++) {
+      const slug = slugUnico(fila, ocupados)
+      ;({ data, error } = await supabase
+        .from('gorras')
+        .insert({ ...fila, stock: 0, slug, sku: temporal })
+        .select('id')
+        .single())
+      if (error?.code !== '23505' || !/slug/.test(error.message)) break
+      ocupados.add(slug)
+    }
     if (error) return { error: mensajeError(error) }
 
-    const { error: errorSlug } = await supabase
+    const { error: errorSku } = await supabase
       .from('gorras')
-      .update({ slug: `${base}-${data.id}`, sku: `CRW-${String(data.id).padStart(4, '0')}` })
+      .update({ sku: `CRW-${String(data.id).padStart(4, '0')}` })
       .eq('id', data.id)
-    if (errorSlug) console.error('Supabase (slug/sku):', errorSlug) // la gorra ya quedó con valores válidos
+    if (errorSku) console.error('Supabase (sku):', errorSku) // la gorra ya quedó con un sku válido
 
     const errorCosto = await guardarCosto(supabase, data.id, costo)
     if (errorCosto) return { error: mensajeError(errorCosto, 'La gorra se creó, pero no se pudo guardar el costo.'), id: data.id }

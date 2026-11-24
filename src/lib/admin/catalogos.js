@@ -1,6 +1,5 @@
 // Valores y nombres visibles del panel. Deben coincidir con los CHECK de supabase/admin.sql.
 import { transformar } from '@/lib/imagenes'
-import { slugTexto } from '@/lib/rutas'
 
 export const ESTADOS_GORRA = [
   { valor: 'activo', nombre: 'Disponible' },
@@ -60,11 +59,6 @@ export const MOTIVOS_MOVIMIENTO = {
   devolucion: 'Devolución',
   perdida: 'Pérdida o daño',
   ajuste: 'Ajuste / conteo',
-}
-
-// Base del slug de una gorra nueva (mismo formato que las URLs de la tienda, ver lib/rutas.js)
-export function slugDe(texto) {
-  return slugTexto(texto) || 'gorra'
 }
 
 // Para buscar sin importar mayúsculas ni tildes: "Camión" → "camion"

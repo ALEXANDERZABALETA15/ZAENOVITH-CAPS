@@ -1,7 +1,7 @@
 import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { getGorras, getGorraById, getGorraBySlug, getGorrasRelacionadas } from '@/lib/getGorras'
-import { FORMATO_SLUG, rutaGorra, rutaMarca, slugTexto } from '@/lib/rutas'
+import { FORMATO_SLUG, rutaGorra, rutaMarca, slugTexto, pareceSlugDe } from '@/lib/rutas'
 import { nombreColeccion, rutaColeccion } from '@/lib/colecciones'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
 import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
@@ -22,19 +22,21 @@ export async function generateStaticParams() {
   return gorras.filter((g) => g.slug).map((g) => ({ slug: g.slug }))
 }
 
-// Redirige a la URL oficial de la gorra (permanente: Google pasa el posicionamiento a la nueva)
-async function irALaOficial(id) {
+// Redirige a la URL oficial de la gorra (permanente: Google pasa el posicionamiento a la nueva).
+// texto: lo que venía antes del id en una URL vieja; solo redirige si coincide con esa gorra.
+async function irALaOficial(id, texto = null) {
   const gorra = await getGorraById(id)
   if (!gorra) notFound()
+  if (texto !== null && !pareceSlugDe(texto, gorra.slug)) notFound()
   // Sin slug válido, la URL con número ES la oficial: se muestra sin redirigir (evita un bucle)
   if (!gorra.slug) return gorra
   permanentRedirect(rutaGorra(gorra))
 }
 
-// /gorra/<slug>        → la gorra
-// /gorra/6             → redirige a /gorra/<slug> (enlaces viejos, Google, WhatsApp)
-// /gorra/otro-texto-6  → slug viejo o mal escrito que termina en el id: redirige al correcto
-// cualquier otra cosa  → 404 real, sin consultar Supabase si el formato no sirve
+// /gorra/<slug>          → la gorra
+// /gorra/6               → redirige a /gorra/<slug> (enlaces viejos, Google, WhatsApp)
+// /gorra/<nombre>-6      → slug viejo, de cuando llevaba el id: redirige si el nombre coincide
+// cualquier otra cosa    → 404 real, sin consultar Supabase si el formato no sirve
 async function cargarGorra(params) {
   const { slug } = await params
   let segmento
@@ -53,8 +55,8 @@ async function cargarGorra(params) {
     return gorra
   }
 
-  const id = segmento.match(/-(\d+)$/)?.[1]
-  if (id) return irALaOficial(Number(id))
+  const vieja = segmento.match(/^(.+)-(\d+)$/)
+  if (vieja) return irALaOficial(Number(vieja[2]), vieja[1])
   notFound()
 }
 
