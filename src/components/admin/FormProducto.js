@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import GestorFotos from './GestorFotos'
 import { guardarGorra, eliminarGorra, descartarFotosSinGuardar } from '@/app/admin/(panel)/productos/acciones'
-import { ESTADOS_GORRA, BADGES, TIPOS_GORRA, VISERAS } from '@/lib/admin/catalogos'
+import { ESTADOS_GORRA, BADGES, TIPOS_GORRA, VISERAS, COLECCIONES } from '@/lib/admin/catalogos'
 import { formatPrecio } from '@/lib/precio'
 import { textoBadge } from '@/lib/badges'
 
@@ -25,8 +25,8 @@ function Campo({ id, etiqueta, ayuda, ancho, children }) {
   )
 }
 
-// gorra = null → crear. colecciones: las que ya existen, para sugerirlas.
-export default function FormProducto({ gorra = null, colecciones = [] }) {
+// gorra = null → crear
+export default function FormProducto({ gorra = null }) {
   const router = useRouter()
   const nueva = gorra === null
   const [datos, setDatos] = useState(() => (nueva ? VACIA : { ...VACIA, ...gorra }))
@@ -104,14 +104,14 @@ export default function FormProducto({ gorra = null, colecciones = [] }) {
           <Campo id="nombre" etiqueta="Nombre *" ancho>
             <input {...campo('nombre')} className="adm-input" required maxLength={120} />
           </Campo>
-          <Campo id="coleccion" etiqueta="Colección">
-            <input {...campo('coleccion')} className="adm-input" list="lista-colecciones" />
-            <datalist id="lista-colecciones">
-              {colecciones.map((c) => <option key={c} value={c} />)}
-            </datalist>
+          <Campo id="coleccion" etiqueta="Colección *">
+            <select {...campo('coleccion')} className="adm-select" required>
+              <option value="" disabled>Elige una…</option>
+              {COLECCIONES.map((c) => <option key={c.valor} value={c.valor}>{c.nombre}</option>)}
+            </select>
           </Campo>
-          <Campo id="color" etiqueta="Color">
-            <input {...campo('color')} className="adm-input" />
+          <Campo id="color" etiqueta="Color *">
+            <input {...campo('color')} className="adm-input" required maxLength={80} placeholder="Negro / Blanco" />
           </Campo>
           <Campo id="estado" etiqueta="Estado" ayuda={datos.estado === 'oculto' ? 'No aparece en la web, pero conserva su historial.' : null}>
             <select {...campo('estado')} className="adm-select">

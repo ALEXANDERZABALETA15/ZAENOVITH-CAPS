@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requerirAdmin } from '@/lib/admin/sesion'
-import { gorrasAdmin, coleccionesDe } from '@/lib/admin/consultas'
+import { gorrasAdmin } from '@/lib/admin/consultas'
 import FormProducto from '@/components/admin/FormProducto'
 import AjusteStock from '@/components/admin/AjusteStock'
 import { ChipEstadoGorra } from '@/components/admin/Chips'
@@ -60,7 +60,7 @@ export default async function EditarGorra({ params }) {
       </div>
 
       <div className="adm-detalle">
-        <FormProducto key={claveFormulario(gorra)} gorra={gorra} colecciones={coleccionesDe(gorras)} />
+        <FormProducto key={claveFormulario(gorra)} gorra={gorra} />
 
         <aside className="adm-detalle-lateral">
           <section className="adm-tarjeta" id="inventario" aria-labelledby="titulo-inventario">
