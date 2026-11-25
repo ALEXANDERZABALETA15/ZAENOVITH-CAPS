@@ -53,3 +53,31 @@ export function IconoCompartir({ size = 16 }) {
     </IconoTrazo>
   )
 }
+
+// Flechas arriba/abajo: control de orden del catálogo
+export function IconoOrden({ size = 14 }) {
+  return (
+    <IconoTrazo size={size}>
+      <path d="m3 8 4-4 4 4" />
+      <path d="M7 4v16" />
+      <path d="m21 16-4 4-4-4" />
+      <path d="M17 20V4" />
+    </IconoTrazo>
+  )
+}
+
+export function IconoChevron({ size = 14 }) {
+  return (
+    <IconoTrazo size={size}>
+      <path d="m6 9 6 6 6-6" />
+    </IconoTrazo>
+  )
+}
+
+export function IconoCheck({ size = 14 }) {
+  return (
+    <IconoTrazo size={size}>
+      <path d="M20 6 9 17l-5-5" />
+    </IconoTrazo>
+  )
+}

@@ -132,64 +132,12 @@ export default function Hero() {
           flexWrap: 'wrap',
         }}>
 
-          {/* Botón principal */}
-          <a
-            href="#catalogo"
-            style={{
-              display: 'inline-block',
-              padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 40px)',
-              backgroundColor: 'var(--color-green)',
-              color: 'var(--color-white)',
-              fontSize: 'clamp(10px, 1.5vw, 12px)',
-              fontWeight: '600',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              transition: 'all 0.3s ease',
-              fontFamily: 'var(--font-inter)',
-              borderRadius: '1px',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-green-light)'
-              e.currentTarget.style.transform = 'translateY(-2px)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-green)'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
-          >
+          {/* Botones: estilos en globals.css (.btn-cta) */}
+          <a href="#catalogo" className="btn-cta btn-cta--primario">
             Ver Catálogo
           </a>
 
-          {/* Botón secundario */}
-          <a
-            href="#contacto"
-            style={{
-              display: 'inline-block',
-              padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 40px)',
-              backgroundColor: 'transparent',
-              color: 'var(--color-white)',
-              fontSize: 'clamp(10px, 1.5vw, 12px)',
-              fontWeight: '600',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              border: '1px solid var(--color-silver)',
-              transition: 'all 0.3s ease',
-              fontFamily: 'var(--font-inter)',
-              borderRadius: '1px',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-green)'
-              e.currentTarget.style.color = 'var(--color-green-text)'
-              e.currentTarget.style.transform = 'translateY(-2px)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-silver)'
-              e.currentTarget.style.color = 'var(--color-white)'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
-          >
+          <a href="#contacto" className="btn-cta btn-cta--secundario">
             Contáctanos
           </a>
         </div>

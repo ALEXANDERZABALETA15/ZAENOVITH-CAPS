@@ -193,19 +193,7 @@ export default function PoliticaDeCambiosPage() {
             href="https://wa.me/573133635338"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: 'inline-block',
-              padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 48px)',
-              backgroundColor: 'var(--color-green)',
-              color: 'var(--color-white)',
-              fontSize: 'clamp(11px, 1.5vw, 13px)',
-              fontWeight: '600',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              fontFamily: 'var(--font-inter)',
-              borderRadius: '1px',
-            }}
+            className="btn-cta btn-cta--primario"
           >
             Escribir por WhatsApp
           </a>

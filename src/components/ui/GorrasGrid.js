@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import GorraCard from '@/components/ui/GorraCard'
+import SelectOrden from '@/components/ui/SelectOrden'
 import { useColeccion } from '@/lib/ColeccionContext'
 import { TODAS, claveColeccion, coleccionesDisponibles } from '@/lib/colecciones'
 
@@ -22,9 +23,32 @@ export default function GorrasGrid({ gorras = [] }) {
   const { coleccionActiva, setColeccionActiva } = useColeccion()
   const [cantidad, setCantidad] = useState(GORRAS_POR_PAGINA)
   const [orden, setOrden] = useState('relevante')
+  const filtrosRef = useRef(null)
 
-  // Los chips salen del catálogo real, así una colección nueva en la base aparece sola
-  const colecciones = [{ clave: TODAS, nombre: 'Todas' }, ...coleccionesDisponibles(gorras)]
+  // Los chips salen del catálogo real, así una colección nueva en la base aparece sola.
+  // Cada chip muestra cuántas gorras tiene (agotadas incluidas, igual que el grid).
+  const conteo = new Map()
+  gorras.forEach((g) => {
+    const clave = claveColeccion(g.coleccion)
+    conteo.set(clave, (conteo.get(clave) ?? 0) + 1)
+  })
+  const colecciones = [
+    { clave: TODAS, nombre: 'Todas', total: gorras.length },
+    ...coleccionesDisponibles(gorras).map((c) => ({ ...c, total: conteo.get(c.clave) ?? 0 })),
+  ]
+
+  // En móvil los chips van en una fila deslizable: centra el activo cuando cambia
+  // (por ejemplo al elegir una colección desde las tarjetas de "Encuentra tu estilo").
+  // Solo mueve la fila, nunca la página.
+  useEffect(() => {
+    const fila = filtrosRef.current
+    const chip = fila?.querySelector('[aria-pressed="true"]')
+    if (!fila || !chip || fila.scrollWidth <= fila.clientWidth) return
+    fila.scrollTo({
+      left: chip.offsetLeft - (fila.clientWidth - chip.offsetWidth) / 2,
+      behavior: 'smooth',
+    })
+  }, [coleccionActiva])
 
   const gorrasFiltradas = coleccionActiva === TODAS
     ? gorras
@@ -54,8 +78,8 @@ export default function GorrasGrid({ gorras = [] }) {
     setCantidad(GORRAS_POR_PAGINA)
   }
 
-  function cambiarOrden(e) {
-    setOrden(e.target.value)
+  function cambiarOrden(valor) {
+    setOrden(valor)
     setCantidad(GORRAS_POR_PAGINA)
   }
 
@@ -128,102 +152,45 @@ export default function GorrasGrid({ gorras = [] }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 'clamp(12px, 2vw, 16px)',
-            marginBottom: 'clamp(32px, 6vw, 56px)',
-          }}
+          className="catalogo-controles"
+          style={{ marginBottom: 'clamp(32px, 6vw, 56px)' }}
         >
-          {/* Filtros de colección */}
-          <div style={{
-            display: 'flex',
-            gap: 'clamp(8px, 2vw, 12px)',
-            flexWrap: 'wrap',
-          }}>
-            {colecciones.map((col) => (
-              <button
-                key={col.clave}
-                onClick={() => cambiarColeccion(col.clave)}
-                aria-pressed={coleccionActiva === col.clave}
-                style={{
-                  padding: 'clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px)',
-                  backgroundColor: coleccionActiva === col.clave
-                    ? 'var(--color-green)'
-                    : 'transparent',
-                  color: coleccionActiva === col.clave
-                    ? 'var(--color-white)'
-                    : 'var(--color-gray)',
-                  border: coleccionActiva === col.clave
-                    ? '1px solid var(--color-green)'
-                    : '1px solid rgba(199,199,199,0.1)',
-                  fontSize: 'clamp(10px, 1.5vw, 12px)',
-                  fontWeight: '600',
-                  letterSpacing: '0.15em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  fontFamily: 'var(--font-inter)',
-                  borderRadius: '1px',
-                }}
-                onMouseEnter={(e) => {
-                  if (coleccionActiva !== col.clave) {
-                    e.currentTarget.style.borderColor = 'var(--color-green)'
-                    e.currentTarget.style.color = 'var(--color-green-text)'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (coleccionActiva !== col.clave) {
-                    e.currentTarget.style.borderColor = 'rgba(199,199,199,0.1)'
-                    e.currentTarget.style.color = 'var(--color-gray)'
-                  }
-                }}
-              >
-                {col.nombre}
-              </button>
-            ))}
+          {/* Filtros de colección: estilos en globals.css (.chip-filtro) */}
+          <div
+            ref={filtrosRef}
+            className="filtros-coleccion"
+            role="group"
+            aria-label="Filtrar por colección"
+          >
+            {colecciones.map((col) => {
+              const activa = coleccionActiva === col.clave
+              return (
+                <button
+                  key={col.clave}
+                  type="button"
+                  className="chip-filtro"
+                  onClick={() => cambiarColeccion(col.clave)}
+                  aria-pressed={activa}
+                >
+                  {/* Fondo del chip activo: se desliza de un chip a otro al cambiar */}
+                  {activa && (
+                    <motion.span
+                      layoutId="chip-filtro-activo"
+                      className="chip-filtro__fondo"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  {col.nombre}
+                  <span className="chip-filtro__conteo">
+                    {col.total}
+                    <span className="sr-only"> modelos</span>
+                  </span>
+                </button>
+              )
+            })}
           </div>
 
-          {/* Dropdown de orden */}
-          <select
-            value={orden}
-            onChange={cambiarOrden}
-            style={{
-              padding: 'clamp(8px, 1.5vw, 10px) clamp(14px, 2.5vw, 20px)',
-              backgroundColor: 'var(--color-black-card)',
-              color: 'var(--color-white)',
-              border: '1px solid rgba(199,199,199,0.15)',
-              fontSize: 'clamp(10px, 1.5vw, 12px)',
-              fontWeight: '600',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-inter)',
-              borderRadius: '1px',
-              appearance: 'none',
-              WebkitAppearance: 'none',
-              backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231e6b52'><path d='M7 10l5 5 5-5z'/></svg>")`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'right 10px center',
-              backgroundSize: '16px',
-              paddingRight: '32px',
-            }}
-          >
-            {opcionesOrden.map((op) => (
-              <option
-                key={op.valor}
-                value={op.valor}
-                style={{
-                  backgroundColor: 'var(--color-black-card)',
-                  color: 'var(--color-white)',
-                }}
-              >
-                {op.label}
-              </option>
-            ))}
-          </select>
+          <SelectOrden opciones={opcionesOrden} valor={orden} onCambiar={cambiarOrden} />
         </motion.div>
 
         {/* Grid */}
@@ -262,31 +229,15 @@ export default function GorrasGrid({ gorras = [] }) {
             viewport={{ once: true }}
             style={{ textAlign: 'center' }}
           >
-            <button
-              onClick={verMas}
-              style={{
-                padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 56px)',
-                backgroundColor: 'transparent',
-                color: 'var(--color-green-text)',
-                border: '1px solid var(--color-green)',
-                fontSize: 'clamp(11px, 1.5vw, 13px)',
-                fontWeight: '600',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                fontFamily: 'var(--font-inter)',
-                borderRadius: '1px',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--color-green)'
-                e.currentTarget.style.color = 'var(--color-white)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.color = 'var(--color-green-text)'
-              }}
-            >
+            <p className="progreso-catalogo">
+              Mostrando {gorrasVisibles.length} de {gorrasOrdenadas.length}
+            </p>
+            <div
+              className="progreso-catalogo__barra"
+              aria-hidden="true"
+              style={{ '--progreso': `${(gorrasVisibles.length / gorrasOrdenadas.length) * 100}%` }}
+            />
+            <button type="button" onClick={verMas} className="btn-cta btn-cta--contorno">
               Ver más gorras
             </button>
           </motion.div>

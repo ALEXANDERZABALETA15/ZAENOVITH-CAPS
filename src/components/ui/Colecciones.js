@@ -115,26 +115,27 @@ function ColeccionCard({ col, index, onClick }) {
       transition={{ duration: 0.5, delay: index * 0.1 }}
       onClick={onClick}
       aria-label={`Ver colección ${col.nombre}`}
+      className="coleccion-card"
       style={{
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: '2px',
         cursor: 'pointer',
         aspectRatio: '3/4',
         width: '100%',
         padding: 0,
-        background: 'none',
+        background: 'var(--color-black-card)',
         textAlign: 'left',
         display: 'block',
       }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ y: -4 }}
     >
+      {/* Bordes, zoom de la imagen y CTA: .coleccion-card en globals.css */}
       <Image
         src={col.imagen}
         alt=""
         fill
         sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 400px"
-        style={{ objectFit: 'cover', transition: 'transform 0.6s ease' }}
+        style={{ objectFit: 'cover' }}
       />
 
       <div style={{
@@ -172,17 +173,16 @@ function ColeccionCard({ col, index, onClick }) {
           {col.descripcion}
         </p>
 
-        <p style={{
+        <span className="coleccion-card__cta" style={{
           fontSize: '11px',
-          color: 'var(--color-green-text)',
           fontWeight: '600',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          fontFamily: 'var(--font-inter)',
           marginTop: '14px',
         }}>
-          Ver colección →
-        </p>
+          Ver colección
+          <span className="coleccion-card__flecha" aria-hidden="true">→</span>
+        </span>
       </div>
     </motion.button>
   )

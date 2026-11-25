@@ -40,21 +40,7 @@ export default function NoEncontrado() {
         }}>
           Puede que el link esté mal o que el producto ya no exista. Mira lo que tenemos disponible.
         </p>
-        <Link
-          href="/#catalogo"
-          style={{
-            display: 'inline-block',
-            padding: '14px 32px',
-            backgroundColor: 'var(--color-green)',
-            color: 'var(--color-white)',
-            fontSize: '12px',
-            fontWeight: '700',
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            fontFamily: 'var(--font-inter)',
-            borderRadius: '6px',
-          }}
-        >
+        <Link href="/#catalogo" className="btn-cta btn-cta--primario">
           Ver catálogo
         </Link>
       </div>
