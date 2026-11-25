@@ -104,22 +104,7 @@ export default function ListadoGorras({ etiqueta, titulo, descripcion, textoVaci
             }}>
               {textoVacio}
             </p>
-            <Link
-              href="/#catalogo"
-              style={{
-                display: 'inline-block',
-                padding: '12px 32px',
-                backgroundColor: 'var(--color-green)',
-                color: 'var(--color-white)',
-                fontSize: '12px',
-                fontWeight: '600',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                fontFamily: 'var(--font-inter)',
-                borderRadius: '1px',
-              }}
-            >
+            <Link href="/#catalogo" className="btn-cta btn-cta--primario">
               Ver Catálogo
             </Link>
           </div>

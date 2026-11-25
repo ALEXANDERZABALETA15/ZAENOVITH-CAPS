@@ -42,18 +42,7 @@ export default function Error({ reset }) {
           <button
             type="button"
             onClick={() => reset()}
-            style={{
-              padding: '12px 28px',
-              backgroundColor: 'var(--color-green)',
-              color: 'var(--color-white)',
-              border: 'none',
-              fontSize: '12px',
-              fontWeight: '600',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              fontFamily: 'var(--font-inter)',
-              cursor: 'pointer',
-            }}
+            className="btn-cta btn-cta--primario"
           >
             Reintentar
           </button>
@@ -61,17 +50,7 @@ export default function Error({ reset }) {
             href={whatsappLink('Hola, quiero ver el catálogo de gorras.')}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              padding: '12px 28px',
-              border: '1px solid var(--color-silver)',
-              color: 'var(--color-white)',
-              fontSize: '12px',
-              fontWeight: '600',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              fontFamily: 'var(--font-inter)',
-            }}
+            className="btn-cta btn-cta--secundario"
           >
             WhatsApp
           </a>

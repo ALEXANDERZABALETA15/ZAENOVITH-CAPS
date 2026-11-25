@@ -154,22 +154,7 @@ export default function SobreNosotrosPage() {
             borderTop: '1px solid rgba(199,199,199,0.08)',
           }}
         >
-          <Link
-            href="/#catalogo"
-            style={{
-              display: 'inline-block',
-              padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 48px)',
-              backgroundColor: 'var(--color-green)',
-              color: 'var(--color-white)',
-              fontSize: 'clamp(11px, 1.5vw, 13px)',
-              fontWeight: '600',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              fontFamily: 'var(--font-inter)',
-              borderRadius: '1px',
-            }}
-          >
+          <Link href="/#catalogo" className="btn-cta btn-cta--primario">
             Ver Catálogo
           </Link>
         </motion.div>

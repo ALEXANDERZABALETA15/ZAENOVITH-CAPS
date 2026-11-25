@@ -221,6 +221,467 @@ img {
   }
 }
 
+/* ===== Catálogo: filtros de colección, orden y "ver más" ===== */
+
+.catalogo-controles {
+  position: relative;
+  z-index: 5; /* la lista de orden se abre por encima del grid de gorras */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 16px;
+}
+
+.filtros-coleccion {
+  position: relative; /* referencia de offsetLeft para centrar el chip activo */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip-filtro {
+  position: relative;
+  isolation: isolate; /* el fondo animado queda detrás del texto */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 8px 10px 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(199, 199, 199, 0.14);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--color-silver);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, transform 0.15s ease;
+}
+
+/* Solo con mouse: en táctil el hover se queda "pegado" tras el toque */
+@media (hover: hover) {
+  .chip-filtro:hover {
+    color: var(--color-white);
+    border-color: rgba(63, 182, 139, 0.45);
+    background-color: rgba(30, 107, 82, 0.14);
+  }
+
+  .chip-filtro:hover .chip-filtro__conteo {
+    color: var(--color-silver);
+  }
+
+  .control-orden:hover {
+    border-color: rgba(63, 182, 139, 0.45);
+  }
+}
+
+.chip-filtro:active {
+  transform: scale(0.96);
+}
+
+.chip-filtro[aria-pressed="true"] {
+  color: var(--color-white-pure);
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.chip-filtro:focus-visible {
+  outline-offset: 2px;
+}
+
+/* Píldora verde del chip activo (motion.span con layoutId en GorrasGrid.js).
+   Degradado entre --color-green y --color-green-dark: el texto blanco pasa AA en todo el chip */
+.chip-filtro__fondo {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 6px 16px -6px rgba(42, 143, 111, 0.55);
+}
+
+.chip-filtro__conteo {
+  min-width: 24px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: var(--color-silver-dark);
+  font-size: 10px;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.chip-filtro[aria-pressed="true"] .chip-filtro__conteo {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: var(--color-white-pure);
+}
+
+/* ===== Control de orden (SelectOrden.js): botón píldora + lista propia ===== */
+.orden {
+  position: relative;
+}
+
+.control-orden {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 14px 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(199, 199, 199, 0.14);
+  background-color: var(--color-black-card);
+  color: var(--color-green-text);
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.control-orden[aria-expanded="true"] {
+  border-color: rgba(63, 182, 139, 0.6);
+  box-shadow: 0 0 0 3px rgba(30, 107, 82, 0.25);
+}
+
+.control-orden:focus-visible {
+  outline-offset: 2px;
+}
+
+.control-orden__texto {
+  color: var(--color-gray);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.control-orden__valor {
+  margin-left: auto;
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.control-orden__chevron {
+  display: inline-flex;
+  margin-left: 6px;
+  transition: transform 0.25s ease;
+}
+
+.control-orden[aria-expanded="true"] .control-orden__chevron {
+  transform: rotate(180deg);
+}
+
+.orden-lista {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  min-width: 100%;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border-radius: 16px;
+  border: 1px solid rgba(199, 199, 199, 0.12);
+  background-color: rgba(24, 24, 24, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 24px 48px -16px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transform-origin: top right;
+}
+
+/* El foco se marca en la opción activa (aria-activedescendant), no en el contenedor */
+.orden-lista:focus,
+.orden-lista:focus-visible {
+  outline: none;
+}
+
+.orden-opcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 11px 12px 11px 14px;
+  border-radius: 10px;
+  color: var(--color-silver);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.orden-opcion[data-activa="true"] {
+  background-color: rgba(30, 107, 82, 0.2);
+  color: var(--color-white);
+}
+
+/* Teclado: la opción activa además lleva un borde visible */
+.orden-lista:focus-visible .orden-opcion[data-activa="true"] {
+  box-shadow: inset 0 0 0 1px rgba(63, 182, 139, 0.55);
+}
+
+.orden-opcion[aria-selected="true"] {
+  color: var(--color-green-text);
+  font-weight: 600;
+}
+
+.orden-opcion__check {
+  display: inline-flex;
+  color: var(--color-green-text);
+}
+
+/* Progreso del listado + botón "Ver más" */
+.progreso-catalogo {
+  color: var(--color-gray);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.progreso-catalogo__barra {
+  position: relative;
+  width: 160px;
+  height: 3px;
+  margin: 0 auto 24px;
+  border-radius: 999px;
+  background-color: rgba(199, 199, 199, 0.12);
+  overflow: hidden;
+}
+
+.progreso-catalogo__barra::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--progreso, 0%);
+  border-radius: inherit;
+  background-color: var(--color-green-text);
+  transition: width 0.4s ease;
+}
+
+@media (max-width: 640px) {
+  .catalogo-controles {
+    flex-direction: column;
+    flex-wrap: nowrap; /* con wrap cada línea toma el ancho de su contenido y desborda */
+    align-items: stretch;
+  }
+
+  /* Chips en una sola fila deslizable que llega a los bordes de la pantalla.
+     El margen negativo anula el padding lateral de la sección (mismo clamp que GorrasGrid.js) */
+  .filtros-coleccion {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(-1 * clamp(16px, 5vw, 40px));
+    padding: 6px clamp(16px, 5vw, 40px) 14px; /* deja ver la sombra y el anillo de foco */
+    margin-block: -6px -14px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    /* Desvanece los bordes para indicar que hay más chips */
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 28px), transparent 100%);
+  }
+
+  .filtros-coleccion::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip-filtro {
+    flex-shrink: 0;
+  }
+
+  /* La lista ocupa el mismo ancho que el botón */
+  .orden-lista {
+    left: 0;
+    transform-origin: top center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip-filtro,
+  .control-orden,
+  .control-orden__chevron,
+  .progreso-catalogo__barra::after {
+    transition: none;
+  }
+}
+
+/* ===== Botones de llamada a la acción (Hero, Novedades, Ver más, páginas) =====
+   .btn-cta + una variante:
+   --primario   fondo verde (acción principal)
+   --secundario borde plata, se vuelve verde en hover
+   --contorno   borde verde, se rellena en hover
+   Úsalas en vez de estilos en línea para que todos los botones grandes se vean igual. */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: clamp(12px, 2vw, 15px) clamp(28px, 4.5vw, 44px);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(11px, 1.5vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+}
+
+.btn-cta:focus-visible {
+  outline-offset: 3px;
+}
+
+.btn-cta:active {
+  transform: scale(0.97);
+}
+
+/* Degradado entre --color-green y --color-green-dark: el texto blanco pasa AA en todo el botón */
+.btn-cta--primario {
+  background: linear-gradient(135deg, var(--color-green) 0%, var(--color-green-dark) 100%);
+  color: var(--color-white-pure);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 22px -10px rgba(42, 143, 111, 0.7);
+}
+
+.btn-cta--secundario {
+  border-color: rgba(199, 199, 199, 0.5);
+  background-color: rgba(10, 10, 10, 0.35);
+  color: var(--color-white);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Contorno: fondo verde tenue para que no se pierda sobre el negro antes del hover */
+.btn-cta--contorno {
+  border-color: rgba(63, 182, 139, 0.55);
+  background-color: rgba(30, 107, 82, 0.14);
+  color: var(--color-green-text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.btn-cta__flecha {
+  transition: transform 0.25s ease;
+}
+
+@media (hover: hover) {
+  .btn-cta:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-cta--primario:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 14px 30px -10px rgba(42, 143, 111, 0.85);
+  }
+
+  .btn-cta--secundario:hover {
+    border-color: var(--color-green-text);
+    color: var(--color-green-text);
+  }
+
+  .btn-cta--contorno:hover {
+    background-color: var(--color-green);
+    color: var(--color-white-pure);
+    box-shadow: 0 12px 28px -10px rgba(42, 143, 111, 0.7);
+  }
+
+  .btn-cta:hover .btn-cta__flecha {
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-cta,
+  .btn-cta__flecha {
+    transition: none;
+  }
+
+  .btn-cta:hover {
+    transform: none;
+  }
+}
+
+/* ===== Tarjetas de colección ("Encuentra tu estilo") ===== */
+
+.coleccion-card {
+  border-radius: 14px;
+  border: 1px solid rgba(199, 199, 199, 0.08);
+  isolation: isolate; /* Safari: mantiene las esquinas redondeadas al hacer zoom a la imagen */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coleccion-card:hover {
+  border-color: rgba(63, 182, 139, 0.35);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.8);
+}
+
+.coleccion-card img {
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.coleccion-card:hover img {
+  transform: scale(1.06);
+}
+
+.coleccion-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(63, 182, 139, 0.35);
+  background-color: rgba(10, 10, 10, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--color-green-text);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.coleccion-card:hover .coleccion-card__cta {
+  background-color: var(--color-green);
+  border-color: transparent;
+  color: var(--color-white-pure);
+}
+
+.coleccion-card__flecha {
+  transition: transform 0.3s ease;
+}
+
+.coleccion-card:hover .coleccion-card__flecha {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coleccion-card img,
+  .coleccion-card__flecha {
+    transition: none;
+  }
+}
+
 /* Hero: espacio bajo la etiqueta para dejar ver el logo de la imagen de fondo.
    Mismos cortes que las imágenes del <picture> en Hero.js */
 .hero-etiqueta {

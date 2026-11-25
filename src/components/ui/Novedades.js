@@ -90,22 +90,9 @@ export default function Novedades({ gorras = [], limite }) {
 
         {hayMas && (
           <div style={{ textAlign: 'center', marginTop: 'clamp(32px, 5vw, 48px)' }}>
-            <Link
-              href="/novedades"
-              style={{
-                display: 'inline-block',
-                padding: 'clamp(12px, 2vw, 16px) clamp(32px, 5vw, 56px)',
-                color: 'var(--color-green-text)',
-                border: '1px solid var(--color-green)',
-                fontSize: 'clamp(11px, 1.5vw, 13px)',
-                fontWeight: '600',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--font-inter)',
-                borderRadius: '1px',
-              }}
-            >
-              Ver todas las novedades →
+            <Link href="/novedades" className="btn-cta btn-cta--contorno">
+              Ver todas las novedades
+              <span className="btn-cta__flecha" aria-hidden="true">→</span>
             </Link>
           </div>
         )}
