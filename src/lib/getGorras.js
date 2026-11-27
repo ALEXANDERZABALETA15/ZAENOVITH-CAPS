@@ -11,6 +11,7 @@ import { supabase } from './supabase'
 import { FOTO_RESPALDO } from './imagenes'
 import { slugValido, slugTexto } from './rutas'
 import { claveColeccion } from './colecciones'
+import { porcentajeDescuento } from './precio'
 
 // Columnas explícitas: si la tabla gana columnas internas (costos, notas), no se publican solas
 const COLUMNAS = [
@@ -151,6 +152,19 @@ export function filtrarMarca(gorras, slug) {
 
 export function filtrarOfertas(gorras) {
   return gorras.filter((g) => g.badge === 'Oferta' && g.estado === 'activo').sort(masNuevaPrimero)
+}
+
+// Para paneles de temporada (Black Friday): las ofertas con más descuento primero
+// y el "Hasta X%" real. descuentoMaximo es null si ninguna tiene precio anterior.
+export function resumenOfertas(gorras, limite = 4) {
+  const ofertas = filtrarOfertas(gorras)
+    .map((gorra) => ({ gorra, descuento: porcentajeDescuento(gorra.precio, gorra.precioAnterior) ?? 0 }))
+    .sort((a, b) => b.descuento - a.descuento)
+
+  return {
+    gorras: ofertas.slice(0, limite).map((o) => o.gorra),
+    descuentoMaximo: ofertas[0]?.descuento || null,
+  }
 }
 
 const MINIMO_RELACIONADAS = 4
