@@ -3,11 +3,13 @@
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 import VisorFotos from './VisorFotos'
+import SelloTemporada from './SelloTemporada'
 
 // Galería deslizable: en móvil se pasa con el dedo (scroll-snap nativo),
 // en escritorio con las miniaturas o con las flechas del teclado.
 // Tocar la foto abre el visor a pantalla completa con zoom.
-export default function GaleriaDetalle({ fotos, nombre }) {
+// enOferta: durante una temporada (src/lib/temporadas.js) la foto lleva el sello girando.
+export default function GaleriaDetalle({ fotos, nombre, enOferta = false }) {
   const [actual, setActual] = useState(0)
   const [visorAbierto, setVisorAbierto] = useState(false)
   const pistaRef = useRef(null)
@@ -115,6 +117,8 @@ export default function GaleriaDetalle({ fotos, nombre }) {
             <path d="m20 20-3.5-3.5M11 8v6M8 11h6" />
           </svg>
         </span>
+
+        {enOferta && <SelloTemporada tamano={112} girar className="sello-temporada--galeria" />}
 
         {/* Contador: indica que hay más fotos para deslizar */}
         {varias && (

@@ -7,10 +7,13 @@ import Image from 'next/image'
 import { nombreColeccion } from '@/lib/colecciones'
 import { whatsappLink, mensajePedido } from '@/lib/contacto'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
-import { estiloBadge, textoBadge, mostrarBadge as debeMostrarBadge } from '@/lib/badges'
+import { esOferta } from '@/lib/badges'
 import { eventoComprar } from '@/lib/analitica'
 import { rutaGorra } from '@/lib/rutas'
+import { useTemporada } from '@/lib/TemporadaContext'
 import AvisoModal from './AvisoModal'
+import BadgeGorra from './BadgeGorra'
+import SelloTemporada from './SelloTemporada'
 import { IconoWhatsApp, IconoCampana } from './Iconos'
 
 const estiloCta = {
@@ -40,10 +43,10 @@ export default function GorraCard({ gorra }) {
   const proximo = gorra.estado === 'proximo'
   const href = rutaGorra(gorra)
 
-  // El sello "Agotado" sobre la foto reemplaza al badge
-  const mostrarBadge = debeMostrarBadge(gorra)
-  const badge = estiloBadge(gorra.badge)
   const descuento = agotado ? null : porcentajeDescuento(gorra.precio, gorra.precioAnterior)
+  // En temporada (src/lib/temporadas.js) las ofertas llevan el sello sobre la foto
+  const temporada = useTemporada()
+  const conSello = Boolean(temporada) && esOferta(gorra)
 
   return (
     <motion.div
@@ -114,25 +117,10 @@ export default function GorraCard({ gorra }) {
             transition: 'background-color 0.3s ease',
           }} />
 
-          {/* Badge */}
-          {mostrarBadge && (
-            <div style={{
-              position: 'absolute',
-              top: '12px',
-              left: '12px',
-              backgroundColor: badge.bg,
-              color: badge.color,
-              fontSize: '10px',
-              fontWeight: '700',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              padding: '4px 10px',
-              borderRadius: '4px',
-              fontFamily: 'var(--font-inter)',
-            }}>
-              {textoBadge(gorra.badge)}
-            </div>
-          )}
+          {/* Badge (el sello "Agotado" sobre la foto lo reemplaza) */}
+          <BadgeGorra gorra={gorra} style={{ position: 'absolute', top: '12px', left: '12px' }} />
+
+          {conSello && <SelloTemporada className="sello-temporada--tarjeta" />}
 
           {/* Descuento */}
           {descuento && (

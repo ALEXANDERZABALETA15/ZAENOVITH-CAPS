@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import SincronizarColeccionURL from '@/components/ui/SincronizarColeccionURL'
 import Hero from '@/components/ui/Hero'
-import BlackFriday from '@/components/ui/BlackFriday'
+import PanelTemporada from '@/components/ui/PanelTemporada'
 import Confianza from '@/components/ui/Confianza'
 import Colecciones from '@/components/ui/Colecciones'
 import Novedades from '@/components/ui/Novedades'
@@ -11,7 +11,7 @@ import Resenas from '@/components/ui/Resenas'
 import Contacto from '@/components/ui/Contacto'
 import { ColeccionProvider } from '@/lib/ColeccionContext'
 import { getGorras, filtrarNovedades, resumenOfertas } from '@/lib/getGorras'
-import { BLACK_FRIDAY, eventoVigente } from '@/lib/eventos'
+import { temporadaActiva } from '@/lib/temporadas'
 import { metadatosPagina, jsonLd, datosTienda, TITULO_SITIO, DESCRIPCION_SITIO } from '@/lib/seo'
 
 // La página se genera en el servidor y queda en caché; se regenera como máximo cada 10 minutos
@@ -26,7 +26,10 @@ export const metadata = metadatosPagina({
 
 export default async function Home() {
   const gorras = await getGorras()
-  const blackFriday = eventoVigente(BLACK_FRIDAY) ? resumenOfertas(gorras) : null
+  // Panel de la temporada activa (src/lib/temporadas.js); con la caché puede aparecer
+  // hasta 10 minutos tarde, y en el navegador se retira en cuanto termina
+  const temporada = temporadaActiva()
+  const panel = temporada?.panel ? resumenOfertas(gorras) : null
 
   return (
     <ColeccionProvider>
@@ -36,11 +39,11 @@ export default async function Home() {
       </Suspense>
       <main>
         <Hero />
-        {blackFriday && (
-          <BlackFriday
-            evento={BLACK_FRIDAY}
-            gorras={blackFriday.gorras}
-            descuentoMaximo={blackFriday.descuentoMaximo}
+        {panel && (
+          <PanelTemporada
+            temporada={temporada}
+            gorras={panel.gorras}
+            descuentoMaximo={panel.descuentoMaximo}
           />
         )}
         <Confianza />

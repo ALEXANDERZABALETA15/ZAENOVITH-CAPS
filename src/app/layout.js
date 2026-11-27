@@ -6,6 +6,8 @@ import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 import Analitica from '@/components/Analitica'
 import SoloTienda from '@/components/layout/SoloTienda'
+import { TemporadaProvider } from '@/lib/TemporadaContext'
+import { temporadaActiva } from '@/lib/temporadas'
 import { SITIO_URL } from '@/lib/contacto'  // Trae la dirección oficial del sitio desde un solo lugar
 import { NOMBRE_SITIO, TITULO_SITIO, DESCRIPCION_SITIO, IMAGEN_COMPARTIR_SITIO } from '@/lib/seo'
 
@@ -48,16 +50,19 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es" data-scroll-behavior="smooth">
       <body className={`${cinzel.variable} ${inter.variable}`}>
-        <SoloTienda>
-          <LoadingScreen />
-          <Header />
-        </SoloTienda>
-        {children}
-        <SoloTienda>
-          <Footer />
-          <WhatsAppButton />
-          <Analitica />
-        </SoloTienda>
+        {/* Temporada (Black Friday, Navidad...): ver src/lib/temporadas.js */}
+        <TemporadaProvider idInicial={temporadaActiva()?.id ?? null}>
+          <SoloTienda>
+            <LoadingScreen />
+            <Header />
+          </SoloTienda>
+          {children}
+          <SoloTienda>
+            <Footer />
+            <WhatsAppButton />
+            <Analitica />
+          </SoloTienda>
+        </TemporadaProvider>
       </body>
     </html>
   )

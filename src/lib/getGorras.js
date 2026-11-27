@@ -12,6 +12,7 @@ import { FOTO_RESPALDO } from './imagenes'
 import { slugValido, slugTexto } from './rutas'
 import { claveColeccion } from './colecciones'
 import { porcentajeDescuento } from './precio'
+import { esOferta } from './badges'
 
 // Columnas explícitas: si la tabla gana columnas internas (costos, notas), no se publican solas
 const COLUMNAS = [
@@ -151,7 +152,7 @@ export function filtrarMarca(gorras, slug) {
 }
 
 export function filtrarOfertas(gorras) {
-  return gorras.filter((g) => g.badge === 'Oferta' && g.estado === 'activo').sort(masNuevaPrimero)
+  return gorras.filter(esOferta).sort(masNuevaPrimero)
 }
 
 // Para paneles de temporada (Black Friday): las ofertas con más descuento primero

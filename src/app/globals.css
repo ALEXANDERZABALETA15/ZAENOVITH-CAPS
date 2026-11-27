@@ -682,9 +682,10 @@ img {
   }
 }
 
-/* ===== Black Friday (BlackFriday.js): panel temporal del home =====
+/* ===== Panel de temporada del home (PanelTemporada.js) =====
+   Las clases .bf nacieron con Black Friday y sirven para cualquier temporada.
    Mismo negro del sitio; lo que lo destaca es la línea verde con destello arriba,
-   el brillo detrás del título y el contador. Se retira solo (ver src/lib/eventos.js). */
+   el brillo detrás del título y el contador. Se retira solo (ver src/lib/temporadas.js). */
 
 .bf {
   position: relative;
@@ -998,6 +999,265 @@ img {
   }
 
   .bf__pulso {
+    animation: none;
+  }
+}
+
+/* ===== Temporada (src/lib/temporadas.js): barra superior, contador y sello =====
+   La marca sigue en verde; la temporada agrega la barra con contador, el sello circular
+   (SelloTemporada.js) y su nombre en las gorras en oferta. */
+
+/* Barra superior (BarraTemporada.js). No más de ~36px de alto:
+   las páginas dejan 100px arriba para el header fijo */
+.barra-temporada {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.6vw, 18px);
+  min-height: 34px;
+  padding: 5px 16px;
+  background: linear-gradient(90deg, var(--color-green-dark), var(--color-green) 50%, var(--color-green-dark));
+  color: var(--color-white-pure);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.barra-temporada__titulo,
+.barra-temporada__titulo span {
+  font-family: var(--font-cinzel), serif;
+}
+
+.barra-temporada__titulo {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.barra-temporada__separador {
+  width: 1px;
+  height: 14px;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.45);
+}
+
+.barra-temporada__texto,
+.barra-temporada__enlace {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.barra-temporada__enlace {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .barra-temporada:hover .barra-temporada__enlace {
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* Contador en cajitas (RelojTemporada.js): en la barra, chico sobre el verde */
+.reloj-temporada {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reloj-temporada__titulo {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.reloj-temporada__cajas {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.reloj-temporada__caja {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background-color: rgba(10, 10, 10, 0.5);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-white-pure);
+}
+
+.reloj-temporada__letra {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-silver);
+}
+
+/* En la ficha de la gorra: cajas grandes en Cinzel con borde verde */
+.reloj-temporada--ficha {
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.reloj-temporada--ficha .reloj-temporada__titulo {
+  margin-right: 4px;
+  color: var(--color-silver);
+}
+
+.reloj-temporada--ficha .reloj-temporada__cajas {
+  gap: 8px;
+}
+
+.reloj-temporada--ficha .reloj-temporada__caja {
+  gap: 3px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(30, 107, 82, 0.55);
+  background-color: var(--color-black-card);
+  font-family: var(--font-cinzel), serif;
+  font-size: clamp(17px, 2.2vw, 20px);
+}
+
+.reloj-temporada--ficha .reloj-temporada__letra {
+  font-size: 10px;
+  color: var(--color-gray);
+}
+
+/* "Precio Black Friday" encima del precio en la ficha */
+.precio-temporada {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-green-text);
+}
+
+/* Punto que late: "Ofertas" en el menú y el precio de temporada */
+.punto-temporada {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--color-green-text);
+  animation: temporada-pulso 1.6s ease-in-out infinite;
+}
+
+@keyframes temporada-pulso {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Sello (SelloTemporada.js). Las medidas de texto van en unidades del dibujo (100 × 100) */
+.sello-temporada {
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.sello-temporada__anillo {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 8.2px;
+  font-weight: 700;
+}
+
+.sello-temporada__centro {
+  font-family: var(--font-cinzel), serif;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.sello-temporada__giro {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: temporada-giro 30s linear infinite;
+}
+
+@keyframes temporada-giro {
+  to { transform: rotate(360deg); }
+}
+
+.sello-temporada--cabecera {
+  width: clamp(34px, 4vw, 44px);
+  height: clamp(34px, 4vw, 44px);
+}
+
+/* Sobre la foto de las tarjetas en oferta (GorraCard.js) */
+.sello-temporada--tarjeta {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: clamp(44px, 22%, 64px);
+  height: auto;
+  aspect-ratio: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+}
+
+/* Sobre la foto principal de la ficha: abajo a la izquierda (a la derecha va el contador de fotos) */
+.sello-temporada--galeria {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  width: clamp(72px, 20%, 112px);
+  height: auto;
+  aspect-ratio: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55));
+}
+
+/* Celular: la barra deja el nombre y el contador; toda la barra sigue siendo el enlace */
+@media (max-width: 640px) {
+  .barra-temporada {
+    gap: 10px;
+    padding: 5px 12px;
+  }
+
+  .barra-temporada__extra,
+  .barra-temporada__ancho {
+    display: none;
+  }
+
+  .barra-temporada__titulo {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  /* "Ver ofertas" no se ve, pero sigue siendo el nombre del enlace para lectores de pantalla */
+  .barra-temporada__enlace {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  .reloj-temporada--barra .reloj-temporada__titulo {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* "Termina en" cabe desde 386px (medido con el título "Black Friday") */
+@media (max-width: 385px) {
+  .reloj-temporada--barra .reloj-temporada__titulo {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .punto-temporada,
+  .sello-temporada__giro {
     animation: none;
   }
 }
