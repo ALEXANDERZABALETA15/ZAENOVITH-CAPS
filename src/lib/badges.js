@@ -22,3 +22,20 @@ export function textoBadge(badge) {
 export function mostrarBadge(gorra) {
   return Boolean(gorra.badge) && gorra.estado !== 'agotado' && gorra.badge !== 'Agotado'
 }
+
+// En oferta y a la venta: la lista de /ofertas y las gorras que llevan el sello de temporada
+export function esOferta(gorra) {
+  return gorra.badge === 'Oferta' && gorra.estado === 'activo'
+}
+
+// Verde de la marca en degradado: el texto blanco pasa AA en todo el badge
+const estiloTemporada = { bg: 'linear-gradient(135deg, #1e6b52, #164d3b)', color: '#ffffff' }
+
+// Texto y colores del badge. Durante una temporada (src/lib/temporadas.js)
+// las ofertas llevan su nombre: "Black Friday" en vez de "Oferta".
+export function badgeDeGorra(gorra, temporada) {
+  if (temporada?.etiquetaOferta && esOferta(gorra)) {
+    return { texto: temporada.etiquetaOferta, estilo: estiloTemporada }
+  }
+  return { texto: textoBadge(gorra.badge), estilo: estiloBadge(gorra.badge) }
+}

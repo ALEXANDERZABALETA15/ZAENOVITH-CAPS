@@ -227,6 +227,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTemporada } from '@/lib/TemporadaContext'
+import BarraTemporada from './BarraTemporada'
+import SelloTemporada from '@/components/ui/SelloTemporada'
 
 const navLinks = [
   { nombre: 'Catálogo', href: '/#catalogo' },
@@ -237,6 +240,11 @@ const navLinks = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  // Temporada activa (src/lib/temporadas.js): cambia la barra superior, pone el sello
+  // junto al logo y resalta "Ofertas"
+  const temporada = useTemporada()
+  const resaltar = (item) => Boolean(temporada?.etiquetaOferta) && item.href === '/ofertas'
+  const colorLink = (item) => (resaltar(item) ? 'var(--color-green-text)' : 'var(--color-silver)')
 
   return (
     <header style={{
@@ -252,23 +260,27 @@ export default function Header() {
     }}>
 
       {/* Barra superior */}
-      <div style={{
-        backgroundColor: 'var(--color-green)',
-        textAlign: 'center',
-        padding: '6px 16px',
-      }}>
-        <p style={{
-          fontSize: 'clamp(10px, 2vw, 12px)',
-          color: 'var(--color-white)',
-          fontWeight: '600',
-          letterSpacing: '0.15em',
-          fontFamily: 'var(--font-inter)',
-          textTransform: 'uppercase',
-          margin: 0,
+      {temporada ? (
+        <BarraTemporada temporada={temporada} />
+      ) : (
+        <div style={{
+          backgroundColor: 'var(--color-green)',
+          textAlign: 'center',
+          padding: '6px 16px',
         }}>
-          Envío gratis en Ibagué · Envíos a toda Colombia
-        </p>
-      </div>
+          <p style={{
+            fontSize: 'clamp(10px, 2vw, 12px)',
+            color: 'var(--color-white)',
+            fontWeight: '600',
+            letterSpacing: '0.15em',
+            fontFamily: 'var(--font-inter)',
+            textTransform: 'uppercase',
+            margin: 0,
+          }}>
+            Envío gratis en Ibagué · Envíos a toda Colombia
+          </p>
+        </div>
+      )}
 
       {/* Navbar */}
       <nav style={{
@@ -281,39 +293,42 @@ export default function Header() {
         justifyContent: 'space-between',
       }}>
 
-        {/* Logo */}
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <div>
-            {/* No es <h1>: cada página tiene el suyo (el del home está en el Hero) */}
-            <p style={{
-              display: 'block',
-              fontSize: 'clamp(16px, 3.5vw, 24px)',
-              fontWeight: '800',
-              color: 'var(--color-white)',
-              letterSpacing: '0.2em',
-              fontFamily: 'var(--font-cinzel)',
-              textTransform: 'uppercase',
-              transition: 'color 0.3s ease',
-              margin: 0,
-            }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-white)'}
-            >
-              CROWNLUX
-            </p>
-            <p style={{
-              fontSize: 'clamp(7px, 1.5vw, 9px)',
-              color: 'var(--color-silver)',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              marginTop: '-2px',
-              fontFamily: 'var(--font-inter)',
-              margin: 0,
-            }}>
-              Premium Caps
-            </p>
-          </div>
-        </Link>
+        {/* Logo (+ sello de la temporada) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(10px, 1.5vw, 16px)' }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <div>
+              {/* No es <h1>: cada página tiene el suyo (el del home está en el Hero) */}
+              <p style={{
+                display: 'block',
+                fontSize: 'clamp(16px, 3.5vw, 24px)',
+                fontWeight: '800',
+                color: 'var(--color-white)',
+                letterSpacing: '0.2em',
+                fontFamily: 'var(--font-cinzel)',
+                textTransform: 'uppercase',
+                transition: 'color 0.3s ease',
+                margin: 0,
+              }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-white)'}
+              >
+                CROWNLUX
+              </p>
+              <p style={{
+                fontSize: 'clamp(7px, 1.5vw, 9px)',
+                color: 'var(--color-silver)',
+                letterSpacing: '0.3em',
+                textTransform: 'uppercase',
+                marginTop: '-2px',
+                fontFamily: 'var(--font-inter)',
+                margin: 0,
+              }}>
+                Premium Caps
+              </p>
+            </div>
+          </Link>
+          <SelloTemporada tamano={44} className="sello-temporada--cabecera" />
+        </div>
 
         {/* Links desktop */}
         <div
@@ -329,19 +344,23 @@ export default function Header() {
               key={item.nombre}
               href={item.href}
               style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
                 fontSize: 'clamp(10px, 1.5vw, 12px)',
-                color: 'var(--color-silver)',
-                fontWeight: '500',
+                color: colorLink(item),
+                fontWeight: resaltar(item) ? '600' : '500',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 transition: 'color 0.3s ease',
                 whiteSpace: 'nowrap',
                 fontFamily: 'var(--font-inter)',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-green-text)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-silver)'}
+              onMouseEnter={(e) => e.currentTarget.style.color = resaltar(item) ? 'var(--color-white)' : 'var(--color-green-text)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = colorLink(item)}
             >
               {item.nombre}
+              {resaltar(item) && <span className="punto-temporada" aria-hidden="true" />}
             </Link>
           ))}
         </div>
@@ -408,9 +427,12 @@ export default function Header() {
             href={item.href}
             onClick={() => setMenuOpen(false)}
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
               fontSize: '13px',
-              color: 'var(--color-silver)',
-              fontWeight: '500',
+              color: colorLink(item),
+              fontWeight: resaltar(item) ? '600' : '500',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               padding: '8px 0',
@@ -419,6 +441,14 @@ export default function Header() {
             }}
           >
             {item.nombre}
+            {resaltar(item) && (
+              <>
+                <span className="punto-temporada" aria-hidden="true" />
+                <span style={{ fontSize: '10px', letterSpacing: '0.2em', color: 'var(--color-silver)' }}>
+                  {temporada.etiquetaOferta}
+                </span>
+              </>
+            )}
           </Link>
         ))}
       </div>

@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
-import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
 import { rutaGorra } from '@/lib/rutas'
+import BadgeGorra from './BadgeGorra'
 
 const estiloEtiqueta = {
   position: 'absolute',
@@ -22,7 +22,6 @@ export default function GorraCardMini({ gorra }) {
   const agotado = gorra.estado === 'agotado'
   const proximo = gorra.estado === 'proximo'
   const descuento = agotado ? null : porcentajeDescuento(gorra.precio, gorra.precioAnterior)
-  const badge = estiloBadge(gorra.badge)
 
   return (
     <Link
@@ -59,11 +58,7 @@ export default function GorraCardMini({ gorra }) {
             }}
           />
 
-          {mostrarBadge(gorra) && (
-            <span style={{ ...estiloEtiqueta, left: '8px', backgroundColor: badge.bg, color: badge.color }}>
-              {textoBadge(gorra.badge)}
-            </span>
-          )}
+          <BadgeGorra gorra={gorra} style={{ ...estiloEtiqueta, left: '8px' }} />
 
           {descuento && (
             <span style={{ ...estiloEtiqueta, right: '8px', backgroundColor: '#f87171', color: '#0a0a0a', fontSize: '10px', letterSpacing: '0.04em' }}>

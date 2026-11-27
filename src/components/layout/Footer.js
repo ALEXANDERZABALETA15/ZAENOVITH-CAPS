@@ -1,9 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+import { useTemporada } from '@/lib/TemporadaContext'
+import SelloTemporada from '@/components/ui/SelloTemporada'
 
 export default function Footer() {
   const year = new Date().getFullYear()
+  const temporada = useTemporada()
 
   const links = {
     Colecciones: ['Clásicos', 'Urbano', 'Premium'],
@@ -92,6 +95,25 @@ export default function Footer() {
               backgroundColor: 'var(--color-green)',
               marginTop: '24px',
             }} />
+
+            {/* Temporada activa (src/lib/temporadas.js) */}
+            {temporada && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '24px' }}>
+                <SelloTemporada tamano={64} />
+                <p style={{
+                  fontSize: '10px',
+                  fontWeight: '600',
+                  letterSpacing: '0.25em',
+                  lineHeight: '1.8',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-green-text)',
+                  fontFamily: 'var(--font-inter)',
+                  maxWidth: '200px',
+                }}>
+                  {temporada.etiqueta}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Links */}

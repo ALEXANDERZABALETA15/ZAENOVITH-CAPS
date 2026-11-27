@@ -4,7 +4,7 @@ import { getGorras, getGorraById, getGorraBySlug, getGorrasRelacionadas } from '
 import { FORMATO_SLUG, rutaGorra, rutaMarca, slugTexto } from '@/lib/rutas'
 import { nombreColeccion, rutaColeccion } from '@/lib/colecciones'
 import { formatPrecio, porcentajeDescuento } from '@/lib/precio'
-import { estiloBadge, textoBadge, mostrarBadge } from '@/lib/badges'
+import { esOferta } from '@/lib/badges'
 import { BENEFICIOS_COMPRA, INFO_DESPLEGABLE } from '@/lib/tienda'
 import { SITIO_URL } from '@/lib/contacto'
 import { urlCompartir, urlProductoGrande } from '@/lib/imagenes'
@@ -12,6 +12,8 @@ import { metadatosPagina, jsonLd, datosMigas } from '@/lib/seo'
 import GaleriaDetalle from '@/components/ui/GaleriaDetalle'
 import CompraDetalle from '@/components/ui/CompraDetalle'
 import Relacionadas from '@/components/ui/Relacionadas'
+import BadgeGorra from '@/components/ui/BadgeGorra'
+import { EtiquetaPrecioTemporada, RelojOferta } from '@/components/ui/PrecioTemporada'
 
 // Cada gorra se genera una vez y queda en caché; se regenera como máximo cada 10 minutos
 // (o al instante con /api/revalidar). Las gorras nuevas se generan en su primera visita.
@@ -91,7 +93,8 @@ export default async function GorraDetalle({ params }) {
   const coleccion = nombreColeccion(gorra.coleccion)
   const descuento = agotado ? null : porcentajeDescuento(gorra.precio, gorra.precioAnterior)
   const ahorro = descuento ? gorra.precioAnterior - gorra.precio : 0
-  const badge = estiloBadge(gorra.badge)
+  // En temporada (src/lib/temporadas.js) las ofertas muestran sello, nombre del precio y contador
+  const oferta = esOferta(gorra)
 
   // Solo se muestran las filas con dato (ver supabase/gorras_ficha.sql)
   const ficha = [
@@ -208,7 +211,7 @@ export default async function GorraDetalle({ params }) {
       }}>
 
         {/* GALERÍA */}
-        <GaleriaDetalle fotos={gorra.fotos} nombre={gorra.nombre} />
+        <GaleriaDetalle fotos={gorra.fotos} nombre={gorra.nombre} enOferta={oferta} />
 
         {/* INFORMACIÓN */}
         <div style={{
@@ -234,21 +237,7 @@ export default async function GorraDetalle({ params }) {
               </p>
             </div>
 
-            {mostrarBadge(gorra) && (
-              <span style={{
-                backgroundColor: badge.bg,
-                color: badge.color,
-                fontSize: '10px',
-                fontWeight: '700',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                padding: '4px 10px',
-                borderRadius: '4px',
-                fontFamily: 'var(--font-inter)',
-              }}>
-                {textoBadge(gorra.badge)}
-              </span>
-            )}
+            <BadgeGorra gorra={gorra} />
           </div>
 
           {/* Nombre */}
@@ -270,6 +259,8 @@ export default async function GorraDetalle({ params }) {
             flexDirection: 'column',
             gap: '8px',
           }}>
+            <EtiquetaPrecioTemporada enOferta={oferta} />
+
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
               <span style={{
                 color: agotado ? 'var(--color-gray)' : 'var(--color-green-text)',
@@ -327,6 +318,8 @@ export default async function GorraDetalle({ params }) {
                 Ahorras {formatPrecio(ahorro)}
               </p>
             )}
+
+            <RelojOferta enOferta={oferta} />
 
             {!agotado && !proximo && (
               <p style={{ color: 'var(--color-silver)', fontSize: '13px', fontFamily: 'var(--font-inter)' }}>
