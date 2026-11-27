@@ -12,8 +12,10 @@ export const REDES_SOCIALES = [
 const IMAGEN_MARCA = 'https://res.cloudinary.com/dg4kazsno/image/upload/v1787713702/Modifying_logo_in_image_2K_202608202128_uutkt2.jpg'
 
 export const NOMBRE_SITIO = 'CROWNLUX'
-export const TITULO_SITIO = 'CROWNLUX — Gorras Premium en Colombia'
-export const DESCRIPCION_SITIO = 'Tienda online de gorras premium: New Era, Supreme, Kith y más. Ediciones exclusivas y limitadas con envíos a toda Colombia. Calidad original garantizada.'
+// "Ibagué" va en el título, la descripción y el h1 del home: es lo que la gente busca ("gorras en Ibagué").
+// Título de ~55 caracteres y descripción de ~155 para que Google no los corte.
+export const TITULO_SITIO = 'Gorras Premium en Ibagué y toda Colombia | CROWNLUX'
+export const DESCRIPCION_SITIO = 'Tienda de gorras premium en Ibagué: New Era, Supreme, Jordan, Amiri y más. Envío gratis en Ibagué y envíos a toda Colombia. Calidad original garantizada.'
 
 // 1200×630 en JPG liviano (~130 KB): WhatsApp no muestra vistas previas pesadas
 export const IMAGEN_COMPARTIR_SITIO = {
@@ -77,7 +79,10 @@ export function datosTienda() {
         addressRegion: 'Tolima',
         addressCountry: 'CO',
       },
-      areaServed: { '@type': 'Country', name: 'Colombia' },
+      areaServed: [
+        { '@type': 'City', name: 'Ibagué' },
+        { '@type': 'Country', name: 'Colombia' },
+      ],
       sameAs: REDES_SOCIALES,
       contactPoint: {
         '@type': 'ContactPoint',
